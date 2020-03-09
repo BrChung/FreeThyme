@@ -1,4 +1,5 @@
 export interface Roles {
+    guest?: boolean;
     subscriber?: boolean;
     editor?: boolean;
     admin?: boolean;
