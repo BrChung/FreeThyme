@@ -7,22 +7,31 @@ import { AppComponent } from './app.component';
 
 import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule, AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AuthService } from './services/auth.service';
+import { CalendarService } from './services/calendar.service';
+
+import { HomeComponent } from './components/home/home.component';
+import { RoomComponent } from './components/room/room.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    RoomComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase, 'angularfs'),
     AngularFireAuthModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    CalendarService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
