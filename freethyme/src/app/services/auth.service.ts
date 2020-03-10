@@ -12,17 +12,18 @@ declare var gapi: any;
   providedIn: 'root'
 })
 export class AuthService {
-  
-  
-  user$: Observable<firebase.User>; 
+
+
+  user$: Observable<firebase.User>;
   calendarItems: any[];
   calendarList: any[];
+  calendarIds: any[];
 
 
   constructor
   (public afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    ) { 
+    ) {
     this.initClient();
     this.user$ = afAuth.authState;
   }
@@ -53,33 +54,64 @@ export class AuthService {
     const googleUser = await googleAuth.signIn();
     const token = googleUser.getAuthResponse().id_token;
     const credential = auth.GoogleAuthProvider.credential(token);
-    const reterievedData = await this.afAuth.auth.signInAndRetrieveDataWithCredential(credential); 
-    return this.updateUserData(reterievedData.user); 
+    const reterievedData = await this.afAuth.auth.signInAndRetrieveDataWithCredential(credential);
+    return this.updateUserData(reterievedData.user);
   }
   logout() {
     this.afAuth.auth.signOut();
   }
 
   async getEvents() {
-    const events = await gapi.client.calendar.events.list({
-      calendarId: 'hjs8vmh2j8gunl8jld5q5qp8ps@group.calendar.google.com',
-      timeMin: new Date().toISOString(),
-      showDeleted: false,
-      singleEvents: true,
-      maxResults: 10,
-      orderBy: 'startTime'
-    })
+    // Grabs and updates the calendar Ids (can now use this.calendarIds)
+    await this.getCalendars();
+    // Simulating potential user input of how far ahead they want to look
+    let daysInAdvance = 2;
+    let timeMaximum = new Date();
+    timeMaximum.setDate(timeMaximum.getDate() + daysInAdvance);
 
-    console.log(events)
+    // Simulating when the user selects which calendar to add
+    // All calendars are selected by default, user will uncheck the ones they don't want
+    // if a calendar item is unchecked that means
+    console.log("Calendar Ids: ", this.calendarList)
 
-    this.calendarItems = events.result.items;
-  
+    let calendarParameters = {
+      resource: {
+        timeMin: new Date().toISOString(),
+        timeMax: timeMaximum,
+        timeZone: 'America/Los_Angeles',
+        items: this.calendarList
+      }
+    };
+    const events = await gapi.client.calendar.freebusy.query(calendarParameters)
+    // const tempCalendarItems = {events.results.calendars.id.busy}
+
+    console.events()
+    // console.log(events.results.calendar.primary.busy);
+    // events.result.calendars.map((calendar, index) => {
+    //   console.log(calendar.busy)
+    // })
+    // console.log(this.calendarItems)
+
   }
 
+
+ // Translates calenders into calendar Ids
   async getCalendars() {
     const calendars = await gapi.client.calendar.calendarList.list({});
-    console.log(calendars)
     this.calendarList = calendars.result.items;
+
+    // Creating a temporary variable to get list of Ids
+    let calendarIds = [];
+
+    // Filtering out the ids from the list of calendars
+    this.calendarList.map((calendar, index) => {
+      calendarIds.push(calendar.id);
+    });
+
+    // Assigning the temp calendarIds list to this.calendarIds
+    // So that the rest of the service can access the data
+    this.calendarIds = calendarIds;
+
   }
 
   async insertEvent() {
@@ -88,11 +120,11 @@ export class AuthService {
       start: {
         dateTime: hoursFromNow(2),
         timeZone: 'America/Los_Angeles'
-      }, 
+      },
       end: {
         dateTime: hoursFromNow(3),
         timeZone: 'America/Los_Angeles'
-      }, 
+      },
       summary: 'Have Fun!!!',
       description: 'Do some cool stuff and have a fun time doing it'
     })
