@@ -83,14 +83,42 @@ export class AuthService {
       }
     };
     const events = await gapi.client.calendar.freebusy.query(calendarParameters)
-    // const tempCalendarItems = {events.results.calendars.id.busy}
 
-    console.events()
-    // console.log(events.results.calendar.primary.busy);
-    // events.result.calendars.map((calendar, index) => {
-    //   console.log(calendar.busy)
-    // })
-    // console.log(this.calendarItems)
+    const tempCalendars = events.result.calendars
+
+    const tempEvents = []
+    // console.log(tempCalendars);
+    for (const busy of Object.values(tempCalendars)) {
+      // console.log(busy)
+      for (const busyArray of Object.values(busy)) {
+        // console.log(busyArray.length)
+        // If the calendar has no events, we don't need to do anythin
+        if (busyArray.length === 0) {
+          // console.log("Array is empty!")
+          //pass
+        }
+
+        // IF the calendar has events or an error, the length will be at least 1
+        else {
+          // If there is an error, don't add it to the list we send to cloud firestore
+          if (busyArray[0].hasOwnProperty("domain") === true) {
+            // pass
+          }
+
+          // NO error --> make a big array and send that to Cloud Firestore
+          else {
+            console.log("These items were pushed: ", busyArray)
+            tempEvents.push.apply(tempEvents, busyArray)
+          }
+
+
+        }
+      }
+    }
+    console.log("There should be 9 events in here")
+    console.log(tempEvents)
+
+
 
   }
 
