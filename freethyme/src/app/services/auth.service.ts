@@ -84,14 +84,21 @@ export class AuthService {
     };
     const events = await gapi.client.calendar.freebusy.query(calendarParameters)
 
+    // Save a quicker reference to all the queried calendars
     const tempCalendars = events.result.calendars
 
+    // Save a temporary list to store all of the busy events
     const tempEvents = []
     // console.log(tempCalendars);
+
+    // Iterate through all of the calendars
     for (const busy of Object.values(tempCalendars)) {
       // console.log(busy)
+
+      // Iterate through all the busyArrays(list of events), and add them to the temp list
       for (const busyArray of Object.values(busy)) {
         // console.log(busyArray.length)
+
         // If the calendar has no events, we don't need to do anythin
         if (busyArray.length === 0) {
           // console.log("Array is empty!")
@@ -100,6 +107,7 @@ export class AuthService {
 
         // IF the calendar has events or an error, the length will be at least 1
         else {
+
           // If there is an error, don't add it to the list we send to cloud firestore
           if (busyArray[0].hasOwnProperty("domain") === true) {
             // pass
@@ -118,7 +126,10 @@ export class AuthService {
     console.log("There should be 9 events in here")
     console.log(tempEvents)
 
+    console.log("Room data from firestore")
 
+    // Sends data to write to firestore
+    updateRoomData(roomid, userid, tempEvents)
 
   }
 
@@ -160,6 +171,16 @@ export class AuthService {
     await this.getEvents();
   }
 
+  // PUSHING DATA to cloud firestore --> should convert to a function that can be called
+  // NEED to know which room and which user
+  private updateRoomData(roomid, userid, calendarEvents) {
+    // Setting a reference
+    const roomRef: AngularFirestoreDocument<User> = this.afs.doc(`rooms/${roomId}/${userId}`);
+
+    // Set data of calendar items into cloud firestore;
+    roomRef.set(tempEvents, {merge: true});
+  }
+
   private updateUserData({uid, email, displayName, photoURL}: User){
     //Sets user data to firestore on login for more accurate data
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`);
@@ -173,7 +194,8 @@ export class AuthService {
         guest: true
       },
     };
-
+    console.log("Saving to cloud firestore hehe")
+    console.log(data)
     return userRef.set(data, {merge: true});
   }
 
