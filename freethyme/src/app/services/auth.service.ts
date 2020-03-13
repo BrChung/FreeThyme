@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { auth } from 'firebase/app';
 import { User } from '../models/user';
+import { Room } from '../models/room';
 
 
 declare var gapi: any;
@@ -82,13 +83,13 @@ export class AuthService {
         items: this.calendarList
       }
     };
-    const events = await gapi.client.calendar.freebusy.query(calendarParameters)
+    const events = await gapi.client.calendar.freebusy.query(calendarParameters);
 
     // Save a quicker reference to all the queried calendars
-    const tempCalendars = events.result.calendars
+    const tempCalendars = events.result.calendars;
 
     // Save a temporary list to store all of the busy events
-    const tempEvents = []
+    const freeBusy = [];
     // console.log(tempCalendars);
 
     // Iterate through all of the calendars
@@ -115,21 +116,22 @@ export class AuthService {
 
           // NO error --> make a big array and send that to Cloud Firestore
           else {
-            console.log("These items were pushed: ", busyArray)
-            tempEvents.push.apply(tempEvents, busyArray)
+            console.log("These items were pushed: ", busyArray);
+            freeBusy.push.apply(freeBusy, busyArray);
           }
 
 
         }
       }
     }
-    console.log("There should be 9 events in here")
-    console.log(tempEvents)
+    console.log("There should be 9 events in here");
+    console.log(freeBusy);
 
-    console.log("Room data from firestore")
-
-    // Sends data to write to firestore
-    updateRoomData(roomid, userid, tempEvents)
+    // === HARDCODING Room Id and User Id for testing purposes === //
+    const roomid = "R307ZW3qDQaxA1V5fUz4";
+    const userid = "a0wgKgLrw9dudbAJzdBl5yNQ6cH2";
+    //Sends data to write to firestore
+    this.updateRoomData(roomid, userid, freeBusy)
 
   }
 
@@ -173,12 +175,20 @@ export class AuthService {
 
   // PUSHING DATA to cloud firestore --> should convert to a function that can be called
   // NEED to know which room and which user
-  private updateRoomData(roomid, userid, calendarEvents) {
+  private updateRoomData(roomid, userid, freeBusy) {
+    console.log("in updateRoomData function")
     // Setting a reference
-    const roomRef: AngularFirestoreDocument<User> = this.afs.doc(`rooms/${roomId}/${userId}`);
+    const roomRef: AngularFirestoreDocument = this.afs.doc(`rooms/${roomid}/`);
 
-    // Set data of calendar items into cloud firestore;
-    roomRef.set(tempEvents, {merge: true});
+    // === POTENTIAL OPTIMIZATION === //
+    // Wasn't sure how to create this structure in a model
+    const userCalendar = {}
+    userCalendar[userid] = {
+      freeBusy
+    }
+
+    roomRef.set(userCalendar, {merge:true})
+
   }
 
   private updateUserData({uid, email, displayName, photoURL}: User){
