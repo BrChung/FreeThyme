@@ -19,6 +19,8 @@ export class AuthService {
   calendarItems: any[];
   calendarList: any[];
   calendarIds: any[];
+  userId: string;
+
 
 
   constructor
@@ -130,8 +132,9 @@ export class AuthService {
     // === HARDCODING Room Id and User Id for testing purposes === //
     const roomid = "R307ZW3qDQaxA1V5fUz4";
     const userid = "a0wgKgLrw9dudbAJzdBl5yNQ6cH2";
+    console.log("user id:", this.userId)
     //Sends data to write to firestore
-    this.updateRoomData(roomid, userid, freeBusy)
+    this.updateRoomData(roomid, this.userId, freeBusy)
 
   }
 
@@ -204,6 +207,8 @@ export class AuthService {
         guest: true
       },
     };
+    this.userId = uid;
+
     console.log("Saving to cloud firestore hehe")
     console.log(data)
     return userRef.set(data, {merge: true});
