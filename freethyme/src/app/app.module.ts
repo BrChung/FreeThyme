@@ -11,6 +11,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AuthService } from './services/auth.service';
 import { CalendarService } from './services/calendar.service';
+import { RoomService } from './services/room.service';
 
 import { HomeComponent } from './components/home/home.component';
 import { RoomComponent } from './components/room/room.component';
@@ -30,7 +31,8 @@ import { RoomComponent } from './components/room/room.component';
   ],
   providers: [
     AuthService,
-    CalendarService
+    CalendarService,
+    RoomService
   ],
   bootstrap: [AppComponent]
 })

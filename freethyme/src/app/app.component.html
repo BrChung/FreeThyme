@@ -2,25 +2,34 @@
   <h3>Google Calendar + Firebase</h3>
   <p>Welcome to AngularFirebase world </p>
 
-  <div *ngIf="auth.user$ | async as user">
+  <div *ngIf="authService.user$ | async as user">
       <h3>Logged in as {{ user.displayName }}</h3>
       <img src="{{ user.photoURL }}" width="50px">
   </div>
 
 
-  <button (click)="auth.login()" class="button is-danger">Login with Google</button>
+  <button (click)="authService.login()" class="button is-danger">Login with Google</button>
 
-  <button (click)="auth.logout()" class="button">Logout</button>
+  <button (click)="authService.logout()" class="button">Logout</button>
+
+
 
   <hr>
 
-  <div *ngIf="auth.user$ | async">
+  <div *ngIf="authService.user$ | async">
 
-      <button (click)="auth.getEvents()" class="button is-success">Get Events</button>
-      <button (click)="auth.insertEvent()" class="button is-warning">Add Event</button>
-      <button (click)="auth.getCalendars()" class="button is-warning">Get Calendar IDs</button>
-
-      <div *ngFor="let item of auth.calendarItems">
+      <button (click)="calendarService.getEvents()" class="button is-success">Get Events</button>
+      <!-- <button (click)="calendar.insertEvent()" class="button is-warning">Add Event</button> -->
+      <!-- <button (click)="calendar.getCalendars()" class="button is-warning">Get Calendar IDs</button> -->
+      <button (click)="roomService.createRoom()" class="button is-warning">Create Room </button>
+      <!-- <nav>
+          <a routerLink="room/{roomService.roomId}">
+            <span>
+              {roomService.roomId}
+            </span>
+          </a>
+      </nav> -->
+      <!-- <div *ngFor="let item of auth.calendarItems">
           <h3>{{ item.summary }} - {{ item.status }}</h3>
           <p><em>Created {{ item.created }}</em></p>
           <p>{{ item.description }}</p>
@@ -30,7 +39,7 @@
       <div *ngFor="let item of auth.calendarList">
         <h3>{{ item.id }}</h3>
         <hr>
-    </div>
+    </div> -->
 
   </div>
 
