@@ -1,54 +1,41 @@
 <nb-layout>
-
   <nb-layout-header fixed>
-  <!-- Insert header here -->
+    <!-- Insert header here -->
   </nb-layout-header>
 
   <nb-layout-column>
-
     <main>
-      <h3>Google Calendar + Firebase</h3>
-      <p>Welcome to AngularFirebase world </p>
-    
-      <div *ngIf="auth.user$ | async as user">
-          <h3>Logged in as {{ user.displayName }}</h3>
-          <img src="{{ user.photoURL }}" width="50px">
-      </div>
-    
-    
-      <button (click)="auth.login()" class="button is-danger">Login with Google</button>
-    
-      <button (click)="auth.logout()" class="button">Logout</button>
-    
-      <hr>
-    
       <div *ngIf="auth.user$ | async">
-    
-          <button (click)="auth.getEvents()" class="button is-success">Get Events</button>
-          <button (click)="auth.insertEvent()" class="button is-warning">Add Event</button>
-          <button (click)="auth.getCalendars()" class="button is-warning">Get Calendar IDs</button>
-    
-          <div *ngFor="let item of auth.calendarItems">
-              <h3>{{ item.summary }} - {{ item.status }}</h3>
-              <p><em>Created {{ item.created }}</em></p>
-              <p>{{ item.description }}</p>
-              <hr>
-          </div>
-    
-          <div *ngFor="let item of auth.calendarList">
-            <h3>{{ item.id }}</h3>
-            <hr>
+        <button (click)="auth.getEvents()" class="button is-success">
+          Get Events
+        </button>
+        <button (click)="auth.insertEvent()" class="button is-warning">
+          Add Event
+        </button>
+        <button (click)="auth.getCalendars()" class="button is-warning">
+          Get Calendar IDs
+        </button>
+
+        <div *ngFor="let item of auth.calendarItems">
+          <h3>{{ item.summary }} - {{ item.status }}</h3>
+          <p>
+            <em>Created {{ item.created }}</em>
+          </p>
+          <p>{{ item.description }}</p>
+          <hr />
         </div>
-    
+
+        <div *ngFor="let item of auth.calendarList">
+          <h3>{{ item.id }}</h3>
+          <hr />
+        </div>
       </div>
-    
     </main>
-    
+
     <router-outlet></router-outlet>
   </nb-layout-column>
 
   <nb-layout-footer fixed>
-  <!-- Insert footer here -->
+    <!-- Insert footer here -->
   </nb-layout-footer>
-
 </nb-layout>
