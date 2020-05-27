@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card class="login-card">
   <nb-card-header>
     Login with your Calendar Provider
   </nb-card-header>
@@ -16,7 +16,7 @@
         Logged in as <strong>{{ user.email }}</strong>
       </p>
 
-      <button nbButton (click)="auth.login()">Logout</button>
+      <button nbButton (click)="auth.logout()">Logout</button>
     </div>
   </nb-card-body>
 </nb-card>
