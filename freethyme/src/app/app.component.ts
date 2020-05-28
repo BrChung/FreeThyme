@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  title = 'freethyme';
-  constructor(public auth: AuthService){}
+  title = "freethyme";
+  constructor() {}
 }
