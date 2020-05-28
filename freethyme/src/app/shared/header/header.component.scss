@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.avatar {
+  width: 2.75em;
+  border-radius: 50%;
+  margin: 0 10px 5px;
+}
