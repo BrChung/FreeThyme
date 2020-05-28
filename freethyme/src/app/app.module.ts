@@ -18,9 +18,10 @@ import { NbThemeModule, NbLayoutModule } from "@nebular/theme";
 import { NbEvaIconsModule } from "@nebular/eva-icons";
 
 import { SharedModule } from "./shared/shared.module";
+import { PlaygroundComponent } from './playground/playground.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, RoomComponent],
+  declarations: [AppComponent, HomeComponent, RoomComponent, PlaygroundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
