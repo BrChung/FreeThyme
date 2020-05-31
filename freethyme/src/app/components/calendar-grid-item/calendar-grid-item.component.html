@@ -28,7 +28,11 @@
       <div class="bottom-container-user-share">
         <hr />
         <div class="user-share">
-          <div class="user"></div>
+          <app-user-bar
+            [userCount]="memberCount"
+            [users]="members"
+            [userImg]="profileImg"
+          ></app-user-bar>
           <button nbButton>
             Share
           </button>

@@ -1,6 +1,6 @@
 .parent {
   --goldenRatio: 1.618;
-  --height: 14em;
+  --height: 15em;
   --accentHeight: 0.3em;
   --borderRadius: 10px;
 }
@@ -63,5 +63,6 @@
 .user-share {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 0em 0.7em 0.7em 0.7em;
 }

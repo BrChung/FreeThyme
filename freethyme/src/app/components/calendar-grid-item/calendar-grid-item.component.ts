@@ -13,6 +13,8 @@ export class CalendarGridItemComponent implements OnInit {
   @Input() meetingLength: number = 30;
   @Input() meetingType: string = "General";
   @Input() members: Array<Member>;
+  @Input() memberCount: number;
+  @Input() profileImg: any;
   @Input() accentColor: string = "#3D94C7";
   @Input() imageURL: string = "";
   displayTime: string = this.minutesToDhm(this.meetingLength);

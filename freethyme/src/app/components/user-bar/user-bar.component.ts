@@ -7,8 +7,9 @@ import { Member } from "../../models/member";
   styleUrls: ["./user-bar.component.scss"],
 })
 export class UserBarComponent implements OnInit {
-  @Input() userCount: number;
+  @Input() userCount: number = 0;
   @Input() users: Array<Member>;
+  @Input() userImg: any;
 
   constructor() {}
 
