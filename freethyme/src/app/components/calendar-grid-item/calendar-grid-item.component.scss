@@ -1,0 +1,29 @@
+.parent {
+  --goldenRatio: 1.618;
+  --height: 13em;
+  --accentHeight: 0.3em;
+  --borderRadius: 10px;
+}
+
+#background {
+  border-radius: var(--borderRadius);
+  width: calc((var(--goldenRatio) * var(--height)));
+  height: var(--height);
+  box-shadow: 4px 8px 6px 0px rgba($color: #000000, $alpha: 0.16);
+}
+
+#container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top: var(--accentHeight);
+  border-radius: var(--borderRadius);
+  width: calc((var(--goldenRatio) * var(--height)));
+  height: calc(var(--height) - var(--accentHeight));
+  background-color: white;
+}
+
+.favorite {
+  align-self: flex-end;
+  margin: 0.5em;
+}
