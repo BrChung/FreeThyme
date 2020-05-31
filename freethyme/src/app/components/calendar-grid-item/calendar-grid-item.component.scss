@@ -1,6 +1,6 @@
 .parent {
   --goldenRatio: 1.618;
-  --height: 13em;
+  --height: 14em;
   --accentHeight: 0.3em;
   --borderRadius: 10px;
 }
@@ -16,6 +16,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   top: var(--accentHeight);
   border-radius: var(--borderRadius);
   width: calc((var(--goldenRatio) * var(--height)));
@@ -23,7 +24,44 @@
   background-color: white;
 }
 
+.calendar-title {
+  height: 1.3em;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin: 1.8em 0.7em 0.4em 0.7em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-information {
+  font-size: 0.9em;
+  margin: 0em 0.7em 0.7em 0.7em;
+}
+
+.calendar-description {
+  margin-top: 0.4em;
+  height: 3em;
+}
+
+.calendar-overview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-container {
+  position: relative;
+}
+
 .favorite {
-  align-self: flex-end;
-  margin: 0.5em;
+  position: absolute;
+  right: 0px;
+  margin: 0.7em;
+}
+
+.user-share {
+  display: flex;
+  justify-content: space-between;
+  margin: 0em 0.7em 0.7em 0.7em;
 }

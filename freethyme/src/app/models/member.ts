@@ -1,7 +1,9 @@
 // This model differs to users as it describes the individual members in a calendar room
 export interface Member {
   UID: string;
+  nickname: string;
   role: "owner" | "admin" | "member" | "viewer";
+  combined: string; //ex (owner Tommy = 1_Tommy)
 }
 
 // Only one owner per calendar group

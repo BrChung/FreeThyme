@@ -4,6 +4,7 @@ import { RouterModule } from "@angular/router";
 import { NbCardModule, NbButtonModule, NbIconModule } from "@nebular/theme";
 
 import { NbEvaIconsModule } from "@nebular/eva-icons";
+import { EllipsisModule } from "ngx-ellipsis";
 import { HeaderComponent } from "./header/header.component";
 
 const components = [HeaderComponent];
@@ -15,6 +16,7 @@ const modules = [
   RouterModule,
   NbIconModule,
   NbEvaIconsModule,
+  EllipsisModule,
 ];
 
 @NgModule({

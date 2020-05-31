@@ -20,9 +20,10 @@ import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { SharedModule } from "./shared/shared.module";
 import { PlaygroundComponent } from './playground/playground.component';
 import { CalendarGridItemComponent } from './components/calendar-grid-item/calendar-grid-item.component';
+import { UserBarComponent } from './components/user-bar/user-bar.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, RoomComponent, PlaygroundComponent, CalendarGridItemComponent],
+  declarations: [AppComponent, HomeComponent, RoomComponent, PlaygroundComponent, CalendarGridItemComponent, UserBarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
