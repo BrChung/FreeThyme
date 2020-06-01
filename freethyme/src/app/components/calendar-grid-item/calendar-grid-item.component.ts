@@ -18,6 +18,7 @@ export class CalendarGridItemComponent implements OnInit {
   @Input() accentColor: string = "#3D94C7";
   @Input() imageURL: string = "";
   displayTime: string = this.minutesToDhm(this.meetingLength);
+  rippleDisabled = false;
 
   constructor() {}
 
@@ -33,5 +34,10 @@ export class CalendarGridItemComponent implements OnInit {
       minutes ? minutes + " min" + (minutes > 1 ? "s" : "") : "",
     ];
     return time.filter((el) => el != "").join(", ");
+  }
+
+  test() {
+    if (event.stopPropagation) event.stopPropagation();
+    console.log("test");
   }
 }

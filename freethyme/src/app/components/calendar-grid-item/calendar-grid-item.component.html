@@ -3,6 +3,7 @@
     <div
       id="container"
       matRipple
+      [matRippleDisabled]="rippleDisabled"
       [ngStyle]="imageURL && { 'background-image': 'url(' + imageURL + ')' }"
     >
       <div class="top-container">
@@ -34,7 +35,12 @@
             [users]="members"
             [userImg]="profileImg"
           ></app-user-bar>
-          <button nbButton>
+          <button
+            nbButton
+            (click)="test()"
+            (mousedown)="rippleDisabled = true"
+            (mouseup)="rippleDisabled = false"
+          >
             Share
           </button>
         </div>
