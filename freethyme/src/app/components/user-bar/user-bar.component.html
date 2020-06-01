@@ -4,6 +4,7 @@
       <img
         src="{{ userImg[user.UID] }}"
         class="user-img"
+        draggable="false"
         [ngStyle]="{ left: -i * 0.4 + 'em' }"
       />
     </div>
@@ -18,7 +19,7 @@
   <div
     *ngIf="userCount > 5"
     class="user-text"
-    [ngStyle]="{ left: -6 * 0.4 + 'em' }"
+    [ngStyle]="{ left: -5 * 0.4 + 'em' }"
   >
     <span>{{ "+" + (userCount - 5) }}</span>
   </div>

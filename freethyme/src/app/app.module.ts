@@ -21,9 +21,10 @@ import { SharedModule } from "./shared/shared.module";
 import { PlaygroundComponent } from './playground/playground.component';
 import { CalendarGridItemComponent } from './components/calendar-grid-item/calendar-grid-item.component';
 import { UserBarComponent } from './components/user-bar/user-bar.component';
+import { CreateCalendarComponent } from './components/create-calendar/create-calendar.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, RoomComponent, PlaygroundComponent, CalendarGridItemComponent, UserBarComponent],
+  declarations: [AppComponent, HomeComponent, RoomComponent, PlaygroundComponent, CalendarGridItemComponent, UserBarComponent, CreateCalendarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
