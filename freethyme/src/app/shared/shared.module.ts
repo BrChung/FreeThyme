@@ -5,6 +5,14 @@ import { NbCardModule, NbButtonModule, NbIconModule } from "@nebular/theme";
 import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { EllipsisModule } from "ngx-ellipsis";
 import { MatRippleModule } from "@angular/material/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatIconModule } from "@angular/material/icon";
+
 import { HeaderComponent } from "./header/header.component";
 
 const components = [HeaderComponent];
@@ -18,6 +26,13 @@ const modules = [
   NbEvaIconsModule,
   EllipsisModule,
   MatRippleModule,
+  FormsModule,
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatButtonToggleModule,
+  MatIconModule,
 ];
 
 @NgModule({
