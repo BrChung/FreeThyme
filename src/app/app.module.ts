@@ -11,20 +11,26 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AuthService } from "./services/auth.service";
 import { CalendarService } from "./services/calendar.service";
 
-import { HomeComponent } from "./components/home/home.component";
 import { RoomComponent } from "./components/room/room.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NbThemeModule, NbLayoutModule } from "@nebular/theme";
 import { NbEvaIconsModule } from "@nebular/eva-icons";
 
 import { SharedModule } from "./shared/shared.module";
-import { PlaygroundComponent } from './playground/playground.component';
-import { CalendarGridItemComponent } from './components/calendar-grid-item/calendar-grid-item.component';
-import { UserBarComponent } from './components/user-bar/user-bar.component';
-import { CreateCalendarComponent } from './components/create-calendar/create-calendar.component';
+import { PlaygroundComponent } from "./playground/playground.component";
+import { CalendarGridItemComponent } from "./components/calendar-grid-item/calendar-grid-item.component";
+import { UserBarComponent } from "./components/user-bar/user-bar.component";
+import { CreateCalendarComponent } from "./components/create-calendar/create-calendar.component";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, RoomComponent, PlaygroundComponent, CalendarGridItemComponent, UserBarComponent, CreateCalendarComponent],
+  declarations: [
+    AppComponent,
+    RoomComponent,
+    PlaygroundComponent,
+    CalendarGridItemComponent,
+    UserBarComponent,
+    CreateCalendarComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
