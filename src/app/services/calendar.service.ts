@@ -5,7 +5,7 @@ import {
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Observable, combineLatest, of } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { switchMap, map, delay } from "rxjs/operators";
 import * as firebase from "firebase/app";
 
 @Injectable({
@@ -14,12 +14,6 @@ import * as firebase from "firebase/app";
 export class CalendarService {
   room: Observable<any>;
   roomDoc: AngularFirestoreDocument<any>;
-  roles = {
-    owner: 1,
-    admin: 2,
-    member: 3,
-    viewer: 4,
-  };
 
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {}
 
@@ -65,6 +59,7 @@ export class CalendarService {
               )
               .valueChanges()
               .pipe(
+                delay(250), //Firebase Rule violated if query ran before database is updated
                 switchMap((m) => {
                   rooms = m;
                   const roomIDs = Array.from(
@@ -112,7 +107,6 @@ export class CalendarService {
         nickname,
         favorite: false,
         roles: this.getRoles(role),
-        combined: this.roles[role] + "_" + nickname,
         addedAt: firebase.firestore.Timestamp.fromDate(new Date()),
         lastAccessed: firebase.firestore.Timestamp.fromDate(new Date()),
       })
