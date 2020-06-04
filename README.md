@@ -41,6 +41,8 @@ Run `npm install` to install dependencies.
 
 ### Set Enviroment Variables
 
+**This step may be skipped, development keys currently in use and uploaded on GitHub.**
+
 The web-application will not function without connecting to various API's. API keys can be generated from [Firebase](https://console.firebase.google.com/) and [GCP](https://console.developers.google.com/)
 
 They will need to be set in the `./src/environments/environment.ts` file. Follow the syntax provided by the `environments.example.ts` file.

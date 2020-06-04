@@ -5,19 +5,18 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyBuR5_eDmJZuIXAYztNZmiHEXG5neSgO9o",
-    authDomain: "freethyme-269222.firebaseapp.com",
-    databaseURL: "https://freethyme-269222.firebaseio.com",
-    projectId: "freethyme-269222",
-    storageBucket: "freethyme-269222.appspot.com",
-    messagingSenderId: "182621995345",
-    appId: "1:182621995345:web:433cc7c2bfb4dcf352d370",
-    measurementId: "G-9XQ8VD95T7",
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: "",
   },
   googleCal: {
-    apiKey: "AIzaSyBuR5_eDmJZuIXAYztNZmiHEXG5neSgO9o",
-    clientId:
-      "182621995345-4hu18t2bf0bc4636dqln5gt4scbtlqk0.apps.googleusercontent.com",
+    apiKey: "",
+    clientId: "",
     discoveryDocs: [
       "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
     ],
