@@ -10,6 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatStepperModule } from "@angular/material/stepper";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatIconModule } from "@angular/material/icon";
@@ -35,6 +36,7 @@ const modules = [
   MatButtonToggleModule,
   MatIconModule,
   MatStepperModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({

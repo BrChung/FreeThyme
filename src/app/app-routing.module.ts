@@ -1,12 +1,21 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { HomeComponent } from "./components/home/home.component";
 import { RoomComponent } from "./components/room/room.component";
 import { PlaygroundComponent } from "./playground/playground.component";
+import { AuthGuard } from "./user/auth.guard";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "playground", component: PlaygroundComponent },
+  { path: "playground", component: PlaygroundComponent }, //Temp
+  {
+    path: "",
+    loadChildren: () =>
+      import("./welcome/welcome.module").then((m) => m.WelcomeModule),
+  },
+  {
+    path: "home",
+    canActivate: [AuthGuard],
+    loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
+  },
   { path: "cal/:id", component: RoomComponent },
   {
     path: "login",
