@@ -1,0 +1,25 @@
+.user-parent {
+  --diameter: 1.9em;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.user-img {
+  position: relative;
+  width: var(--diameter);
+  border-radius: 50%;
+}
+
+.user-text {
+  position: relative;
+  width: var(--diameter);
+  height: var(--diameter);
+  border-radius: 50%;
+  font-size: 1em;
+  line-height: var(--diameter);
+  text-align: center;
+  color: #222b45;
+  background: #edf2f8;
+}

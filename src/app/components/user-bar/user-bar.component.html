@@ -1,0 +1,26 @@
+<div class="user-parent">
+  <div *ngFor="let user of users | slice: 0:5; let i = index">
+    <div *ngIf="userImg[user.UID]">
+      <img
+        src="{{ userImg[user.UID] }}"
+        class="user-img"
+        draggable="false"
+        [ngStyle]="{ left: -i * 0.4 + 'em' }"
+      />
+    </div>
+    <div
+      *ngIf="!userImg[user.UID]"
+      class="user-text"
+      [ngStyle]="{ left: -i * 0.4 + 'em' }"
+    >
+      <span>{{ user.nickname[0] }}</span>
+    </div>
+  </div>
+  <div
+    *ngIf="userCount > 5"
+    class="user-text"
+    [ngStyle]="{ left: -5 * 0.4 + 'em' }"
+  >
+    <span>{{ "+" + (userCount - 5) }}</span>
+  </div>
+</div>
