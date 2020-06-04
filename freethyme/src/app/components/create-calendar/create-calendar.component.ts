@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CalendarService } from "../../services/calendar.service";
 
 @Component({
   selector: "app-create-calendar",
@@ -14,15 +15,15 @@ export class CreateCalendarComponent implements OnInit {
     .fill(1)
     .map((x, i) => i);
   minsArr = [0, 15, 30, 45];
-  meetingTypes = [
-    { value: "general", viewValue: "General" },
-    { value: "meetup", viewValue: "Meet Up" },
-  ];
+  meetingTypes = ["General", "Meet Up"];
   selectedMin = 0;
   selectedHour = 1;
-  selectedMeeting = "general";
+  selectedMeeting = "General";
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private calendarService: CalendarService
+  ) {}
 
   ngOnInit(): void {
     this.calendarForm = this.fb.group({
@@ -57,8 +58,8 @@ export class CreateCalendarComponent implements OnInit {
     return this.meetingForm.get("mins");
   }
 
-  onSubmit() {
-    console.log(this.calendarForm);
-    console.log(this.meetingForm);
+  async onSubmit() {
+    const data = { ...this.calendarForm.value, ...this.meetingForm.value };
+    return this.calendarService.createRoom(data);
   }
 }

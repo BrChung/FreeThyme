@@ -16,7 +16,7 @@
       </mat-form-field>
       <mat-form-field>
         <textarea
-          placeholder="Calendar description"
+          placeholder="Description"
           matInput
           formControlName="description"
         ></textarea>
@@ -37,8 +37,8 @@
       <mat-form-field>
         <mat-label>Meeting Type</mat-label>
         <mat-select formControlName="type" [(ngModel)]="selectedMeeting">
-          <mat-option *ngFor="let type of meetingTypes" [value]="type.value">
-            {{ type.viewValue }}
+          <mat-option *ngFor="let type of meetingTypes" [value]="type">
+            {{ type }}
           </mat-option>
         </mat-select>
       </mat-form-field>
