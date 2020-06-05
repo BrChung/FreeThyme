@@ -1,15 +1,15 @@
 <div class="user-parent">
   <div *ngFor="let user of users | slice: 0:5; let i = index">
-    <div *ngIf="userImg[user.UID]">
+    <div *ngIf="userImg[user.uid]">
       <img
-        src="{{ userImg[user.UID] }}"
+        src="{{ userImg[user.uid] }}"
         class="user-img"
         draggable="false"
         [ngStyle]="{ left: -i * 0.4 + 'em' }"
       />
     </div>
     <div
-      *ngIf="!userImg[user.UID]"
+      *ngIf="!userImg[user.uid]"
       class="user-text"
       [ngStyle]="{ left: -i * 0.4 + 'em' }"
     >

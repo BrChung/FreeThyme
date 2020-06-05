@@ -10,19 +10,21 @@ export class CalendarGridItemComponent implements OnInit {
   @Input() calID: string;
   @Input() title: string = "Untitled Calendar";
   @Input() description: string = "";
-  @Input() meetingLength: number = 30;
+  @Input() meetingLength: number;
   @Input() meetingType: string = "General";
   @Input() members: Array<Member>;
   @Input() memberCount: number;
   @Input() profileImg: any;
   @Input() accentColor: string = "#3D94C7";
   @Input() imageURL: string = "";
-  displayTime: string = this.minutesToDhm(this.meetingLength);
   rippleDisabled = false;
+  displayTime: string;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.displayTime = this.minutesToDhm(Number(this.meetingLength));
+  }
 
   minutesToDhm(mins: number) {
     const days = Math.floor(mins / 24 / 60);
