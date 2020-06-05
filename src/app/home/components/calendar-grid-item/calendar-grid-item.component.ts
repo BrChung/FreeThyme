@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Member } from "../../models/member";
+import { Member } from "../../../models/member";
 
 @Component({
   selector: "app-calendar-grid-item",

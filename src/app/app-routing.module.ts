@@ -7,13 +7,7 @@ import { AuthGuard } from "./user/auth.guard";
 const routes: Routes = [
   { path: "playground", component: PlaygroundComponent }, //Temp
   {
-    path: "",
-    loadChildren: () =>
-      import("./welcome/welcome.module").then((m) => m.WelcomeModule),
-  },
-  {
     path: "home",
-    canActivate: [AuthGuard],
     loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
   },
   { path: "cal/:id", component: RoomComponent },

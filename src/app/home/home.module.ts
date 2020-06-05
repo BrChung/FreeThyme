@@ -1,12 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { HomeRoutingModule } from "./home-routing.module";
+import { HomeComponent } from "./home.component";
+import { CalendarsComponent } from "./calendars/calendars.component";
+import { AppointmentsComponent } from "./appointments/appointments.component";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { SharedModule } from "../shared/shared.module";
+import { CalendarGridItemComponent } from "./components/calendar-grid-item/calendar-grid-item.component";
+import { UserBarComponent } from "./components/user-bar/user-bar.component";
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  declarations: [
+    HomeComponent,
+    CalendarsComponent,
+    AppointmentsComponent,
+    CalendarGridItemComponent,
+    UserBarComponent,
+  ],
+  imports: [CommonModule, HomeRoutingModule, SharedModule, MatGridListModule],
 })
-export class HomeModule { }
+export class HomeModule {}

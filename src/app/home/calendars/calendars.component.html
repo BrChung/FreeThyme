@@ -1,0 +1,19 @@
+<mat-grid-list
+  [cols]="breakpoint"
+  rowHeight="16em"
+  (window:resize)="onResize($event)"
+>
+  <mat-grid-tile>
+    <app-calendar-grid-item
+      title="Work - Software Engineering heheXD"
+      description="Meet at the skatepark yo, this is an example of a long description. I made this so long that this should now span three lines."
+      [members]="userExample"
+      [profileImg]="images"
+      [memberCount]="7"
+    >
+    </app-calendar-grid-item>
+  </mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+  <mat-grid-tile>3</mat-grid-tile>
+  <mat-grid-tile>4</mat-grid-tile>
+</mat-grid-list>

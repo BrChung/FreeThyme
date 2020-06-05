@@ -1,0 +1,37 @@
+<mat-sidenav-container class="home-container">
+  <mat-sidenav mode="side" opened>
+    <div class="home-sidenav-container">
+      <div>
+        <a
+          routerLink="/home/cal"
+          routerLinkActive="home-sidenav-button-active"
+          class="home-sidenav-button"
+          draggable="false"
+        >
+          <mat-icon class="home-sidenav-button-icon">calendar_today</mat-icon>
+          <span>Calendar</span>
+        </a>
+      </div>
+      <div>
+        <a
+          routerLink="/home/appt"
+          routerLinkActive="home-sidenav-button-active"
+          class="home-sidenav-button"
+          draggable="false"
+        >
+          <mat-icon class="home-sidenav-button-icon">access_time</mat-icon>
+          <span>Appointments</span>
+        </a>
+      </div>
+    </div>
+    <div *ngIf="o.activatedRoute.snapshot.url[0].path == 'cal'">
+      <span>Calendar</span>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div [@routeAnimations]="o.isActivated ? o.activatedRoute : ''">
+      <router-outlet #o="outlet"></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

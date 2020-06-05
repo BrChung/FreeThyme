@@ -13,23 +13,17 @@ import { CalendarService } from "./services/calendar.service";
 
 import { RoomComponent } from "./components/room/room.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NbThemeModule, NbLayoutModule } from "@nebular/theme";
-import { NbEvaIconsModule } from "@nebular/eva-icons";
 
 import { SharedModule } from "./shared/shared.module";
 import { PlaygroundComponent } from "./playground/playground.component";
-import { CalendarGridItemComponent } from "./components/calendar-grid-item/calendar-grid-item.component";
-import { UserBarComponent } from "./components/user-bar/user-bar.component";
 import { CreateCalendarComponent } from "./components/create-calendar/create-calendar.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     RoomComponent,
-    PlaygroundComponent,
-    CalendarGridItemComponent,
-    UserBarComponent,
     CreateCalendarComponent,
+    PlaygroundComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,9 +32,6 @@ import { CreateCalendarComponent } from "./components/create-calendar/create-cal
     AngularFireAuthModule,
     AngularFirestoreModule,
     BrowserAnimationsModule,
-    NbThemeModule.forRoot({ name: "default" }),
-    NbLayoutModule,
-    NbEvaIconsModule,
     SharedModule,
   ],
   providers: [AuthService, CalendarService],

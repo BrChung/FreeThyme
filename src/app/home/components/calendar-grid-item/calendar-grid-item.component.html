@@ -8,10 +8,13 @@
     >
       <div class="top-container">
         <div class="favorite">
-          <nb-icon
-            icon="star-outline"
-            [ngStyle]="{ color: accentColor }"
-          ></nb-icon>
+          <button
+            mat-icon-button
+            (mousedown)="rippleDisabled = true"
+            (mouseup)="rippleDisabled = false"
+          >
+            <mat-icon [ngStyle]="{ color: accentColor }">star</mat-icon>
+          </button>
         </div>
         <div class="calendar-title">
           <span>{{ title }}</span>
@@ -36,7 +39,7 @@
             [userImg]="profileImg"
           ></app-user-bar>
           <button
-            nbButton
+            mat-raised-button
             (click)="test()"
             (mousedown)="rippleDisabled = true"
             (mouseup)="rippleDisabled = false"
