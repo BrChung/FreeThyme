@@ -13,14 +13,7 @@
       <mat-grid-tile *ngIf="room.favorite">
         <app-calendar-grid-item
           [calID]="room.roomID"
-          [title]="room.room.title"
-          [description]="room.room.description"
-          [meetingLength]="room.room.meetingLength"
-          [meetingType]="room.room.type"
-          [members]="room.room.members"
-          [profileImg]="room.room.profileImages"
-          [memberCount]="room.room.memberCount"
-          [accentColor]="room.room.color"
+          [room]="room.room"
           [favorite]="room.favorite"
         >
         </app-calendar-grid-item>
@@ -40,14 +33,7 @@
   <mat-grid-tile *ngFor="let room of rooms">
     <app-calendar-grid-item
       [calID]="room.roomID"
-      [title]="room.room.title"
-      [description]="room.room.description"
-      [meetingLength]="room.room.meetingLength"
-      [meetingType]="room.room.type"
-      [members]="room.room.members"
-      [profileImg]="room.room.profileImages"
-      [memberCount]="room.room.memberCount"
-      [accentColor]="room.room.color"
+      [room]="room.room"
       [favorite]="room.favorite"
     >
     </app-calendar-grid-item>

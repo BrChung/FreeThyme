@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { CalendarService } from "../../../services/calendar.service";
-import { Member } from "../../../models/member";
 
 @Component({
   selector: "app-calendar-grid-item",
@@ -9,15 +8,8 @@ import { Member } from "../../../models/member";
 })
 export class CalendarGridItemComponent implements OnInit {
   @Input() calID: string;
-  @Input() title: string = "Untitled Calendar";
-  @Input() description: string = "";
-  @Input() meetingLength: number;
-  @Input() meetingType: string = "General";
-  @Input() members: Array<Member>;
-  @Input() memberCount: number;
-  @Input() profileImg: any;
-  @Input() accentColor: string = "#3D94C7";
-  @Input() imageURL: string = "";
+  @Input() room: any;
+  @Input() imageURL: string = ""; //Not yet implemented
   @Input() favorite: boolean = false;
   rippleDisabled = false;
   displayTime: string;
@@ -25,7 +17,7 @@ export class CalendarGridItemComponent implements OnInit {
   constructor(private calendar: CalendarService) {}
 
   ngOnInit(): void {
-    this.displayTime = this.minutesToDhm(Number(this.meetingLength));
+    this.displayTime = this.minutesToDhm(Number(this.room.meetingLength));
   }
 
   minutesToDhm(mins: number) {

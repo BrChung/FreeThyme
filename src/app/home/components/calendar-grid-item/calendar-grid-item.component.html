@@ -1,5 +1,5 @@
 <div class="parent">
-  <div id="background" [ngStyle]="{ background: accentColor }">
+  <div id="background" [ngStyle]="{ background: room.color }">
     <div
       id="container"
       matRipple
@@ -15,25 +15,25 @@
             (mousedown)="rippleDisabled = true"
             (mouseup)="rippleDisabled = false"
           >
-            <mat-icon [ngStyle]="{ color: accentColor }" *ngIf="favorite">
+            <mat-icon [ngStyle]="{ color: room.color }" *ngIf="favorite">
               star
             </mat-icon>
-            <mat-icon [ngStyle]="{ color: accentColor }" *ngIf="!favorite">
+            <mat-icon [ngStyle]="{ color: room.color }" *ngIf="!favorite">
               star_border
             </mat-icon>
           </button>
         </div>
         <div class="calendar-title">
-          <span>{{ title }}</span>
+          <span>{{ room.title }}</span>
         </div>
         <div class="calendar-information">
           <div class="calendar-overview">
-            <span>{{ displayTime }} | {{ meetingType }}</span>
+            <span>{{ displayTime }} | {{ room.type }}</span>
           </div>
           <div
             class="calendar-description"
             ellipsis
-            [ellipsis-content]="description"
+            [ellipsis-content]="room.description"
           ></div>
         </div>
       </div>
@@ -41,9 +41,9 @@
         <hr />
         <div class="user-share">
           <app-user-bar
-            [userCount]="memberCount"
-            [users]="members"
-            [userImg]="profileImg"
+            [userCount]="room.memberCount"
+            [users]="room.members"
+            [userImg]="room.profileImages"
           ></app-user-bar>
           <button
             mat-raised-button
