@@ -1,9 +1,13 @@
 // This model differs to users as it describes the individual members in a calendar room
 export interface Member {
-  UID: string;
+  uid: string;
   nickname: string;
   roles: Roles;
   combined: string; //ex (owner Tommy = 1_Tommy)
+  favorite?: boolean;
+  addedAt?: any;
+  lastAccessed?: any;
+  roomID?: string;
 }
 
 export interface Roles {

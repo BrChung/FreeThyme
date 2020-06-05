@@ -1,0 +1,60 @@
+<div class="parent">
+  <div id="background" [ngStyle]="{ background: room.color }">
+    <div
+      id="container"
+      matRipple
+      [matRippleDisabled]="rippleDisabled"
+      [ngStyle]="imageURL && { 'background-image': 'url(' + imageURL + ')' }"
+      [routerLink]="['/cal/' + calID]"
+    >
+      <div class="top-container">
+        <div class="favorite">
+          <button
+            mat-icon-button
+            (click)="toggleFavorite()"
+            (mousedown)="rippleDisabled = true"
+            (mouseup)="rippleDisabled = false"
+          >
+            <mat-icon [ngStyle]="{ color: room.color }" *ngIf="favorite">
+              star
+            </mat-icon>
+            <mat-icon [ngStyle]="{ color: room.color }" *ngIf="!favorite">
+              star_border
+            </mat-icon>
+          </button>
+        </div>
+        <div class="calendar-title">
+          <span>{{ room.title }}</span>
+        </div>
+        <div class="calendar-information">
+          <div class="calendar-overview">
+            <span>{{ displayTime }} | {{ room.type }}</span>
+          </div>
+          <div
+            class="calendar-description"
+            ellipsis
+            [ellipsis-content]="room.description"
+          ></div>
+        </div>
+      </div>
+      <div class="bottom-container-user-share">
+        <hr />
+        <div class="user-share">
+          <app-user-bar
+            [userCount]="room.memberCount"
+            [users]="room.members"
+            [userImg]="room.profileImages"
+          ></app-user-bar>
+          <button
+            mat-raised-button
+            (click)="test()"
+            (mousedown)="rippleDisabled = true"
+            (mouseup)="rippleDisabled = false"
+          >
+            Share
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+.home-container {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: #fcfcfc;
+}
+
+.home-sidenav-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 1.2em;
+  background-color: #f5faff;
+}
+
+.home-sidenav-button {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  height: 2.75em;
+  width: 14em;
+  margin: 1em 1em 0em 1em;
+}
+
+.home-sidenav-button-active {
+  border-radius: 0.625em;
+  background: #d8e0e8;
+  color: #2162d0;
+}
+
+.home-sidenav-button-icon {
+  margin-left: 1em;
+  margin-right: 0.6em;
+}
+
+router-outlet ~ * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.home-sidenav-container-calendar-button {
+  margin: 2em 0 2em 0;
+}

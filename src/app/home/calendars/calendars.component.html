@@ -1,0 +1,41 @@
+<div *ngIf="showFavorite">
+  <div class="home-calendars-subheading">
+    <mat-icon class="home-calendars-subheading-icon">star</mat-icon>
+    <span>Starred Calendars</span>
+  </div>
+
+  <mat-grid-list
+    [cols]="breakpoint"
+    rowHeight="16em"
+    (window:resize)="onResize($event)"
+  >
+    <div *ngFor="let room of rooms">
+      <mat-grid-tile *ngIf="room.favorite">
+        <app-calendar-grid-item
+          [calID]="room.roomID"
+          [room]="room.room"
+          [favorite]="room.favorite"
+        >
+        </app-calendar-grid-item>
+      </mat-grid-tile>
+    </div>
+  </mat-grid-list>
+</div>
+<div class="home-calendars-subheading">
+  <mat-icon class="home-calendars-subheading-icon">calendar_today</mat-icon>
+  <span>Calendars</span>
+</div>
+<mat-grid-list
+  [cols]="breakpoint"
+  rowHeight="16em"
+  (window:resize)="onResize($event)"
+>
+  <mat-grid-tile *ngFor="let room of rooms">
+    <app-calendar-grid-item
+      [calID]="room.roomID"
+      [room]="room.room"
+      [favorite]="room.favorite"
+    >
+    </app-calendar-grid-item>
+  </mat-grid-tile>
+</mat-grid-list>

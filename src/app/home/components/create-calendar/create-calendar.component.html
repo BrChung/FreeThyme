@@ -1,0 +1,67 @@
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="calendarForm">
+    <form [formGroup]="calendarForm">
+      <ng-template matStepLabel>Calendar Options</ng-template>
+      <mat-form-field [color]="title.valid && 'accent'">
+        <input
+          matInput
+          formControlName="title"
+          type="text"
+          placeholder="Title"
+          autocomplete="off"
+        />
+        <mat-error *ngIf="title.invalid && title.dirty">
+          You must have a title for the calendar
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea
+          placeholder="Description"
+          matInput
+          formControlName="description"
+        ></textarea>
+      </mat-form-field>
+      <mat-button-toggle-group formControlName="color">
+        <mat-button-toggle *ngFor="let opt of colors" [value]="opt">
+          <mat-icon [ngStyle]="{ color: opt }">lens</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="meetingForm">
+    <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Meeting Details</ng-template>
+      <mat-form-field>
+        <mat-label>Meeting Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of meetingTypes" [value]="type">
+            {{ type }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="hours">
+          <mat-option *ngFor="let hour of hoursArr" [value]="hour">
+            {{ hour }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span>hr</span>
+      <mat-form-field>
+        <mat-select formControlName="mins">
+          <mat-option *ngFor="let min of minsArr" [value]="min">
+            {{ min }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span>min</span>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button type="submit">Create Calendar</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>

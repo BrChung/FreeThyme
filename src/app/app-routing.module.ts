@@ -1,13 +1,21 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { HomeComponent } from "./components/home/home.component";
-import { RoomComponent } from "./components/room/room.component";
 import { PlaygroundComponent } from "./playground/playground.component";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "playground", component: PlaygroundComponent },
-  { path: "cal/:id", component: RoomComponent },
+  { path: "", redirectTo: "/home/cal", pathMatch: "full" },
+  { path: "playground", component: PlaygroundComponent }, //Temp
+  {
+    path: "home",
+    loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
+  },
+  {
+    path: "cal",
+    loadChildren: () =>
+      import("./calendar-room/calendar-room.module").then(
+        (m) => m.CalendarRoomModule
+      ),
+  },
   {
     path: "login",
     loadChildren: () => import("./user/user.module").then((m) => m.UserModule),
