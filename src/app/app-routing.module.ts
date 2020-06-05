@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { RoomComponent } from "./components/room/room.component";
 import { PlaygroundComponent } from "./playground/playground.component";
 
 const routes: Routes = [
@@ -10,7 +9,13 @@ const routes: Routes = [
     path: "home",
     loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
   },
-  { path: "cal/:id", component: RoomComponent },
+  {
+    path: "cal",
+    loadChildren: () =>
+      import("./calendar-room/calendar-room.module").then(
+        (m) => m.CalendarRoomModule
+      ),
+  },
   {
     path: "login",
     loadChildren: () => import("./user/user.module").then((m) => m.UserModule),

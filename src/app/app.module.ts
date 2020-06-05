@@ -11,7 +11,6 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AuthService } from "./services/auth.service";
 import { CalendarService } from "./services/calendar.service";
 
-import { RoomComponent } from "./components/room/room.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { SharedModule } from "./shared/shared.module";
@@ -19,12 +18,7 @@ import { PlaygroundComponent } from "./playground/playground.component";
 import { CreateCalendarComponent } from "./components/create-calendar/create-calendar.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    RoomComponent,
-    CreateCalendarComponent,
-    PlaygroundComponent,
-  ],
+  declarations: [AppComponent, CreateCalendarComponent, PlaygroundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

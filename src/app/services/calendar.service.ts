@@ -13,9 +13,6 @@ import { AuthService } from "./auth.service";
   providedIn: "root",
 })
 export class CalendarService {
-  room: Observable<any>;
-  roomDoc: AngularFirestoreDocument<any>;
-
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
@@ -23,9 +20,17 @@ export class CalendarService {
   ) {}
 
   getRoomDetails(roomID: any) {
-    this.roomDoc = this.afs.doc(`rooms/${roomID}`);
-    this.room = this.roomDoc.valueChanges();
-    return this.room;
+    const roomDoc = this.afs.doc(`rooms/${roomID}`);
+    const room = roomDoc.valueChanges();
+    return room;
+  }
+
+  async changeFavorite(state: boolean, roomID: string) {
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      const memDoc = this.afs.doc(`rooms/${roomID}/members/${user.uid}`);
+      return memDoc.set({ favorite: !state }, { merge: true });
+    }
   }
 
   async createRoom(data: any) {
@@ -62,7 +67,7 @@ export class CalendarService {
           try {
             return this.afs
               .collectionGroup("members", (ref) =>
-                ref.where("uid", "==", user.uid).orderBy("lastAccessed")
+                ref.where("uid", "==", user.uid).orderBy("lastAccessed", "desc")
               )
               .valueChanges()
               .pipe(

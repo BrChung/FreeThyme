@@ -12,15 +12,22 @@ export class CalendarsComponent implements OnInit, OnDestroy {
   roomSub: Subscription;
   rooms: any;
   breakpoint: number;
+  showFavorite: boolean = false;
 
   constructor(public calendar: CalendarService) {}
 
   ngOnInit(): void {
     this.breakpoint =
       window.innerWidth >= 1475 ? 3 : window.innerWidth >= 1080 ? 2 : 1;
-    this.roomSub = this.calendar
-      .getRooms()
-      .subscribe((rooms) => (this.rooms = rooms));
+    this.roomSub = this.calendar.getRooms().subscribe((rooms) => {
+      this.rooms = rooms;
+      this.showFavorite = false;
+      rooms.forEach((element) => {
+        if (element.favorite) {
+          return (this.showFavorite = true);
+        }
+      });
+    });
   }
 
   onResize(event) {

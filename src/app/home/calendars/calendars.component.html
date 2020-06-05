@@ -1,3 +1,37 @@
+<div *ngIf="showFavorite">
+  <div class="home-calendars-subheading">
+    <mat-icon class="home-calendars-subheading-icon">star</mat-icon>
+    <span>Starred Calendars</span>
+  </div>
+
+  <mat-grid-list
+    [cols]="breakpoint"
+    rowHeight="16em"
+    (window:resize)="onResize($event)"
+  >
+    <div *ngFor="let room of rooms">
+      <mat-grid-tile *ngIf="room.favorite">
+        <app-calendar-grid-item
+          [calID]="room.roomID"
+          [title]="room.room.title"
+          [description]="room.room.description"
+          [meetingLength]="room.room.meetingLength"
+          [meetingType]="room.room.type"
+          [members]="room.room.members"
+          [profileImg]="room.room.profileImages"
+          [memberCount]="room.room.memberCount"
+          [accentColor]="room.room.color"
+          [favorite]="room.favorite"
+        >
+        </app-calendar-grid-item>
+      </mat-grid-tile>
+    </div>
+  </mat-grid-list>
+</div>
+<div class="home-calendars-subheading">
+  <mat-icon class="home-calendars-subheading-icon">calendar_today</mat-icon>
+  <span>Calendars</span>
+</div>
 <mat-grid-list
   [cols]="breakpoint"
   rowHeight="16em"
@@ -14,6 +48,7 @@
       [profileImg]="room.room.profileImages"
       [memberCount]="room.room.memberCount"
       [accentColor]="room.room.color"
+      [favorite]="room.favorite"
     >
     </app-calendar-grid-item>
   </mat-grid-tile>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { CalendarService } from "../../../services/calendar.service";
 import { Member } from "../../../models/member";
 
 @Component({
@@ -17,10 +18,11 @@ export class CalendarGridItemComponent implements OnInit {
   @Input() profileImg: any;
   @Input() accentColor: string = "#3D94C7";
   @Input() imageURL: string = "";
+  @Input() favorite: boolean = false;
   rippleDisabled = false;
   displayTime: string;
 
-  constructor() {}
+  constructor(private calendar: CalendarService) {}
 
   ngOnInit(): void {
     this.displayTime = this.minutesToDhm(Number(this.meetingLength));
@@ -36,6 +38,11 @@ export class CalendarGridItemComponent implements OnInit {
       minutes ? minutes + " min" + (minutes > 1 ? "s" : "") : "",
     ];
     return time.filter((el) => el != "").join(", ");
+  }
+
+  toggleFavorite() {
+    if (event.stopPropagation) event.stopPropagation();
+    this.calendar.changeFavorite(this.favorite, this.calID);
   }
 
   test() {

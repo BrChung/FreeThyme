@@ -5,15 +5,22 @@
       matRipple
       [matRippleDisabled]="rippleDisabled"
       [ngStyle]="imageURL && { 'background-image': 'url(' + imageURL + ')' }"
+      [routerLink]="['/cal/' + calID]"
     >
       <div class="top-container">
         <div class="favorite">
           <button
             mat-icon-button
+            (click)="toggleFavorite()"
             (mousedown)="rippleDisabled = true"
             (mouseup)="rippleDisabled = false"
           >
-            <mat-icon [ngStyle]="{ color: accentColor }">star</mat-icon>
+            <mat-icon [ngStyle]="{ color: accentColor }" *ngIf="favorite">
+              star
+            </mat-icon>
+            <mat-icon [ngStyle]="{ color: accentColor }" *ngIf="!favorite">
+              star_border
+            </mat-icon>
           </button>
         </div>
         <div class="calendar-title">
