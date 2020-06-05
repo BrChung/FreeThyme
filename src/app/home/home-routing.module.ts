@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { HomeComponent } from "./home.component";
 import { CalendarsComponent } from "./calendars/calendars.component";
 import { AppointmentsComponent } from "./appointments/appointments.component";
+import { AuthGuard } from "../user/auth.guard";
 
 const routes: Routes = [
   {
@@ -16,10 +17,12 @@ const routes: Routes = [
       {
         path: "cal",
         component: CalendarsComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: "appt",
         component: AppointmentsComponent,
+        canActivate: [AuthGuard],
       },
     ],
   },

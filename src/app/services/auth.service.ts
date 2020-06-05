@@ -107,6 +107,18 @@ export class AuthService {
 
     return userRef.set(data, { merge: true });
   }
+
+  async getCurrentUser() {
+    return new Promise<any>((resolve, reject) => {
+      var user = this.afAuth.auth.onAuthStateChanged(function (user) {
+        if (user) {
+          resolve(user);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
 }
 
 const hoursFromNow = (n) =>

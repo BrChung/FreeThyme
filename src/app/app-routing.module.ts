@@ -2,9 +2,9 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { RoomComponent } from "./components/room/room.component";
 import { PlaygroundComponent } from "./playground/playground.component";
-import { AuthGuard } from "./user/auth.guard";
 
 const routes: Routes = [
+  { path: "", redirectTo: "/home/cal", pathMatch: "full" },
   { path: "playground", component: PlaygroundComponent }, //Temp
   {
     path: "home",
