@@ -8,6 +8,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { SharedModule } from "../shared/shared.module";
 import { CalendarGridItemComponent } from "./components/calendar-grid-item/calendar-grid-item.component";
 import { UserBarComponent } from "./components/user-bar/user-bar.component";
+import { CreateCalendarComponent } from "./components/create-calendar/create-calendar.component";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { UserBarComponent } from "./components/user-bar/user-bar.component";
     AppointmentsComponent,
     CalendarGridItemComponent,
     UserBarComponent,
+    CreateCalendarComponent,
   ],
   imports: [CommonModule, HomeRoutingModule, SharedModule, MatGridListModule],
 })

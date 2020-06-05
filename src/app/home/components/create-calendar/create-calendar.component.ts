@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CalendarService } from "../../services/calendar.service";
+import { CalendarService } from "../../../services/calendar.service";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: "app-create-calendar",
@@ -16,13 +17,11 @@ export class CreateCalendarComponent implements OnInit {
     .map((x, i) => i);
   minsArr = [0, 15, 30, 45];
   meetingTypes = ["General", "Meet Up"];
-  selectedMin = 0;
-  selectedHour = 1;
-  selectedMeeting = "General";
 
   constructor(
     private fb: FormBuilder,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    public dialogRef: MatDialogRef<CreateCalendarComponent>
   ) {}
 
   ngOnInit(): void {
@@ -32,9 +31,9 @@ export class CreateCalendarComponent implements OnInit {
       color: ["#3D94C7", [Validators.required]],
     });
     this.meetingForm = this.fb.group({
-      type: ["", [Validators.required]],
-      hours: ["", [Validators.required]],
-      mins: ["", [Validators.required]],
+      type: ["General", [Validators.required]],
+      hours: ["1", [Validators.required]],
+      mins: ["0", [Validators.required]],
     });
   }
 
@@ -61,5 +60,9 @@ export class CreateCalendarComponent implements OnInit {
   async onSubmit() {
     const data = { ...this.calendarForm.value, ...this.meetingForm.value };
     return this.calendarService.createRoom(data);
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

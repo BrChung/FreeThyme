@@ -23,9 +23,13 @@
           <span>Appointments</span>
         </a>
       </div>
-    </div>
-    <div *ngIf="o.activatedRoute.snapshot.url[0].path == 'cal'">
-      <span>Calendar</span>
+      <div *ngIf="o.activatedRoute.snapshot.url[0].path == 'cal'">
+        <div class="home-sidenav-container-calendar-button">
+          <button mat-fab color="primary" (click)="openCalendarDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </mat-sidenav>
 

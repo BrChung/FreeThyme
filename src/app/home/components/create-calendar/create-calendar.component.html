@@ -11,7 +11,7 @@
           autocomplete="off"
         />
         <mat-error *ngIf="title.invalid && title.dirty">
-          You must a title for the calendar
+          You must have a title for the calendar
         </mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -36,14 +36,14 @@
       <ng-template matStepLabel>Meeting Details</ng-template>
       <mat-form-field>
         <mat-label>Meeting Type</mat-label>
-        <mat-select formControlName="type" [(ngModel)]="selectedMeeting">
+        <mat-select formControlName="type">
           <mat-option *ngFor="let type of meetingTypes" [value]="type">
             {{ type }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field>
-        <mat-select formControlName="hours" [(ngModel)]="selectedHour">
+        <mat-select formControlName="hours">
           <mat-option *ngFor="let hour of hoursArr" [value]="hour">
             {{ hour }}
           </mat-option>
@@ -51,7 +51,7 @@
       </mat-form-field>
       <span>hr</span>
       <mat-form-field>
-        <mat-select formControlName="mins" [(ngModel)]="selectedMin">
+        <mat-select formControlName="mins">
           <mat-option *ngFor="let min of minsArr" [value]="min">
             {{ min }}
           </mat-option>

@@ -37,7 +37,7 @@
       <!-- DROPDOWN MENU -->
 
       <div *ngIf="afAuth.authState | async as user" class="avatar-container">
-        <a routerLink="/profile">
+        <a routerLink="/login">
           <img
             class="avatar"
             [src]="user.photoURL || 'assets/default-user.svg'"
