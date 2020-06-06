@@ -61,6 +61,7 @@ export class CalendarService {
   getRooms() {
     let rooms: any;
     const joinKeys = {};
+    // Pipe takes desired input: whoever is logged in at the moment, and does
     return this.afAuth.authState.pipe(
       switchMap((user) => {
         if (user) {
