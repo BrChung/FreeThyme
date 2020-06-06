@@ -15,6 +15,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { SharedModule } from "./shared/shared.module";
 import { PlaygroundComponent } from "./playground/playground.component";
+import { CalendarModule } from "angular-calendar";
+import { DateAdapter } from "angular-calendar";
+import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 
 @NgModule({
   declarations: [AppComponent, PlaygroundComponent],
@@ -26,6 +29,10 @@ import { PlaygroundComponent } from "./playground/playground.component";
     AngularFirestoreModule,
     BrowserAnimationsModule,
     SharedModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
   providers: [AuthService, CalendarService],
   bootstrap: [AppComponent],

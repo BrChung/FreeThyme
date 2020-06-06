@@ -1,3 +1,34 @@
-<p>calendar-room works!</p>
-{{ room | json }}
-{{ calID }}
+<mat-toolbar class="calendar-room-toolar" *ngIf="room && member">
+  <div class="calendar-room-title-container">
+    <h3>{{ room.title }}</h3>
+    <button mat-icon-button (click)="toggleFavorite()">
+      <mat-icon [ngStyle]="{ color: room.color }" *ngIf="member.favorite">
+        star
+      </mat-icon>
+      <mat-icon [ngStyle]="{ color: room.color }" *ngIf="!member.favorite">
+        star_border
+      </mat-icon>
+    </button>
+  </div>
+  <app-user-bar
+    [userCount]="room.memberCount"
+    [users]="room.members"
+    [userImg]="room.profileImages"
+  ></app-user-bar>
+  <div>
+    <button mat-mini-fab color="primary" (click)="openAddCalDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<mat-sidenav-container class="calendar-room-container">
+  <mat-sidenav mode="side" opened>
+    <app-month-calendar></app-month-calendar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <p>calendar-room works!</p>
+    {{ room | json }}
+    {{ member | json }}
+    {{ calID }}
+  </mat-sidenav-content>
+</mat-sidenav-container>

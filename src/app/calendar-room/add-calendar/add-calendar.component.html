@@ -1,0 +1,12 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div
+    formArrayName="orders"
+    *ngFor="let order of getControls(); let i = index"
+  >
+    <mat-checkbox [formControlName]="i">
+      {{ data.calendars[i].name }}</mat-checkbox
+    >
+  </div>
+
+  <button>submit</button>
+</form>
