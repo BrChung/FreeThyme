@@ -88,8 +88,8 @@ export class CalendarService {
                     (room) =>
                       (joinKeys[(<any>room).payload.id] = room.payload.data())
                   );
-                  rooms = rooms.map((room: any) => {
-                    return { ...room, room: joinKeys[room["roomID"]] };
+                  rooms = rooms.map((member: any) => {
+                    return { ...member, room: joinKeys[member["roomID"]] };
                   });
                   return rooms;
                 })

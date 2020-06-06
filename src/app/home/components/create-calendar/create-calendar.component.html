@@ -2,7 +2,10 @@
   <mat-step [stepControl]="calendarForm">
     <form [formGroup]="calendarForm">
       <ng-template matStepLabel>Calendar Options</ng-template>
-      <mat-form-field [color]="title.valid && 'accent'">
+      <mat-form-field
+        [color]="title.valid && 'accent'"
+        class="create-calendar-title"
+      >
         <input
           matInput
           formControlName="title"
@@ -14,14 +17,17 @@
           You must have a title for the calendar
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="create-calendar-description">
         <textarea
           placeholder="Description"
           matInput
           formControlName="description"
         ></textarea>
       </mat-form-field>
-      <mat-button-toggle-group formControlName="color">
+      <mat-button-toggle-group
+        formControlName="color"
+        class="create-calendar-colors"
+      >
         <mat-button-toggle *ngFor="let opt of colors" [value]="opt">
           <mat-icon [ngStyle]="{ color: opt }">lens</mat-icon>
         </mat-button-toggle>
