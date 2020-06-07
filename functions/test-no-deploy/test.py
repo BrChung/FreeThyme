@@ -82,9 +82,35 @@ def findOverlap(eventList):
 
 test = findOverlap(eventList1)
 print(test)
-# test2 = findOverlap(eventList2)
-# print(test2)
-# findOverlap(eventList3)
 
-def main():
-    pass
+
+'''
+Weighted Merge - deprecated
+Reason: O(n^2) algo, will be costly to scale
+'''
+def findWeightedMerge(data):
+    result = list()
+    times = list()
+
+    for event in data:
+        times.append(event["start"])
+        times.append(event["end"])
+    times = list(dict.fromkeys(times))
+    times.sort()
+
+    for i in range(0, len(times)-1):
+        result.append({"start": times[i], "end": times[i+1]})
+
+    for item in result:
+        weight = 0
+        for event in data:
+            if item["start"] >= event["start"] and item["start"] < event["end"]:
+                weight += event["weight"]
+        item["weight"] = weight
+
+    return result
+
+arr = [{"start": 0, "end": 4, "weight": 5},
+       {"start": 1, "end": 6, "weight": 10}]
+
+print(findWeightedMerge(arr))
