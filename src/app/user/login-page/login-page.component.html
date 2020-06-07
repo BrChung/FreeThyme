@@ -2,7 +2,7 @@
   <div *ngIf="!(auth.user$ | async)">
     <h1>Login with your Calendar Provider</h1>
     <br /><br />
-    <button (click)="auth.login()">
+    <button mat-raised-button (click)="login()">
       <img src="/assets/google-logo.svg" /> Login with Google
     </button>
     <br /><br />
@@ -14,6 +14,6 @@
       Logged in as <strong>{{ user.email }}</strong>
     </p>
 
-    <button (click)="auth.logout()">Logout</button>
+    <button mat-raised-button (click)="auth.logout()">Logout</button>
   </div>
 </main>

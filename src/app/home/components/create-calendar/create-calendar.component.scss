@@ -15,5 +15,40 @@
 }
 
 .create-calendar-colors {
-  left: 50%;
+  margin: 0.7em;
+}
+
+.add-calendar-cal-options-next-container {
+  width: 100%;
+}
+
+.add-calendar-cal-options-next {
+  margin-top: 1em;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.create-calendar-cal-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create-calendar-meeting-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-calendar-meeting-details-nav-buttons {
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.create-calendar-meeting-details-length-field {
+  width: 4em;
+}
+
+.create-calendar-meeting-details-length-unit {
+  margin-right: 2em;
 }

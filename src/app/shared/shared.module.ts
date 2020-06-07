@@ -5,6 +5,7 @@ import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { EllipsisModule } from "ngx-ellipsis";
 import { LayoutModule } from "@angular/cdk/layout";
+import { ClipboardModule } from "@angular/cdk/clipboard";
 import { MatRippleModule } from "@angular/material/core";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -24,12 +25,14 @@ import {
 } from "@angular/material/dialog";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatTabsModule } from "@angular/material/tabs";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatIconModule } from "@angular/material/icon";
 import { LayoutComponent } from "./layout/layout.component";
 import { MonthCalendarComponent } from "./components/month-calendar/month-calendar.component";
 import { UserBarComponent } from "./components/user-bar/user-bar.component";
+import { ShareInviteMembersComponent } from "./components/share-invite-members/share-invite-members.component";
 
 const components = [LayoutComponent, MonthCalendarComponent, UserBarComponent];
 
@@ -50,6 +53,7 @@ const modules = [
   MatButtonModule,
   MatToolbarModule,
   LayoutModule,
+  ClipboardModule,
   MatSidenavModule,
   MatListModule,
   MatMenuModule,
@@ -58,10 +62,11 @@ const modules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatCheckboxModule,
+  MatTabsModule,
 ];
 
 @NgModule({
-  declarations: [...components],
+  declarations: [...components, ShareInviteMembersComponent],
   imports: [...modules],
   exports: [...components, ...modules],
   providers: [

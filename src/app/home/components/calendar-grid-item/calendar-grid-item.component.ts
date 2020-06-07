@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { CalendarService } from "../../../services/calendar.service";
+import { MatDialog } from "@angular/material/dialog";
+import { ShareInviteMembersComponent } from "../../../shared/components/share-invite-members/share-invite-members.component";
 
 @Component({
   selector: "app-calendar-grid-item",
@@ -14,7 +16,7 @@ export class CalendarGridItemComponent implements OnInit {
   rippleDisabled = false;
   displayTime: string;
 
-  constructor(private calendar: CalendarService) {}
+  constructor(private calendar: CalendarService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.displayTime = this.minutesToDhm(Number(this.room.meetingLength));
@@ -37,8 +39,14 @@ export class CalendarGridItemComponent implements OnInit {
     this.calendar.changeFavorite(this.favorite, this.calID);
   }
 
-  test() {
+  async openInviteDialog(index: number) {
     if (event.stopPropagation) event.stopPropagation();
-    console.log("test");
+    this.dialog.open(ShareInviteMembersComponent, {
+      width: "550px",
+      data: {
+        index,
+        calID: this.calID,
+      },
+    });
   }
 }

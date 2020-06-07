@@ -1,0 +1,65 @@
+<mat-tab-group
+  mat-align-tabs="center"
+  [selectedIndex]="data.index"
+  dynamicHeight
+>
+  <mat-tab label="Members">
+    <div class="member-tab">
+      <div *ngFor="let member of members$ | async">
+        <div class="member-item">
+          <img
+            class="avatar"
+            [src]="member.user.photoURL || 'assets/default-user.svg'"
+          />
+          <span>{{ member.nickname }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Share">
+    <div class="share-tab">
+      <mat-form-field class="share-link-field">
+        <input matInput type="text" [value]="shareLink" readonly />
+      </mat-form-field>
+      <button mat-icon-button [cdkCopyToClipboard]="shareLink">
+        <mat-icon>file_copy</mat-icon>
+      </button>
+    </div>
+  </mat-tab>
+  <mat-tab label="Invite">
+    <div class="invite-tab">
+      <form [formGroup]="emailForm" (ngSubmit)="addMember()">
+        <div class="invite-email-field">
+          <mat-form-field class="email-form-field">
+            <input
+              type="email"
+              matInput
+              placeholder="Email Address"
+              formControlName="email"
+              autocomplete="off"
+            />
+            <mat-hint *ngIf="email.valid">User found! Invite them!</mat-hint>
+            <mat-hint
+              *ngIf="email.invalid && email.dirty && !email.errors.email"
+            >
+              User does not exist. Ask them to sign up!
+            </mat-hint>
+            <mat-hint *ngIf="email.pending">
+              Checking to see if {{ email.value }} exists...
+            </mat-hint>
+          </mat-form-field>
+          <div class="invite-button-container">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="emailForm.invalid || email.pending"
+            >
+              Invite
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+</mat-tab-group>

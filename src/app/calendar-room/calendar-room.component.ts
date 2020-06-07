@@ -13,6 +13,7 @@ import { Subject } from "rxjs";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AuthService } from "../services/auth.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
+import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
 
 @Component({
   selector: "app-calendar-room",
@@ -56,18 +57,22 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     this.roomSub = this.calendar.getRoomDoc(this.calID).subscribe((room) => {
       this.room = room;
-      room["calendar"].forEach((elm) => {
-        console.log(elm);
-        const { start, end } = elm;
-        const colorHex = this.countToColor(elm["count"]);
-        const color = { primary: colorHex, secondary: colorHex };
-        this.events.push({
-          start: start.toDate(),
-          end: end.toDate(),
-          color,
-          title: "",
+      let events = [];
+      if (room["calendar"]) {
+        room["calendar"].forEach((elm) => {
+          const { start, end } = elm;
+          const colorHex = this.countToColor(elm["count"]);
+          const color = { primary: colorHex, secondary: colorHex };
+          events.push({
+            start: start.toDate(),
+            end: end.toDate(),
+            color,
+            title: "",
+          });
+          this.events = events;
         });
-      });
+      }
+      this.refresh.next();
     });
 
     this.memberSub = this.calendar
@@ -117,9 +122,19 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       x.selected === y.selected ? 0 : x.selected ? -1 : 1;
     });
     this.dialog.open(AddCalendarComponent, {
-      width: "250px",
+      width: "400px",
       data: {
         calendars,
+        calID: this.calID,
+      },
+    });
+  }
+
+  async openInviteDialog(index: number) {
+    this.dialog.open(ShareInviteMembersComponent, {
+      width: "550px",
+      data: {
+        index,
         calID: this.calID,
       },
     });

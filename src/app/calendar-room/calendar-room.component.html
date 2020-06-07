@@ -2,22 +2,29 @@
   <div class="calendar-room-title-container">
     <h3>{{ room.title }}</h3>
     <button mat-icon-button (click)="toggleFavorite()">
-      <mat-icon [ngStyle]="{ color: room.color }" *ngIf="member.favorite">
+      <mat-icon class="favorite-button" *ngIf="member.favorite">
         star
       </mat-icon>
-      <mat-icon [ngStyle]="{ color: room.color }" *ngIf="!member.favorite">
+      <mat-icon class="favorite-button" *ngIf="!member.favorite">
         star_border
       </mat-icon>
     </button>
   </div>
-  <app-user-bar
-    [userCount]="room.memberCount"
-    [users]="room.members"
-    [userImg]="room.profileImages"
-  ></app-user-bar>
+  <div class="calendar-room-toolar-members">
+    <div (click)="openInviteDialog(0)">
+      <app-user-bar
+        [userCount]="room.memberCount"
+        [users]="room.members"
+        [userImg]="room.profileImages"
+      ></app-user-bar>
+    </div>
+    <button mat-raised-button (click)="openInviteDialog(2)">
+      Invite
+    </button>
+  </div>
   <div>
-    <button mat-mini-fab color="primary" (click)="openAddCalDialog()">
-      <mat-icon>add</mat-icon>
+    <button mat-raised-button color="primary" (click)="openAddCalDialog()">
+      Add Events
     </button>
   </div>
 </mat-toolbar>

@@ -1,0 +1,44 @@
+.avatar {
+  width: 2em;
+  border-radius: 50%;
+  margin-right: 1em;
+}
+
+.member-tab {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.member-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0.5em;
+}
+
+.share-link-field {
+  width: 100%;
+}
+
+.share-tab {
+  padding-top: 2em;
+  padding-bottom: 2em;
+  display: flex;
+}
+
+.email-form-field {
+  width: 100%;
+}
+
+.invite-email-field {
+  display: flex;
+}
+
+.invite-tab {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.invite-button-container {
+  padding: 1em;
+}

@@ -25,8 +25,12 @@
       </div>
       <div *ngIf="o.activatedRoute.snapshot.url[0].path == 'cal'">
         <div class="home-sidenav-container-calendar-button">
-          <button mat-fab color="primary" (click)="openCalendarDialog()">
-            <mat-icon>add</mat-icon>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openCalendarDialog()"
+          >
+            Create Calendar
           </button>
         </div>
       </div>

@@ -44,6 +44,7 @@ export class AuthService {
     );
     return this.updateUserData(reterievedData.user);
   }
+
   logout() {
     this.afAuth.auth.signOut();
   }
