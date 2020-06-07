@@ -4,9 +4,6 @@
 </p>
 
 <div *ngIf="auth.user$ | async">
-  <button (click)="auth.getEvents()" class="button is-success">
-    Get Events
-  </button>
   <button (click)="auth.insertEvent()" class="button is-warning">
     Add Event
   </button>

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CalendarService } from "../../../services/calendar.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-create-calendar",
@@ -21,6 +22,7 @@ export class CreateCalendarComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private calendarService: CalendarService,
+    private router: Router,
     public dialogRef: MatDialogRef<CreateCalendarComponent>
   ) {}
 
@@ -32,8 +34,8 @@ export class CreateCalendarComponent implements OnInit {
     });
     this.meetingForm = this.fb.group({
       type: ["General", [Validators.required]],
-      hours: ["1", [Validators.required]],
-      mins: ["0", [Validators.required]],
+      hours: [1, [Validators.required]],
+      mins: [0, [Validators.required]],
     });
   }
 
@@ -59,7 +61,9 @@ export class CreateCalendarComponent implements OnInit {
 
   async onSubmit() {
     const data = { ...this.calendarForm.value, ...this.meetingForm.value };
-    return this.calendarService.createRoom(data);
+    const id = await this.calendarService.createRoom(data);
+    this.dialogRef.close();
+    this.router.navigate([`cal/${id}`]);
   }
 
   onNoClick(): void {

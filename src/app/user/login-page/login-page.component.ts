@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-login-page",
@@ -7,7 +8,12 @@ import { AuthService } from "../../services/auth.service";
   styleUrls: ["./login-page.component.scss"],
 })
 export class LoginPageComponent implements OnInit {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
+
+  async login() {
+    await this.auth.login();
+    this.router.navigate(["/home/cal"]);
+  }
 }

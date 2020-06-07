@@ -54,6 +54,7 @@ export class AddCalendarComponent implements OnInit {
       busyTimes.push(...value["busy"]);
     }
     this.calendar.addBusyTimes(busyTimes, this.data.calID);
+    this.dialogRef.close();
   }
 
   onNoClick(): void {

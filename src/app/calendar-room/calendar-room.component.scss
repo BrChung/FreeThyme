@@ -4,7 +4,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100vh;
+  height: 90vh;
   background: #fcfcfc;
 }
 
@@ -16,4 +16,31 @@
 .calendar-room-title-container {
   display: flex;
   align-items: center;
+}
+
+.calendar-room-cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calendar-room-cal-nav-but-group {
+  margin: 1em;
+}
+
+.calendar-room-cal-view-but-group {
+  margin: 0.8em;
+}
+
+.calendar-room-cal-header-title {
+  font-size: 1em;
+}
+
+.calendar-room-toolar-members {
+  display: flex;
+  align-items: center;
+}
+
+.favorite-button {
+  color: #daa520;
 }

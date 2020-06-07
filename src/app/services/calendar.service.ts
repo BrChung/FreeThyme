@@ -37,6 +37,30 @@ export class CalendarService {
     );
   }
 
+  getMembers(roomID: string) {
+    let members = [];
+    const joinKeys = {};
+    const collectionRef = this.afs.collection(`rooms/${roomID}/members`);
+    return collectionRef.valueChanges().pipe(
+      switchMap((m) => {
+        members = m;
+        const uids = Array.from(new Set(m.map((member: any) => member["uid"])));
+        // Firestore Room Doc Reads
+        const userDocs = uids.map((uid) =>
+          this.afs.doc(`users/${uid}`).valueChanges()
+        );
+        return userDocs.length ? combineLatest(userDocs) : of([]);
+      }),
+      map((arr: any[]) => {
+        arr.forEach((user) => (joinKeys[<any>user.uid] = user));
+        members = members.map((member: any) => {
+          return { ...member, user: joinKeys[member["uid"]] };
+        });
+        return members;
+      })
+    );
+  }
+
   async changeFavorite(state: boolean, roomID: string) {
     const user = await this.auth.getCurrentUser();
     if (user) {
@@ -60,6 +84,7 @@ export class CalendarService {
         })
         .then((docRef) => {
           this.setMember(docRef.id, user.uid, user.displayName, "owner");
+          return docRef.id;
         })
         .catch((error) => console.error("Error Adding Document: ", error));
     }

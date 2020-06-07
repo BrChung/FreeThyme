@@ -21,8 +21,8 @@ import { Subject } from "rxjs";
 
 const colors: any = {
   red: {
-    primary: "#FFA07A",
-    secondary: "#FFA07A",
+    primary: "#ad2121",
+    secondary: "#1e90ff",
   },
   blue: {
     primary: "#1e90ff",
@@ -74,7 +74,6 @@ export class PlaygroundComponent implements OnInit {
       end: addDays(new Date(), 1),
       title: "A 3 day event",
       actions: this.actions,
-      color: colors.red,
       allDay: true,
       resizable: {
         beforeStart: true,

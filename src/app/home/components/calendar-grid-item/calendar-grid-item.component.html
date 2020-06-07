@@ -40,14 +40,20 @@
       <div class="bottom-container-user-share">
         <hr />
         <div class="user-share">
-          <app-user-bar
-            [userCount]="room.memberCount"
-            [users]="room.members"
-            [userImg]="room.profileImages"
-          ></app-user-bar>
+          <div
+            (click)="openInviteDialog(0)"
+            (mousedown)="rippleDisabled = true"
+            (mouseup)="rippleDisabled = false"
+          >
+            <app-user-bar
+              [userCount]="room.memberCount"
+              [users]="room.members"
+              [userImg]="room.profileImages"
+            ></app-user-bar>
+          </div>
           <button
             mat-raised-button
-            (click)="test()"
+            (click)="openInviteDialog(1)"
             (mousedown)="rippleDisabled = true"
             (mouseup)="rippleDisabled = false"
           >
