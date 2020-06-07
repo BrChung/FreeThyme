@@ -114,3 +114,16 @@ a {
   color: #292929;
   text-decoration: none;
 }
+
+.cal-week-view .cal-time-events {
+  max-height: 750px;
+  overflow-y: auto;
+}
+
+.cal-day-headers {
+  margin-right: 14.5px;
+}
+
+.cal-day-columns {
+  height: 100%;
+}

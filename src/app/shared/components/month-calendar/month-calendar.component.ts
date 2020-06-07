@@ -1,12 +1,12 @@
 import {
   Component,
   Output,
+  Input,
   EventEmitter,
   ViewChild,
   Renderer2,
   AfterViewInit,
 } from "@angular/core";
-import { subDays, addDays } from "date-fns";
 import { MatCalendar } from "@angular/material/datepicker";
 
 @Component({
@@ -18,7 +18,7 @@ export class MonthCalendarComponent implements AfterViewInit {
   @Output()
   dateSelected: EventEmitter<Date> = new EventEmitter();
 
-  @Output()
+  @Input()
   selectedDate = new Date();
 
   @ViewChild("calendar")
@@ -47,22 +47,5 @@ export class MonthCalendarComponent implements AfterViewInit {
   dateChanged() {
     this.calendar.activeDate = this.selectedDate;
     this.dateSelected.emit(this.selectedDate);
-  }
-
-  prevDay() {
-    const prevDay = subDays(this.selectedDate, 1);
-    this.selectedDate = prevDay;
-    this.dateChanged();
-  }
-
-  today() {
-    this.selectedDate = new Date();
-    this.dateChanged();
-  }
-
-  nextDay() {
-    const nextDay = addDays(this.selectedDate, 1);
-    this.selectedDate = nextDay;
-    this.dateChanged();
   }
 }
