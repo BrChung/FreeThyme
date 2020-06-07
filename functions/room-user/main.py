@@ -2,7 +2,7 @@ from google.cloud import firestore
 client = firestore.Client()
 
 '''
-Purpose: Queries and stroes the top 5 users written to /rooms/{roomID}/users/{uid} to room document.
+Purpose: Queries and stores the top 5 users written to /rooms/{roomID}/users/{uid} to room document.
     Client does not need to query members collection or read multiple docs
 Deploy:
 gcloud functions deploy room_user --runtime python37 --trigger-event providers/cloud.firestore/eventTypes/document.write --trigger-resource "projects/freethyme-269222/databases/(default)/documents/rooms/{roomID}/members/{uid}"

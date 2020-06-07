@@ -19,10 +19,22 @@ export class CalendarService {
     private auth: AuthService
   ) {}
 
-  getRoomDetails(roomID: any) {
+  getRoomDoc(roomID: any) {
     const roomDoc = this.afs.doc(`rooms/${roomID}`);
     const room = roomDoc.valueChanges();
     return room;
+  }
+
+  getMemberDoc(roomID: string) {
+    return this.afAuth.authState.pipe(
+      switchMap((user) => {
+        if (user) {
+          const memberDoc = this.afs.doc(`rooms/${roomID}/members/${user.uid}`);
+          const member = memberDoc.valueChanges();
+          return member;
+        }
+      })
+    );
   }
 
   async changeFavorite(state: boolean, roomID: string) {
@@ -48,6 +60,22 @@ export class CalendarService {
         })
         .then((docRef) => {
           this.setMember(docRef.id, user.uid, user.displayName, "owner");
+        })
+        .catch((error) => console.error("Error Adding Document: ", error));
+    }
+  }
+
+  async addBusyTimes(busyTimes: Array<any>, calID: string) {
+    busyTimes.map((x) => {
+      x.start = firebase.firestore.Timestamp.fromDate(new Date(x.start));
+      x.end = firebase.firestore.Timestamp.fromDate(new Date(x.end));
+    });
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      return this.afs
+        .doc(`rooms/${calID}/calendars/${user.uid}`)
+        .set({
+          calendar: busyTimes,
         })
         .catch((error) => console.error("Error Adding Document: ", error));
     }

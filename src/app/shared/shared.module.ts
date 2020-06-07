@@ -17,12 +17,21 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatCardModule } from "@angular/material/card";
-import { MatDialogModule } from "@angular/material/dialog";
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 import { MatIconModule } from "@angular/material/icon";
 import { LayoutComponent } from "./layout/layout.component";
+import { MonthCalendarComponent } from "./components/month-calendar/month-calendar.component";
+import { UserBarComponent } from "./components/user-bar/user-bar.component";
 
-const components = [LayoutComponent];
+const components = [LayoutComponent, MonthCalendarComponent, UserBarComponent];
 
 const modules = [
   CommonModule,
@@ -46,11 +55,21 @@ const modules = [
   MatMenuModule,
   MatCardModule,
   MatDialogModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatCheckboxModule,
 ];
 
 @NgModule({
   declarations: [...components],
   imports: [...modules],
   exports: [...components, ...modules],
+  providers: [
+    {
+      provide: MatDialogRef,
+      useValue: {},
+    },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+  ],
 })
 export class SharedModule {}
