@@ -31,7 +31,7 @@ export class ShareInviteMembersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.members$ = this.calendar.getMembers(this.data.calID);
-    this.shareLink = "http://localhost:4200/cal/" + this.data.calID;
+    this.shareLink = "https://freethyme-269222.web.app/cal/" + this.data.calID;
     this.emailForm = this.fb.group({
       email: [
         [],
