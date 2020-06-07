@@ -1,16 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormArray,
-  FormControl,
-  ValidatorFn,
-} from "@angular/forms";
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
+import { startOfDay, endOfDay, addWeeks } from "date-fns";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { AuthService } from "../../services/auth.service";
+import { CalendarService } from "../../services/calendar.service";
 
 @Component({
   selector: "app-add-calendar",
@@ -22,6 +15,8 @@ export class AddCalendarComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private auth: AuthService,
+    private calendar: CalendarService,
     public dialogRef: MatDialogRef<AddCalendarComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -45,11 +40,20 @@ export class AddCalendarComponent implements OnInit {
     });
   }
 
-  submit() {
-    const selectedOrderIds = this.form.value.orders
-      .map((v, i) => (v ? this.data.calendars[i].id : null))
+  async submit() {
+    let busyTimes = [];
+    const items = this.form.value.orders
+      .map((v, i) => (v ? { id: this.data.calendars[i].id } : null))
       .filter((v) => v !== null);
-    console.log(selectedOrderIds);
+    const data = await this.auth.freebusy(
+      items,
+      startOfDay(new Date()),
+      addWeeks(endOfDay(new Date()), 2)
+    );
+    for (let [key, value] of Object.entries(data.result.calendars)) {
+      busyTimes.push(...value["busy"]);
+    }
+    this.calendar.addBusyTimes(busyTimes, this.data.calID);
   }
 
   onNoClick(): void {

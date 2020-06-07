@@ -4,7 +4,11 @@
     *ngFor="let order of getControls(); let i = index"
   >
     <mat-checkbox [formControlName]="i">
-      {{ data.calendars[i].name }}</mat-checkbox
+      {{
+        data.calendars[i].summaryOverride
+          ? data.calendars[i].summaryOverride
+          : data.calendars[i].summary
+      }}</mat-checkbox
     >
   </div>
 

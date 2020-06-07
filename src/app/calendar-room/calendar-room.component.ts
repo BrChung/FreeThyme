@@ -2,12 +2,9 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
 import { CalendarService } from "../services/calendar.service";
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: "app-calendar-room",
@@ -25,7 +22,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private calendar: CalendarService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -54,16 +52,16 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.calendar.changeFavorite(this.member.favorite, this.calID);
   }
 
-  openAddCalDialog() {
+  async openAddCalDialog() {
+    const calendars = await this.auth.getCalendars();
+    calendars.sort((x, y) => {
+      x.selected === y.selected ? 0 : x.selected ? -1 : 1;
+    });
     this.dialog.open(AddCalendarComponent, {
       width: "250px",
       data: {
-        calendars: [
-          { id: 100, name: "order 1" },
-          { id: 200, name: "order 2" },
-          { id: 300, name: "order 3" },
-          { id: 400, name: "order 4" },
-        ],
+        calendars,
+        calID: this.calID,
       },
     });
   }

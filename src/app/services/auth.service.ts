@@ -17,7 +17,6 @@ declare var gapi: any;
 export class AuthService {
   user$: Observable<firebase.User>;
   calendarItems: any[];
-  calendarList: any[];
 
   constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) {
     this.initClient();
@@ -65,10 +64,23 @@ export class AuthService {
     this.calendarItems = events.result.items;
   }
 
+  async freebusy(items: Array<any>, timeMin: Date = new Date(), timeMax: Date) {
+    return await gapi.client.calendar.freebusy.query({
+      items,
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
+    });
+  }
+
   async getCalendars() {
-    const calendars = await gapi.client.calendar.calendarList.list({});
-    console.log(calendars);
-    this.calendarList = calendars.result.items;
+    return new Promise<any>(async (resolve, reject) => {
+      const data = await gapi.client.calendar.calendarList.list({});
+      if (data.result.items) {
+        resolve(data.result.items);
+      } else {
+        resolve(null);
+      }
+    });
   }
 
   async insertEvent() {

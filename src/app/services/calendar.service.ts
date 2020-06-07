@@ -65,6 +65,22 @@ export class CalendarService {
     }
   }
 
+  async addBusyTimes(busyTimes: Array<any>, calID: string) {
+    busyTimes.map((x) => {
+      x.start = firebase.firestore.Timestamp.fromDate(new Date(x.start));
+      x.end = firebase.firestore.Timestamp.fromDate(new Date(x.end));
+    });
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      return this.afs
+        .doc(`rooms/${calID}/calendars/${user.uid}`)
+        .set({
+          calendar: busyTimes,
+        })
+        .catch((error) => console.error("Error Adding Document: ", error));
+    }
+  }
+
   /* Retrieve Rooms that the user is a member of
       First pipe authState to query all subcollections in afs with uid.
       Once membership documents are retrieved, temporarily store roomIDs in hash and retrieve each doc
