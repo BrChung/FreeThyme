@@ -6,21 +6,18 @@
     - meetingLength /rooms/{roomid}/meetingLength
     - mergedCalendar /rooms/{roomid}/calendar
  DEPLOY:
-
+    - gcloud functions deploy calculate_free_time --runtime python37 --trigger-event providers/cloud.firestore/eventTypes/document.write --trigger-resource "projects/freethyme-269222/databases/(default)/documents/rooms/{roomID}/entire-cal/merged"
 '''
 from google.cloud import firestore
-import datetime
-client = firestore.client()
+from datetime import datetime
 
+client = firestore.client()
 
 def calculate_free_time(data, context):
     ''' TRIGGERED by a change to the mergedCalendar (room calendar)
         ARGS:
             - data (dict): the event payload
             - context (google.cloud.functions.Context): Metadata for the event
-    '''
-
-    '''
         0 = rooms
         1 = {roomid}
         2 = calendars
@@ -31,21 +28,40 @@ def calculate_free_time(data, context):
     # Make a Reference to the group calendar, contains
     group_cal_ref = client.collection(u'rooms/{roomID}/entire-cal/merged/calendar'.format(roomID = path_parts[1]))
 
-    # # Make a Reference to the meetingLength
-    # meetingLength_ref = client.collection(u'rooms/{roomID}/meetingLength'.format(roomID = path_parts[1]))
+    transaction = client.transaction()
 
-    # group_cal_query = group_cal_ref.limit(100)
+    @firestore.transactional
+    def find_free_time(transaction, group_cal_ref):
+        freetime_list = list()
+        group_cal_snapshot = group_cal_ref.get(transaction = transction)
 
-    # We need a start date to have a comparison
-    # for the free time range before their first busy event
-    startDate = datetime.now()
+        if group_cal_snapshot.exists:
+            # freetime start = the end of the last event
+            # freetime end = the beginning of the next event
+            for doc_index in range(len(group_cal_ref)):
+                # if its the first event, then the start time is right now
+                if doc_index == 0:
+                    time_interval = {
+                        'start': datetime.now(timezone.utc),
+                        'end': interval_list[doc_Index]['start'],
+                    }
+                    freetime_list.append(time_interval)
+                # if is the last event, then the end time is 11:59 PM of that day
+                elif doc_index == (len(group_cal_ref) - 1):
+                    time_interval = {
+                        'start': group_cal_ref[doc_Index]['end'],
+                        'end': group_cal_ref[doc_Index]['end'].replace(hour=11, minute=59),
+                    }
+                    freetime_list.append(time_interval)
+                # If its in the middle calculations
+                else:
+                    time_interval = {
+                        'start': group_cal_ref[doc_Index]['end'],
+                        'end': group_cal_ref[doc_Index + 1]['start']
+                    }
+                    freetime_list.append(time_interval)
+            return freetime_list
 
-    # End date to use as comparison to calculate free time range after
-    # their last busy event
-    endDate = datetime.now()
-
-    for doc in group_cal_query:
-
-
+    freetime = find_free_time(transaction, group_cal_ref)
 
     client.document(u'rooms/{roomID}/entire-cal/freetime'.format(roomID = path_parts[1])).set({"calendar": freetime})
