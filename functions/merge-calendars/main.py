@@ -2,15 +2,16 @@ from google.cloud import firestore
 client = firestore.Client()
 
 '''
-Purpose: Queries up to 100 calendars written to /rooms/{roomID}/calendars/{uid} to and writes the merged calendar to the room document.
+Purpose:
+    - Queries up to 100 calendars written to /rooms/{roomID}/calendars/{uid} to and writes the merged calendar to the room document.
 Deploy:
-gcloud functions deploy merge_calendar --runtime python37 --trigger-event providers/cloud.firestore/eventTypes/document.write --trigger-resource "projects/freethyme-269222/databases/(default)/documents/rooms/{roomID}/calendars/{uid}"
+    - gcloud functions deploy merge_calendar --runtime python37 --trigger-event providers/cloud.firestore/eventTypes/document.write --trigger-resource "projects/freethyme-269222/databases/(default)/documents/rooms/{roomID}/calendars/{uid}"
 '''
 
 def find_overlap(event_list):
     """ Finds the union of all busy times and also tracks the count of overlaping events.
     Args:
-        event_list (list): The list of all events
+        - event_list (list): The list of all events
     """
     interval_list = []
     interval_counter_list = list()
@@ -49,8 +50,8 @@ def find_overlap(event_list):
     return interval_counter_list
 
 def merge_calendar(data, context):
-    """ Triggered by a change to a member document.
-    Args:
+    """ TRIGGERED by a change to a "calendars" document. Whenever a calendar is added, updated, or removed.
+    ARGS:
         data (dict): The event payload.
         context (google.cloud.functions.Context): Metadata for the event.
     """
@@ -71,4 +72,4 @@ def merge_calendar(data, context):
 
     merged_cal = find_overlap(all_events)
 
-    client.document(u'rooms/{roomID}'.format(roomID = path_parts[1])).update({"calendar": merged_cal})
+    client.document(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1])).set({"calendar": merged_cal})
