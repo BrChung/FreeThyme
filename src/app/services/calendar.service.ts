@@ -37,6 +37,10 @@ export class CalendarService {
     );
   }
 
+  getCalData(roomID: string) {
+    return this.afs.doc(`rooms/${roomID}/entire-cal/merged`).valueChanges();
+  }
+
   getMembers(roomID: string) {
     let members = [];
     const joinKeys = {};

@@ -27,6 +27,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   private routerSub: Subscription;
   private roomSub: Subscription;
   private memberSub: Subscription;
+  private calendarSub: Subscription;
 
   room: any;
   member: any;
@@ -57,9 +58,12 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     this.roomSub = this.calendar.getRoomDoc(this.calID).subscribe((room) => {
       this.room = room;
+    });
+
+    this.calendarSub = this.calendar.getCalData(this.calID).subscribe((doc) => {
       let events = [];
-      if (room["calendar"]) {
-        room["calendar"].forEach((elm) => {
+      if (doc && doc["calendar"]) {
+        doc["calendar"].forEach((elm) => {
           const { start, end } = elm;
           const colorHex = this.countToColor(elm["count"]);
           const color = { primary: colorHex, secondary: colorHex };
@@ -86,6 +90,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.routerSub.unsubscribe();
     this.roomSub.unsubscribe();
     this.memberSub.unsubscribe();
+    this.calendarSub.unsubscribe();
   }
 
   toggleFavorite() {
