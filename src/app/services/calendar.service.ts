@@ -104,7 +104,7 @@ export class CalendarService {
       return this.afs
         .doc(`rooms/${calID}/calendars/${user.uid}`)
         .set({
-          calendar: busyTimes,
+          events: busyTimes,
         })
         .catch((error) => console.error("Error Adding Document: ", error));
     }
