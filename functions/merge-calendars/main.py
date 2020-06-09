@@ -67,9 +67,10 @@ def merge_calendar(data, context):
 
     for doc in calendar_docs:
         data = doc.to_dict()
-        if(doc.id != "masterCalendar"):
-            all_events.extend(data["calendar"])
+        all_events.extend(data["events"])
 
     merged_cal = find_overlap(all_events)
 
-    client.document(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1])).set({"calendar": merged_cal})
+    room_doc_snapshot = client.document(u'rooms/{roomID}'.format(roomID = path_parts[1]))
+    if(room_doc_snapshot.exists):
+        client.document(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1])).set({"events": merged_cal})
