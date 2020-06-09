@@ -73,9 +73,9 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
             color,
             title: "",
           });
-          this.events = events;
         });
       }
+      this.events = events;
       this.refresh.next();
     });
 
