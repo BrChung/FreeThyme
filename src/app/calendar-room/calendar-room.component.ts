@@ -80,8 +80,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     this.calendarSub = this.calendar.getCalData(this.calID).subscribe((doc) => {
       let events = [];
-      if (doc && doc["calendar"]) {
-        doc["calendar"].forEach((elm) => {
+      if (doc && doc["events"]) {
+        doc["events"].forEach((elm) => {
           const { start, end } = elm;
           const colorHex = this.countToColor(elm["count"]);
           const color = { primary: colorHex, secondary: colorHex };
