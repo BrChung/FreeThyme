@@ -71,6 +71,6 @@ def merge_calendar(data, context):
 
     merged_cal = find_overlap(all_events)
 
-    room_doc_snapshot = client.document(u'rooms/{roomID}'.format(roomID = path_parts[1]))
+    room_doc_snapshot = client.document(u'rooms/{roomID}'.format(roomID = path_parts[1])).get()
     if(room_doc_snapshot.exists):
         client.document(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1])).set({"events": merged_cal})
