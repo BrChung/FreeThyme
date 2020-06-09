@@ -1,6 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription } from "rxjs";
 import { CalendarService } from "../services/calendar.service";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -8,15 +14,24 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from "angular-calendar";
-import { isSameDay, isSameMonth } from "date-fns";
-import { Subject } from "rxjs";
+import {
+  isSameDay,
+  isSameMonth,
+  addDays,
+  addMinutes,
+  endOfWeek,
+} from "date-fns";
+import { Subject, Subscription, fromEvent } from "rxjs";
+import { finalize, takeUntil } from "rxjs/operators";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AuthService } from "../services/auth.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
+import { WeekViewHourSegment } from "calendar-utils";
 
 @Component({
   selector: "app-calendar-room",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./calendar-room.component.html",
   styleUrls: ["./calendar-room.component.scss"],
 })
@@ -44,11 +59,14 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   activeDayIsOpen: boolean = true;
 
+  weekStartsOn: 0 = 0;
+
   constructor(
     private route: ActivatedRoute,
     private calendar: CalendarService,
     public dialog: MatDialog,
-    private auth: AuthService
+    private auth: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -192,4 +210,64 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
+
+  startDragToCreate(
+    segment: WeekViewHourSegment,
+    mouseDownEvent: MouseEvent,
+    segmentElement: HTMLElement
+  ) {
+    const dragToSelectEvent: CalendarEvent = {
+      id: this.events.length,
+      title: "New event",
+      start: segment.date,
+      meta: {
+        tmpEvent: true,
+      },
+    };
+    this.events = [...this.events, dragToSelectEvent];
+    const segmentPosition = segmentElement.getBoundingClientRect();
+    const endOfView = endOfWeek(this.viewDate, {
+      weekStartsOn: this.weekStartsOn,
+    });
+
+    fromEvent(document, "mousemove")
+      .pipe(
+        finalize(() => {
+          delete dragToSelectEvent.meta.tmpEvent;
+          console.log(dragToSelectEvent);
+          this.refreshDom();
+        }),
+        takeUntil(fromEvent(document, "mouseup"))
+      )
+      .subscribe((mouseMoveEvent: MouseEvent) => {
+        const minutesDiff = ceilToNearest(
+          mouseMoveEvent.pageY - segmentPosition.top,
+          30
+        );
+
+        const daysDiff =
+          floorToNearest(
+            mouseMoveEvent.clientX - segmentPosition.left,
+            segmentPosition.width
+          ) / segmentPosition.width;
+
+        const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
+        if (newEnd > segment.date && newEnd < endOfView) {
+          dragToSelectEvent.end = newEnd;
+        }
+        this.refreshDom();
+      });
+  }
+  private refreshDom() {
+    this.events = [...this.events];
+    this.cdr.detectChanges();
+  }
+}
+
+function floorToNearest(amount: number, precision: number) {
+  return Math.floor(amount / precision) * precision;
+}
+
+function ceilToNearest(amount: number, precision: number) {
+  return Math.ceil(amount / precision) * precision;
 }
