@@ -51,7 +51,7 @@ def calculate_free_time(data, context):
     path_parts = context.resource.split('/documents/')[1].split('/')
 
     # Make a Reference to the group calendar, contains
-    group_cal_ref = client.docuemnt(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1]))
+    group_cal_ref = client.document(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1]))
     room_info_snapshot = client.document(u'rooms/{roomID}'.format(roomID = path_parts[1])).get()
 
     room_info_data = room_info_snapshot.to_dict()

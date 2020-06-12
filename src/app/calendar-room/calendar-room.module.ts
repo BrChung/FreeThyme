@@ -5,9 +5,10 @@ import { CalendarRoomComponent } from "./calendar-room.component";
 import { SharedModule } from "../shared/shared.module";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { CalendarModule } from "angular-calendar";
+import { AddEventComponent } from './add-event/add-event.component';
 
 @NgModule({
-  declarations: [CalendarRoomComponent, AddCalendarComponent],
+  declarations: [CalendarRoomComponent, AddCalendarComponent, AddEventComponent],
   imports: [
     CommonModule,
     CalendarRoomRoutingModule,

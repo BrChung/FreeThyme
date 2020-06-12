@@ -24,6 +24,7 @@ import {
 import { Subject, Subscription, fromEvent } from "rxjs";
 import { finalize, takeUntil } from "rxjs/operators";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
+import { AddEventComponent } from "./add-event/add-event.component";
 import { AuthService } from "../services/auth.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
@@ -152,6 +153,16 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     });
   }
 
+  async openAddEventDialog(event: CalendarEvent) {
+    this.dialog.open(AddEventComponent, {
+      width: "550px",
+      data: {
+        calID: this.calID,
+        event,
+      },
+    });
+  }
+
   dateSelected(value: Date) {
     this.viewDate = value;
   }
@@ -223,6 +234,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       .pipe(
         finalize(() => {
           console.log(dragToSelectEvent);
+          this.openAddEventDialog(dragToSelectEvent);
           //delete dragToSelectEvent.meta.tmpEvent;
           this.refreshDom();
         }),
