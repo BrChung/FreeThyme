@@ -18,6 +18,7 @@ def find_free_time(busy_times, meetingLength):
 
     meetingLengthDelta = timedelta(minutes=meetingLength)
     print(meetingLengthDelta)
+
     # freetime start = the end of the last event
     # freetime end = the beginning of the next event
     for eventIndex in range(len(busy_times)):
@@ -51,25 +52,24 @@ def calculate_free_time(data, context):
     path_parts = context.resource.split('/documents/')[1].split('/')
 
     # Make a Reference to the group calendar, contains
-    group_cal_ref = client.docuemnt(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1]))
+    group_cal_ref = client.document(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1]))
     room_info_snapshot = client.document(u'rooms/{roomID}'.format(roomID = path_parts[1])).get()
 
+    # Turn snapshot object into viewable data
     room_info_data = room_info_snapshot.to_dict()
 
-    # transaction = client.transaction()
-    # print("just created a transaction theoreotically")
+    transaction = client.transaction()
+    print("just created a transaction theoreotically")
 
-    # @firestore.transactional
-    def set_freetime(group_cal_ref, room_info_data):
-        group_cal_snapshot = group_cal_ref.get()
+    @firestore.transactional
+    def set_freetime(transaction, group_cal_ref, room_info_data):
+        group_cal_snapshot = group_cal_ref.get(transaction=transaction)
         data = group_cal_snapshot.to_dict()
 
         if group_cal_snapshot.exists:
-            print("I'm in the snapshot transaction function WOO!!!")
             freetime = find_free_time(data["events"], room_info_data['meetingLength'])
-            print("here is the freetime list")
             client.document(u'rooms/{roomID}/entire-cal/freetime'.format(roomID = path_parts[1])).set({"events": freetime})
             print("boom just added to the database beeotches")
 
 
-    set_freetime(group_cal_ref, room_info_data)
+    set_freetime(transaction, group_cal_ref, room_info_data)
