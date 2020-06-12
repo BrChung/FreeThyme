@@ -40,12 +40,10 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   monthCalendar: MonthCalendarComponent;
 
   private routerSub: Subscription;
-  private roomSub: Subscription;
-  private memberSub: Subscription;
   private calendarSub: Subscription;
 
-  room: any;
-  member: any;
+  room$: any;
+  member$: any;
   calID: string;
 
   refresh: Subject<any> = new Subject();
@@ -74,10 +72,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       this.calID = params["calID"];
     });
 
-    this.roomSub = this.calendar.getRoomDoc(this.calID).subscribe((room) => {
-      this.room = room;
-    });
-
     this.calendarSub = this.calendar.getCalData(this.calID).subscribe((doc) => {
       let events = [];
       if (doc && doc["events"]) {
@@ -97,22 +91,17 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       this.refresh.next();
     });
 
-    this.memberSub = this.calendar
-      .getMemberDoc(this.calID)
-      .subscribe((member) => {
-        this.member = member;
-      });
+    this.member$ = this.calendar.getMemberDoc(this.calID);
+    this.room$ = this.calendar.getRoomDoc(this.calID);
   }
 
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
-    this.roomSub.unsubscribe();
-    this.memberSub.unsubscribe();
     this.calendarSub.unsubscribe();
   }
 
-  toggleFavorite() {
-    this.calendar.changeFavorite(this.member.favorite, this.calID);
+  toggleFavorite(state: boolean) {
+    this.calendar.changeFavorite(state, this.calID);
   }
 
   countToColor(count: number) {

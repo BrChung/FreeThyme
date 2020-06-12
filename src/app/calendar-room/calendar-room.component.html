@@ -1,32 +1,39 @@
-<mat-toolbar class="calendar-room-toolar" *ngIf="room && member">
-  <div class="calendar-room-title-container">
-    <h3>{{ room.title }}</h3>
-    <button mat-icon-button (click)="toggleFavorite()">
-      <mat-icon class="favorite-button" *ngIf="member.favorite">
-        star
-      </mat-icon>
-      <mat-icon class="favorite-button" *ngIf="!member.favorite">
-        star_border
-      </mat-icon>
-    </button>
-  </div>
-  <div class="calendar-room-toolar-members">
-    <div (click)="openInviteDialog(0)">
-      <app-user-bar
-        [userCount]="room.memberCount"
-        [users]="room.members"
-        [userImg]="room.profileImages"
-      ></app-user-bar>
-    </div>
-    <button mat-raised-button (click)="openInviteDialog(2)">
-      Invite
-    </button>
-  </div>
-  <div>
-    <button mat-raised-button color="primary" (click)="openAddCalDialog()">
-      Add Events
-    </button>
-  </div>
+<mat-toolbar
+  class="calendar-room-toolar"
+  *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
+>
+  <ng-container *ngIf="roomMemDoc.room as room">
+    <ng-container *ngIf="roomMemDoc.member as member">
+      <div class="calendar-room-title-container">
+        <h3>{{ room.title }}</h3>
+        <button mat-icon-button (click)="toggleFavorite(member.favorite)">
+          <mat-icon class="favorite-button" *ngIf="member.favorite">
+            star
+          </mat-icon>
+          <mat-icon class="favorite-button" *ngIf="!member.favorite">
+            star_border
+          </mat-icon>
+        </button>
+      </div>
+      <div class="calendar-room-toolar-members">
+        <div (click)="openInviteDialog(0)">
+          <app-user-bar
+            [userCount]="room.memberCount"
+            [users]="room.members"
+            [userImg]="room.profileImages"
+          ></app-user-bar>
+        </div>
+        <button mat-raised-button (click)="openInviteDialog(2)">
+          Invite
+        </button>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="openAddCalDialog()">
+          Add Events
+        </button>
+      </div>
+    </ng-container>
+  </ng-container>
 </mat-toolbar>
 <mat-sidenav-container class="calendar-room-container">
   <mat-sidenav mode="side" opened>
