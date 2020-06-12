@@ -157,7 +157,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   handleEvent(action: string, event: CalendarEvent) {
-    console.log(action);
+    console.log(action, event);
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -222,8 +222,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     fromEvent(document, "mousemove")
       .pipe(
         finalize(() => {
-          delete dragToSelectEvent.meta.tmpEvent;
           console.log(dragToSelectEvent);
+          //delete dragToSelectEvent.meta.tmpEvent;
           this.refreshDom();
         }),
         takeUntil(fromEvent(document, "mouseup"))
