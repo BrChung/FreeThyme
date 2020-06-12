@@ -9,40 +9,33 @@
     - gcloud functions deploy calculate_free_time --runtime python37 --trigger-event providers/cloud.firestore/eventTypes/document.write --trigger-resource "projects/freethyme-269222/databases/(default)/documents/rooms/{roomID}/entire-cal/merged"
 '''
 from google.cloud import firestore
-from datetime import datetime
+from datetime import datetime, timedelta
 
 client = firestore.Client()
 
-def find_free_time(busy_times):
+def find_free_time(busy_times, meetingLength):
     freetime_list = list()
+
+    meetingLengthDelta = timedelta(minutes=meetingLength)
+    print(meetingLengthDelta)
     # freetime start = the end of the last event
     # freetime end = the beginning of the next event
     for eventIndex in range(len(busy_times)):
-        # if its the first event, then the start time is right now
-        if eventIndex == 0:
-            time_interval = {
-                'start': datetime.now(datetime.timezone.utc),
-                'end': busy_times[eventIndex]['start'],
-            }
-            print("edge case: just added the first time inteval haha", time_interval)
-            freetime_list.append(time_interval)
-        # if is the last event, then the end time is 11:59 PM of that day
-        elif eventIndex == (len(busy_times) - 1):
-            time_interval = {
-                'start': busy_times[eventIndex]['end'],
-                'end': busy_times[eventIndex]['end'].replace(hour=11, minute=59),
-            }
-            print("edge case: just added the last time inteval haha", time_interval)
-            freetime_list.append(time_interval)
-        # If its in the middle calculations
-        else:
-            time_interval = {
-                'start': busy_times[eventIndex]['end'],
-                'end': busy_times[eventIndex + 1]['start']
-            }
-            print("normal case: just found the time in between events interval haha", time_interval)
-            freetime_list.append(time_interval)
-    print("aha yo here's the freetime_list", freetime_list)
+
+        # We calculate intervals between events, therefore we don't need to calculate the last one
+        if (eventIndex + 1 != len(busy_times)):
+            # Calculate time in between events
+            timeDelta = busy_times[eventIndex + 1]['start'] - busy_times[eventIndex]['end']
+            print("Test: ", timeDelta, " vs ", meetingLengthDelta )
+
+            # This means that the calculated free time interval is greater than the desired meeting length
+            if (timeDelta > meetingLengthDelta):
+                time_interval = {
+                    'start': busy_times[eventIndex]['end'],
+                    'end': busy_times[eventIndex + 1]['start']
+                }
+                freetime_list.append(time_interval)
+
     return freetime_list
 
 def calculate_free_time(data, context):
@@ -59,20 +52,24 @@ def calculate_free_time(data, context):
 
     # Make a Reference to the group calendar, contains
     group_cal_ref = client.docuemnt(u'rooms/{roomID}/entire-cal/merged'.format(roomID = path_parts[1]))
+    room_info_snapshot = client.document(u'rooms/{roomID}'.format(roomID = path_parts[1])).get()
 
-    transaction = client.transaction()
-    print("just created a transaction theoreotically")
-    @firestore.transactional
-    def set_freetime(transaction, group_cal_ref):
-        group_cal_snapshot = group_cal_ref.get(transaction = transaction)
+    room_info_data = room_info_snapshot.to_dict()
+
+    # transaction = client.transaction()
+    # print("just created a transaction theoreotically")
+
+    # @firestore.transactional
+    def set_freetime(group_cal_ref, room_info_data):
+        group_cal_snapshot = group_cal_ref.get()
         data = group_cal_snapshot.to_dict()
 
         if group_cal_snapshot.exists:
             print("I'm in the snapshot transaction function WOO!!!")
-            freetime = find_free_time(data["events"])
+            freetime = find_free_time(data["events"], room_info_data['meetingLength'])
             print("here is the freetime list")
             client.document(u'rooms/{roomID}/entire-cal/freetime'.format(roomID = path_parts[1])).set({"events": freetime})
             print("boom just added to the database beeotches")
 
 
-    set_freetime(transaction, group_cal_ref)
+    set_freetime(group_cal_ref, room_info_data)
