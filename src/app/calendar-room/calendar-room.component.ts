@@ -235,7 +235,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         finalize(() => {
           console.log(dragToSelectEvent);
           this.openAddEventDialog(dragToSelectEvent);
-          //delete dragToSelectEvent.meta.tmpEvent;
+          removeByAttr(this.events, "id", dragToSelectEvent.id);
           this.refreshDom();
         }),
         takeUntil(fromEvent(document, "mouseup"))
@@ -272,3 +272,18 @@ function floorToNearest(amount: number, precision: number) {
 function ceilToNearest(amount: number, precision: number) {
   return Math.ceil(amount / precision) * precision;
 }
+
+var removeByAttr = function (arr, attr, value) {
+  var i = arr.length;
+  while (i--) {
+    if (
+      arr[i] &&
+      arr[i].hasOwnProperty(attr) &&
+      arguments.length > 2 &&
+      arr[i][attr] === value
+    ) {
+      arr.splice(i, 1);
+    }
+  }
+  return arr;
+};

@@ -1,2 +1,32 @@
 <p>add-event works!</p>
 {{ data.event | json }}
+<form [formGroup]="form">
+  <mat-form-field
+    [color]="title.valid && 'accent'"
+    class="create-calendar-title"
+  >
+    <input
+      matInput
+      formControlName="title"
+      type="text"
+      placeholder="Title"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="title.invalid && title.dirty">
+      You must have a title for the event
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Start Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="startDate"
+      autocomplete="off"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</form>
+
+{{ form.value | json }}

@@ -34,7 +34,12 @@ import { MonthCalendarComponent } from "./components/month-calendar/month-calend
 import { UserBarComponent } from "./components/user-bar/user-bar.component";
 import { ShareInviteMembersComponent } from "./components/share-invite-members/share-invite-members.component";
 
-const components = [LayoutComponent, MonthCalendarComponent, UserBarComponent];
+const components = [
+  LayoutComponent,
+  MonthCalendarComponent,
+  UserBarComponent,
+  ShareInviteMembersComponent,
+];
 
 const modules = [
   CommonModule,
@@ -66,7 +71,7 @@ const modules = [
 ];
 
 @NgModule({
-  declarations: [...components, ShareInviteMembersComponent],
+  declarations: [...components],
   imports: [...modules],
   exports: [...components, ...modules],
   providers: [

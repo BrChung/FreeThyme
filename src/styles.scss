@@ -1,7 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @import "~@angular/material/theming";
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "~angular-calendar/scss/angular-calendar.scss";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -115,6 +115,14 @@ a {
   text-decoration: none;
 }
 
+$border-color: #e1e1e1;
+
+@include cal-theme(
+  (
+    border-color: $border-color,
+  )
+);
+
 .cal-week-view .cal-time-events {
   max-height: 750px;
   overflow-y: auto;
@@ -126,4 +134,12 @@ a {
 
 .cal-day-columns {
   height: 100%;
+}
+
+.cal-week-view {
+  .cal-hour:not(:last-child) .cal-hour-segment,
+  .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+    border-bottom: thin solid;
+    border-color: $border-color;
+  }
 }
