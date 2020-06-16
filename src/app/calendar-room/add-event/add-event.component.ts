@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import {
+  Component,
+  Inject,
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+} from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -14,18 +20,25 @@ import {
   isSameDay,
   roundToNearestMinutes,
   differenceInMinutes,
+  endOfToday,
+  parse,
 } from "date-fns";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { CalendarService } from "../../services/calendar.service";
+import { Subscription } from "rxjs";
+import { debounceTime, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-add-event",
   templateUrl: "./add-event.component.html",
   styleUrls: ["./add-event.component.scss"],
 })
-export class AddEventComponent implements OnInit {
+export class AddEventComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  option: string[] = ["12:00am"];
+  formSub: Subscription;
+  startTimeOptions: string[] = this.generateTimes();
+  endTimeOptions: string[] = this.generateTimes();
+  refresh = new EventEmitter();
   constructor(
     private formBuilder: FormBuilder,
     private calendar: CalendarService,
@@ -44,9 +57,32 @@ export class AddEventComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(
-      this.generateTimes(new Date(2020, 12, 1, 12, 30), new Date(2020, 12, 1))
-    );
+    this.formSub = this.form.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe((value) => {
+        this.endTimeOptions = this.generateTimes(
+          parse(value.startTime, "h':'mma", value.startDate),
+          value.endDate
+        );
+        if (value.title || !this.form.controls["title"].pristine) {
+          this.data.event.title = value.title;
+        }
+        this.refresh.emit(null);
+        console.log(this.form.controls["title"]);
+        //this.form.controls["title"].setValue("test", { emitEvent: false });
+      });
+    this.form.patchValue({
+      startDate: startOfDay(this.data.event.start),
+      startTime: format(this.data.event.start, "h':'mma"),
+      endDate: this.data.event.end ? startOfDay(this.data.event.end) : [],
+      endTime: this.data.event.end
+        ? format(this.data.event.end, "h':'mma")
+        : [],
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.formSub.unsubscribe();
   }
 
   get title() {
@@ -75,9 +111,9 @@ export class AddEventComponent implements OnInit {
 
   generateTimes(startTime?: Date, endDate?: Date, interval = 15) {
     let times = [];
-    let count = 0;
     if (isSameDay(startTime, endDate)) {
       let time = roundToNearestMinutes(startTime, { nearestTo: 15 });
+      let count = 0;
       const end = endOfDay(startTime);
       while (time < end) {
         const minDiff = differenceInMinutes(time, startTime);
@@ -102,12 +138,7 @@ export class AddEventComponent implements OnInit {
       const end = endOfDay(new Date());
       while (time < end) {
         times.push(format(time, "h':'mma"));
-        count++;
-        if (count <= 4) {
-          time = addMinutes(time, interval);
-        } else {
-          time = addMinutes(time, interval * 2);
-        }
+        time = addMinutes(time, interval);
       }
     }
     return times;

@@ -1,5 +1,3 @@
-<p>add-event works!</p>
-{{ data.event | json }}
 <form [formGroup]="form">
   <mat-form-field
     [color]="title.valid && 'accent'"
@@ -20,12 +18,54 @@
     <mat-label>Start Date</mat-label>
     <input
       matInput
-      [matDatepicker]="picker"
+      [matDatepicker]="startPicker"
       formControlName="startDate"
       autocomplete="off"
     />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="startPicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      type="text"
+      placeholder="Start Time"
+      matInput
+      formControlName="startTime"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of startTimeOptions" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>End Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="endPicker"
+      formControlName="endDate"
+      autocomplete="off"
+    />
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      type="text"
+      placeholder="End Time"
+      matInput
+      formControlName="endTime"
+      [matAutocomplete]="autoE"
+    />
+    <mat-autocomplete #autoE="matAutocomplete">
+      <mat-option *ngFor="let option of endTimeOptions" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 </form>
 

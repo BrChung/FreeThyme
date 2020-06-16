@@ -153,13 +153,24 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  async openAddEventDialog(event: CalendarEvent) {
-    this.dialog.open(AddEventComponent, {
+  async openAddEventDialog(event: CalendarEvent, eventId: string | number) {
+    const dialogRef = this.dialog.open(AddEventComponent, {
       width: "550px",
       data: {
         calID: this.calID,
         event,
       },
+    });
+
+    const sub = dialogRef.componentInstance.refresh.subscribe(() => {
+      this.refreshDom();
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      sub.unsubscribe();
+      console.log(event);
+      removeByAttr(this.events, "id", eventId);
+      this.refreshDom();
     });
   }
 
@@ -233,10 +244,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     fromEvent(document, "mousemove")
       .pipe(
         finalize(() => {
-          console.log(dragToSelectEvent);
-          this.openAddEventDialog(dragToSelectEvent);
-          removeByAttr(this.events, "id", dragToSelectEvent.id);
-          this.refreshDom();
+          this.openAddEventDialog(dragToSelectEvent, dragToSelectEvent.id);
         }),
         takeUntil(fromEvent(document, "mouseup"))
       )
