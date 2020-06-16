@@ -151,6 +151,16 @@ $cal-bg-secondary: #fff;
     border-top: thin solid;
     border-color: $border-color;
   }
+
+  .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+    border-bottom: thin;
+  }
+
+  .cal-hour:last-child :not(:last-child) .cal-hour-start {
+    border-top: thin solid;
+    border-color: $border-color;
+  }
+
   .cal-time-label-column .cal-hour-segment {
     width: 70px;
     height: 100%;
