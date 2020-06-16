@@ -13,7 +13,9 @@ import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
   CalendarView,
+  CalendarDateFormatter,
 } from "angular-calendar";
+import { CustomWeeklyDateFormatter } from './custom-weekly-date-formatter.provider'
 import {
   isSameDay,
   isSameMonth,
@@ -34,6 +36,12 @@ import { WeekViewHourSegment } from "calendar-utils";
   selector: "app-calendar-room",
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./calendar-room.component.html",
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomWeeklyDateFormatter,
+    },
+  ],
   styleUrls: ["./calendar-room.component.scss"],
 })
 export class CalendarRoomComponent implements OnInit, OnDestroy {
