@@ -186,32 +186,15 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  getTimeZone () {
+  getTimeZone() {
     let tempDate = new Date().getTimezoneOffset();
-    let timeOffset = tempDate/60
-    let timeOffsetString = timeOffset.toString();
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 275f459694127ec7c1f2747a288248d6cb5c8ed8
-=======
-    if (tempDate > 0) {
-      if (timeOffset < 10) {
-        let timeOffsetString = '0' + timeOffset.toString();
-      }
-      return "GMT-" + timeOffsetString;
-    }
-    else {
-      if (timeOffset < 10) {
-        let timeOffsetString = '0' + timeOffset.toString();
-      }
-      return "GMT+" + timeOffsetString;
-    }
-
+    let timeOffset = (tempDate / 60) * -1;
+    return (
+      "GMT" +
+      (timeOffset < 0 ? "-" : "+") +
+      ("0" + Math.abs(timeOffset)).slice(-2)
+    );
   }
->>>>>>> parent of 275f459... Highlight by default
   dateSelected(value: Date) {
     this.viewDate = value;
   }
