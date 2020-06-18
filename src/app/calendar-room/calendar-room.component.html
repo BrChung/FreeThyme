@@ -2,7 +2,6 @@
   class="calendar-room-toolar"
   *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
 >
-
   <ng-container *ngIf="roomMemDoc.room as room">
     <ng-container *ngIf="roomMemDoc.member as member">
       <div class="calendar-room-title-container">
@@ -46,8 +45,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="calendar-room-cal-header">
-      <div class="calendar-room-left-spacer">
-      </div>
+      <div class="calendar-room-left-spacer"></div>
       <div class="calendar-room-cal-nav-but-group">
         <button
           mat-icon-button
@@ -74,22 +72,28 @@
         </button>
       </div>
 
-      <mat-button-toggle-group class="calendar-room-cal-view-but-group">
+      <mat-button-toggle-group
+        class="calendar-room-cal-view-but-group"
+        value="Week"
+      >
         <mat-button-toggle
           (click)="setView(CalendarView.Month)"
           [class.active]="view === CalendarView.Month"
+          value="Month"
         >
           Month
         </mat-button-toggle>
         <mat-button-toggle
           (click)="setView(CalendarView.Week)"
           [class.active]="view === CalendarView.Week"
+          value="Week"
         >
           Week
         </mat-button-toggle>
         <mat-button-toggle
           (click)="setView(CalendarView.Day)"
           [class.active]="view === CalendarView.Day"
+          value="Day"
         >
           Day
         </mat-button-toggle>
@@ -113,9 +117,11 @@
         [ngClass]="segment.cssClass"
         (mousedown)="startDragToCreate(segment, $event, segmentElement)"
       >
-        <div class="calculations"  *ngIf="isTimeLabel">
-          <div *ngIf="(segment.date | calendarDate:'weekViewHour':locale) as result">
-            <div class = "cal-time" *ngIf="result != '12 AM'">
+        <div class="calculations" *ngIf="isTimeLabel">
+          <div
+            *ngIf="segment.date | calendarDate: 'weekViewHour':locale as result"
+          >
+            <div class="cal-time" *ngIf="result != '12 AM'">
               {{ result }}
             </div>
           </div>
@@ -125,53 +131,51 @@
 
     <!-- Template to Get rid of the current day and the weekends -->
     <ng-template
-          #customTemplate
-          let-days="days"
-          let-locale="locale"
-          let-dayHeaderClicked="dayHeaderClicked"
-          let-eventDropped="eventDropped"
-          let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
-          let-dragEnter="dragEnter"
-        >
-        <div class="cal-day-header-wrapper">
-
-
-          <div class="cal-day-headers" role="row">
-            <div class="time-label-column">
-                <mat-icon> access_time </mat-icon>
-                <span> {{ timezone }}</span>
-
-            </div>
-            <div
-              class="cal-header"
-              *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
-              [class.cal-past]="day.isPast"
-              [class.cal-today]="day.isToday"
-              [class.cal-future]="day.isFuture"
-              [ngClass]="day.cssClass"
-              (mwlClick)="dayHeaderClicked.emit({ day: day, sourceEvent: $event })"
-              mwlDroppable
-              dragOverClass="cal-drag-over"
-              (drop)="
-                eventDropped.emit({
-                  event: $event.dropData.event,
-                  newStart: day.date
-                })
-              "
-              (dragEnter)="dragEnter.emit({ date: day.date })"
-              tabindex="0"
-              role="columnheader"
-            >
-              <b>{{ day.date | calendarDate: 'weekViewColumnHeader':locale }}</b
-              ><br />
-              <span>{{
-                day.date | calendarDate: 'weekViewColumnSubHeader':locale
-              }}</span>
-            </div>
+      #customTemplate
+      let-days="days"
+      let-locale="locale"
+      let-dayHeaderClicked="dayHeaderClicked"
+      let-eventDropped="eventDropped"
+      let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
+      let-dragEnter="dragEnter"
+    >
+      <div class="cal-day-header-wrapper">
+        <div class="cal-day-headers" role="row">
+          <div class="time-label-column">
+            <mat-icon> access_time </mat-icon>
+            <span> {{ timezone }}</span>
+          </div>
+          <div
+            class="cal-header"
+            *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
+            [class.cal-past]="day.isPast"
+            [class.cal-today]="day.isToday"
+            [class.cal-future]="day.isFuture"
+            [ngClass]="day.cssClass"
+            (mwlClick)="
+              dayHeaderClicked.emit({ day: day, sourceEvent: $event })
+            "
+            mwlDroppable
+            dragOverClass="cal-drag-over"
+            (drop)="
+              eventDropped.emit({
+                event: $event.dropData.event,
+                newStart: day.date
+              })
+            "
+            (dragEnter)="dragEnter.emit({ date: day.date })"
+            tabindex="0"
+            role="columnheader"
+          >
+            <b>{{ day.date | calendarDate: "weekViewColumnHeader":locale }}</b
+            ><br />
+            <span>{{
+              day.date | calendarDate: "weekViewColumnSubHeader":locale
+            }}</span>
           </div>
         </div>
-        </ng-template>
-
+      </div>
+    </ng-template>
 
     <div [ngSwitch]="view">
       <mwl-calendar-month-view
