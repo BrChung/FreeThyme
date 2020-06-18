@@ -186,25 +186,17 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  getTimeZone () {
+  getTimeZone() {
     let tempDate = new Date().getTimezoneOffset();
-    let timeOffset = tempDate/60
-    let timeOffsetString = timeOffset.toString();
-
-    if (tempDate > 0) {
-      if (timeOffset < 10) {
-        let timeOffsetString = '0' + timeOffset.toString();
-      }
-      return "GMT-" + timeOffsetString;
-    }
-    else {
-      if (timeOffset < 10) {
-        let timeOffsetString = '0' + timeOffset.toString();
-      }
-      return "GMT+" + timeOffsetString;
-    }
-
+    let timeOffset = (tempDate / 60) * -1;
+    return (
+      "GMT" +
+      (timeOffset < 0 ? "-" : "+") +
+      ("0" + Math.abs(timeOffset)).slice(-2)
+    );
   }
+
+
   dateSelected(value: Date) {
     this.viewDate = value;
   }
