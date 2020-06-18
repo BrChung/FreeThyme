@@ -3,10 +3,14 @@
 @import "~@angular/material/theming";
 @import "~angular-calendar/scss/angular-calendar.scss";
 
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700&display=swap');
+
+
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 @include mat-core();
+
 
 // http://mcg.mbitson.com/
 $ft-palette: (
@@ -60,6 +64,8 @@ $ft-theme: mat-light-theme($ft-primary, $ft-accent, $ft-warn);
 @include angular-material-theme($ft-theme);
 
 /* You can add global styles to this file, and also import other style files */
+$primary-font:  'Source Sans Pro', sans-serif;
+
 
 html,
 body {
@@ -67,11 +73,18 @@ body {
 }
 body {
   margin: 0;
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: $primary-font;
   color: #292929;
+  font-weight: 300;
 }
+
+// This applies to the Weekday Headers
+b {
+  font-weight: 400;
+}
+
 h1 {
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: $primary-font;
   font-size: 24px;
   font-style: normal;
   font-variant: normal;
@@ -79,11 +92,11 @@ h1 {
   line-height: 26.4px;
 }
 h3 {
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: $primary-font;
   font-size: 14px;
   font-style: normal;
   font-variant: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 15.4px;
 }
 p {
@@ -135,7 +148,7 @@ $cal-bg-secondary: #fff;
 }
 
 .cal-day-headers {
-  margin-right: 14.5px;
+  margin-right: 14px;
 }
 
 .cal-day-columns {
@@ -166,9 +179,12 @@ $cal-bg-secondary: #fff;
     height: 100%;
     border: thin !important;
   }
+
+  // This affects the time Labels on the left-hand side
   .cal-time {
     position: relative;
     top: -13.5px;
+    font-weight: 300;
   }
 
   .cal-ends-within-day .cal-event {

@@ -25,8 +25,14 @@
   align-items: center;
 }
 
+.calendar-room-left-spacer {
+  width: 185px;
+  height: 48px;
+}
 .calendar-room-cal-nav-but-group {
   margin: 1em;
+  display: flex;
+  align-items: center;
 }
 
 .calendar-room-cal-view-but-group {
@@ -34,7 +40,7 @@
 }
 
 .calendar-room-cal-header-title {
-  font-size: 1em;
+  font-size: 1.5em;
 }
 
 .calendar-room-toolar-members {

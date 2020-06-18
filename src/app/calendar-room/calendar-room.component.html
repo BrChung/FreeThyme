@@ -46,10 +46,9 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="calendar-room-cal-header">
+      <div class="calendar-room-left-spacer">
+      </div>
       <div class="calendar-room-cal-nav-but-group">
-        <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
-          Today
-        </button>
         <button
           mat-icon-button
           mwlCalendarPreviousView
@@ -59,6 +58,11 @@
         >
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
+        <div>
+          <h3 class="calendar-room-cal-header-title">
+            {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
+          </h3>
+        </div>
         <button
           mat-icon-button
           mwlCalendarNextView
@@ -69,11 +73,7 @@
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
       </div>
-      <div>
-        <h3 class="calendar-room-cal-header-title">
-          {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
-        </h3>
-      </div>
+
       <mat-button-toggle-group class="calendar-room-cal-view-but-group">
         <mat-button-toggle
           (click)="setView(CalendarView.Month)"
