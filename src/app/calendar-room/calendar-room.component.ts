@@ -115,8 +115,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.calendar.changeFavorite(state, this.calID);
   }
 
-// I am using the green gradient from https://coolors.co/030202-36534b-638279-729164-9576a7
-// and then using Russian Green (729164 and selecting the view shades)
+  // I am using the green gradient from https://coolors.co/030202-36534b-638279-729164-9576a7
+  // and then using Russian Green (729164 and selecting the view shades)
 
   countToColor(count: number) {
     var color: string;
