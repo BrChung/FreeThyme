@@ -115,8 +115,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.calendar.changeFavorite(state, this.calID);
   }
 
-// I am using the green gradient from https://coolors.co/030202-36534b-638279-729164-9576a7
-// and then using Russian Green (729164 and selecting the view shades)
+  // I am using the green gradient from https://coolors.co/030202-36534b-638279-729164-9576a7
+  // and then using Russian Green (729164 and selecting the view shades)
 
   countToColor(count: number) {
     var color: string;
@@ -186,25 +186,20 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  getTimeZone () {
+  getTimeZone() {
     let tempDate = new Date().getTimezoneOffset();
-    let timeOffset = tempDate/60
-    let timeOffsetString = timeOffset.toString();
-
-    if (tempDate > 0) {
-      if (timeOffset < 10) {
-        let timeOffsetString = '0' + timeOffset.toString();
-      }
-      return "GMT-" + timeOffsetString;
-    }
-    else {
-      if (timeOffset < 10) {
-        let timeOffsetString = '0' + timeOffset.toString();
-      }
-      return "GMT+" + timeOffsetString;
-    }
-
+    let timeOffset = (tempDate / 60) * -1;
+    return (
+      "GMT" +
+      (timeOffset < 0 ? "-" : "+") +
+      ("0" + Math.abs(timeOffset)).slice(-2)
+    );
   }
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 275f459694127ec7c1f2747a288248d6cb5c8ed8
   dateSelected(value: Date) {
     this.viewDate = value;
   }

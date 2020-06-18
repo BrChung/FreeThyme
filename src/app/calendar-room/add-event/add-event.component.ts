@@ -99,9 +99,18 @@ export class AddEventComponent implements OnInit, OnDestroy {
         );
         if (this.form.status == "VALID") {
           this.data.event.title = value.title;
+          this.data.event.start = parse(
+            this.form.value.startTime,
+            "h':'mma",
+            this.form.value.startDate
+          );
+          this.data.event.end = parse(
+            this.form.value.endTime,
+            "h':'mma",
+            this.form.value.endDate
+          );
           this.refresh.emit(null);
         }
-        //this.form.controls["title"].setValue("test", { emitEvent: false });
       });
     this.form.patchValue({
       startDate: startOfDay(this.data.event.start),
