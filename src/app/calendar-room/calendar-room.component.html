@@ -96,6 +96,7 @@
       </mat-button-toggle-group>
     </div>
 
+    <!-- Template to get rid of 12 am in the time label column -->
     <ng-template
       #customTimeLabelTemplate
       let-segment="segment"
@@ -115,12 +116,61 @@
         <div class="calculations"  *ngIf="isTimeLabel">
           <div *ngIf="(segment.date | calendarDate:'weekViewHour':locale) as result">
             <div class = "cal-time" *ngIf="result != '12 AM'">
-              {{result}}
+              {{ result }}
             </div>
           </div>
         </div>
       </div>
     </ng-template>
+
+    <!-- Template to Get rid of the current day and the weekends -->
+    <ng-template
+          #customTemplate
+          let-days="days"
+          let-locale="locale"
+          let-dayHeaderClicked="dayHeaderClicked"
+          let-eventDropped="eventDropped"
+          let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
+          let-dragEnter="dragEnter"
+        >
+        <div class="cal-day-header-wrapper">
+
+
+          <div class="cal-day-headers" role="row">
+            <div class="time-label-column">
+                <mat-icon> access_time </mat-icon>
+                <span> {{ timezone }}</span>
+
+            </div>
+            <div
+              class="cal-header"
+              *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
+              [class.cal-past]="day.isPast"
+              [class.cal-today]="day.isToday"
+              [class.cal-future]="day.isFuture"
+              [ngClass]="day.cssClass"
+              (mwlClick)="dayHeaderClicked.emit({ day: day, sourceEvent: $event })"
+              mwlDroppable
+              dragOverClass="cal-drag-over"
+              (drop)="
+                eventDropped.emit({
+                  event: $event.dropData.event,
+                  newStart: day.date
+                })
+              "
+              (dragEnter)="dragEnter.emit({ date: day.date })"
+              tabindex="0"
+              role="columnheader"
+            >
+              <b>{{ day.date | calendarDate: 'weekViewColumnHeader':locale }}</b
+              ><br />
+              <span>{{
+                day.date | calendarDate: 'weekViewColumnSubHeader':locale
+              }}</span>
+            </div>
+          </div>
+        </div>
+        </ng-template>
 
 
     <div [ngSwitch]="view">
@@ -141,6 +191,7 @@
         [events]="events"
         [refresh]="refresh"
         [hourSegmentTemplate]="customTimeLabelTemplate"
+        [headerTemplate]="customTemplate"
         (eventClicked)="handleEvent('Clicked', $event.event)"
         (eventTimesChanged)="eventTimesChanged($event)"
       >

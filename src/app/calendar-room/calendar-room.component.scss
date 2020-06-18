@@ -23,11 +23,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: white;
 }
 
 .calendar-room-left-spacer {
   width: 185px;
   height: 48px;
+  margin: 12.8px;
 }
 .calendar-room-cal-nav-but-group {
   margin: 1em;
@@ -41,6 +43,7 @@
 
 .calendar-room-cal-header-title {
   font-size: 1.5em;
+  text-transform: uppercase;
 }
 
 .calendar-room-toolar-members {
