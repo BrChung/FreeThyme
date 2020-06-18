@@ -11,6 +11,8 @@ import {
   FormArray,
   FormControl,
   Validators,
+  AbstractControl,
+  ValidatorFn,
 } from "@angular/forms";
 import {
   startOfDay,
@@ -39,6 +41,7 @@ export class AddEventComponent implements OnInit, OnDestroy {
   startTimeOptions: string[] = this.generateTimes();
   endTimeOptions: string[] = this.generateTimes();
   refresh = new EventEmitter();
+  today: Date = new Date();
   constructor(
     private formBuilder: FormBuilder,
     private calendar: CalendarService,
@@ -47,10 +50,22 @@ export class AddEventComponent implements OnInit, OnDestroy {
   ) {
     this.form = this.formBuilder.group({
       title: ["", [Validators.required]],
-      startDate: [[], [Validators.required]],
-      startTime: [[], [Validators.required]],
-      endDate: [[], [Validators.required]],
-      endTime: [[], [Validators.required]],
+      startDate: ["", [Validators.required]],
+      startTime: [
+        "",
+        [
+          Validators.required,
+          Validators.pattern("(1[0-2]|0?[1-9]):([0-5][0-9])(\\s*)([AP]M)$"),
+        ],
+      ],
+      endDate: ["", [Validators.required]],
+      endTime: [
+        "",
+        [
+          Validators.required,
+          Validators.pattern("(1[0-2]|0?[1-9]):([0-5][0-9])(\\s*)([AP]M)$"),
+        ],
+      ],
       description: ["", []],
       location: ["", []],
     });
@@ -60,24 +75,43 @@ export class AddEventComponent implements OnInit, OnDestroy {
     this.formSub = this.form.valueChanges
       .pipe(debounceTime(500))
       .subscribe((value) => {
+        this.form.controls["endDate"].setValidators([
+          Validators.required,
+          ValidateEndDate(this.form.value.startDate),
+        ]);
+        this.form.controls["endTime"].setValidators([
+          Validators.required,
+          Validators.pattern("(1[0-2]|0?[1-9]):([0-5][0-9])(\\s*)([AP]M)$"),
+          ValidateEndTime(
+            parse(this.form.value.endTime, "h':'mma", this.form.value.endDate),
+            this.form.value.endDate
+          ),
+        ]);
+        this.form.controls["endDate"].updateValueAndValidity({
+          emitEvent: false,
+        });
+        this.form.controls["endTime"].updateValueAndValidity({
+          emitEvent: false,
+        });
         this.endTimeOptions = this.generateTimes(
           parse(value.startTime, "h':'mma", value.startDate),
           value.endDate
         );
-        if (value.title || !this.form.controls["title"].pristine) {
+        if (this.form.status == "VALID") {
           this.data.event.title = value.title;
+          this.refresh.emit(null);
         }
-        this.refresh.emit(null);
-        console.log(this.form.controls["title"]);
         //this.form.controls["title"].setValue("test", { emitEvent: false });
       });
     this.form.patchValue({
       startDate: startOfDay(this.data.event.start),
       startTime: format(this.data.event.start, "h':'mma"),
-      endDate: this.data.event.end ? startOfDay(this.data.event.end) : [],
+      endDate: this.data.event.end
+        ? startOfDay(this.data.event.end)
+        : startOfDay(this.data.event.start),
       endTime: this.data.event.end
         ? format(this.data.event.end, "h':'mma")
-        : [],
+        : format(addMinutes(this.data.event.start, 30), "h':'mma"),
     });
   }
 
@@ -91,11 +125,17 @@ export class AddEventComponent implements OnInit, OnDestroy {
   get description() {
     return this.form.get("description");
   }
-  get start() {
-    return this.form.get("start");
+  get startTime() {
+    return this.form.get("startTime");
   }
-  get end() {
-    return this.form.get("end");
+  get endTime() {
+    return this.form.get("endTime");
+  }
+  get startDate() {
+    return this.form.get("startDate");
+  }
+  get endDate() {
+    return this.form.get("endDate");
   }
   get location() {
     return this.form.get("location");
@@ -103,6 +143,49 @@ export class AddEventComponent implements OnInit, OnDestroy {
 
   async submit() {
     console.log("hi");
+  }
+
+  unFocusHandler(e, type) {
+    if (type == "start") {
+      const time = this.formatTime(this.form.value.startTime);
+      this.form.controls["startTime"].setValue(time, { emitEvent: false });
+    } else if (type == "end") {
+      var time = this.formatTime(this.form.value.endTime);
+      const startTime = parse(
+        this.form.value.startTime,
+        "h':'mma",
+        this.form.value.startDate
+      );
+      if (this.form.value.endDate === "") return;
+      const endTime = parse(time, "h':'mma", this.form.value.endDate);
+      if (startTime > endTime) {
+        time = format(
+          addMinutes(
+            parse(
+              this.form.value.startTime,
+              "h':'mma",
+              this.form.value.startDate
+            ),
+            60
+          ),
+          "h':'mma"
+        );
+      }
+      this.form.controls["endTime"].setValue(time, { emitEvent: false });
+    }
+  }
+
+  formatTime(time: string) {
+    if (!time) return "";
+    var matches = time
+      .toLowerCase()
+      .match(/(1[0-2]|0?[1-9]):?([0-5][0-9])?(\s*)?([ap]m)?/);
+    return (
+      (matches[1] ? matches[1] : "12") +
+      ":" +
+      (matches[2] ? matches[2] : "00") +
+      (matches[4] == "pm" ? "PM" : "AM")
+    );
   }
 
   onNoClick(): void {
@@ -143,4 +226,23 @@ export class AddEventComponent implements OnInit, OnDestroy {
     }
     return times;
   }
+}
+
+function ValidateEndDate(startDate: Date): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (control.value && control.value < startDate) {
+      return { endDateInvalid: true };
+    }
+    return null;
+  };
+}
+
+function ValidateEndTime(startTime: Date, endDate: Date): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const endTime = parse(control.value, "h':'mma", endDate);
+    if (control.value && endTime < startTime) {
+      return { endTimeInvalid: true };
+    }
+    return null;
+  };
 }

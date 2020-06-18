@@ -15,7 +15,7 @@ import {
   CalendarView,
   CalendarDateFormatter,
 } from "angular-calendar";
-import { CustomWeeklyDateFormatter } from './custom-weekly-date-formatter.provider'
+import { CustomWeeklyDateFormatter } from "./custom-weekly-date-formatter.provider";
 import {
   isSameDay,
   isSameMonth,
@@ -176,7 +176,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(() => {
       sub.unsubscribe();
-      console.log(event);
       removeByAttr(this.events, "id", eventId);
       this.refreshDom();
     });
