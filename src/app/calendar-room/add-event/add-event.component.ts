@@ -151,7 +151,16 @@ export class AddEventComponent implements OnInit, OnDestroy {
   }
 
   async submit() {
-    console.log("hi");
+    const form = this.form.value;
+    await this.calendar.addEvent(
+      this.data.calID,
+      form.title,
+      parse(form.startTime, "h':'mma", form.startDate),
+      parse(form.endTime, "h':'mma", form.endDate),
+      form.description,
+      form.location
+    );
+    this.dialogRef.close();
   }
 
   unFocusHandler(e, type) {

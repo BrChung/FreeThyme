@@ -65,6 +65,35 @@ export class CalendarService {
     );
   }
 
+  async addEvent(
+    calID: string,
+    title: string,
+    start: Date,
+    end: Date,
+    description?: string,
+    location?: string
+  ) {
+    const event = {
+      start: firebase.firestore.Timestamp.fromDate(new Date(start)),
+      end: firebase.firestore.Timestamp.fromDate(new Date(end)),
+      title,
+      description,
+      location,
+    };
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      return this.afs
+        .doc(`rooms/${calID}/calendars/${user.uid}`)
+        .set(
+          {
+            ft_events: firebase.firestore.FieldValue.arrayUnion(event),
+          },
+          { merge: true }
+        )
+        .catch((error) => console.error("Error Adding Document: ", error));
+    }
+  }
+
   async changeFavorite(state: boolean, roomID: string) {
     const user = await this.auth.getCurrentUser();
     if (user) {
@@ -103,9 +132,12 @@ export class CalendarService {
     if (user) {
       return this.afs
         .doc(`rooms/${calID}/calendars/${user.uid}`)
-        .set({
-          events: busyTimes,
-        })
+        .set(
+          {
+            events: busyTimes,
+          },
+          { merge: true }
+        )
         .catch((error) => console.error("Error Adding Document: ", error));
     }
   }
