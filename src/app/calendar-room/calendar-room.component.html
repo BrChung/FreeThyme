@@ -6,14 +6,7 @@
     <ng-container *ngIf="roomMemDoc.member as member">
       <div class="calendar-room-title-container">
         <h3>{{ room.title }}</h3>
-        <button mat-icon-button (click)="toggleFavorite(member.favorite)">
-          <mat-icon class="favorite-button" *ngIf="member.favorite">
-            star
-          </mat-icon>
-          <mat-icon class="favorite-button" *ngIf="!member.favorite">
-            star_border
-          </mat-icon>
-        </button>
+
       </div>
       <div class="calendar-room-toolar-members">
         <div (click)="openInviteDialog(0)">
@@ -32,17 +25,30 @@
 </mat-toolbar> -->
 <mat-sidenav-container class="calendar-room-container">
   <mat-sidenav class="sidebar-wrapper" mode="side" opened>
-    <div class="sidebar">
+    <div class="sidebar-button-wrapper">
       <button class="sidebar-button" mat-raised-button color="primary" (click)="openAddCalDialog()">
-        <mat-icon> calendar_today </mat-icon>
-        <span class="sidebar-button-name"> Add Calendar </span>
+        <div class="sidebar-button-elements">
+          <mat-icon> calendar_today </mat-icon>
+          <span class="sidebar-button-name"> Add Calendar </span>
+        </div>
       </button>
     </div>
 
-    <div>
-      <button class="share-button-wrapper" mat-button (click)="openInviteDialog(1)">
-        <mat-icon> share </mat-icon>
-        <span class="sidebar-button-name"> Share </span>
+    <div class="sidebar-button-wrapper">
+      <button class="sidebar-button" mat-button (click)="openInviteDialog(1)" style="margin-top:0em;">
+        <div class="sidebar-button-elements">
+          <mat-icon> share </mat-icon>
+          <span class="sidebar-button-name"> Share </span>
+        </div>
+      </button>
+    </div>
+
+    <div class="sidebar-button-wrapper">
+      <button class="sidebar-button" mat-button (click)="openInviteDialog(2)" style="margin-top:0em;">
+        <div class="sidebar-button-elements">
+          <mat-icon> group_add </mat-icon>
+          <span class="sidebar-button-name"> Invite Person </span>
+        </div>
       </button>
     </div>
     <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
@@ -58,10 +64,10 @@
         </div>
       </ng-container>
     </ng-container>
-    <button class="invite-button-wrapper" mat-stroked-button (click)="openInviteDialog(2)">
+    <!-- <button class="invite-button-wrapper" mat-stroked-button (click)="openInviteDialog(2)">
       <mat-icon> group_add </mat-icon>
       <span class="invite-button-name"> Invite Person </span>
-    </button>
+    </button> -->
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="calendar-room-title-container"*ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
@@ -76,7 +82,16 @@
           {{ room.title }}
         </div>
       </ng-container>
-
+      <ng-container *ngIf="roomMemDoc.member as member">
+        <button mat-icon-button (click)="toggleFavorite(member.favorite)">
+          <mat-icon class="favorite-button" *ngIf="member.favorite">
+            star
+          </mat-icon>
+          <mat-icon class="favorite-button" *ngIf="!member.favorite">
+            star_border
+          </mat-icon>
+        </button>
+      </ng-container>
 
     </div>
     <div class="calendar-wrapper">
