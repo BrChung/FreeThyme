@@ -1,4 +1,4 @@
-<mat-toolbar
+<!-- <mat-toolbar
   class="calendar-room-toolar"
   *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
 >
@@ -27,23 +27,55 @@
           Invite
         </button>
       </div>
-      <div>
-        <button mat-raised-button color="primary" (click)="openAddCalDialog()">
-          Add Events
-        </button>
-      </div>
     </ng-container>
   </ng-container>
-</mat-toolbar>
+</mat-toolbar> -->
 <mat-sidenav-container class="calendar-room-container">
-  <mat-sidenav mode="side" opened>
-    <app-month-calendar
-      #monthCalendar
-      (dateSelected)="dateSelected($event)"
-      [selectedDate]="viewDate"
-    ></app-month-calendar>
+  <mat-sidenav class="sidebar-wrapper" mode="side" opened>
+    <div class="sidebar">
+      <button class="sidebar-button" mat-raised-button color="primary" (click)="openAddCalDialog()">
+        <mat-icon> calendar_today </mat-icon>
+        <span class="siderbar-button-name"> Add Calendar </span>
+      </button>
+    </div>
+    <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+      <ng-container *ngIf="roomMemDoc.room as room">
+        <div class="calendar-room-toolbar-members">
+          <div (click)="openInviteDialog(0)">
+            <app-room-member-list
+              [userCount]="room.memberCount"
+              [users]="room.members"
+              [userImg]="room.profileImages">
+            </app-room-member-list>
+          </div>
+
+        </div>
+      </ng-container>
+    </ng-container>
+    <button mat-raised-button (click)="openInviteDialog(2)">
+      Invite
+    </button>
+    <!-- <div *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+
+      </div> -->
+
   </mat-sidenav>
   <mat-sidenav-content>
+    <div class="calendar-room-title-container"*ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+      <button
+      mat-icon-button
+      routerLink="/home/cal">
+        <mat-icon> west </mat-icon>
+      </button>
+
+      <ng-container *ngIf="roomMemDoc.room as room" >
+        <div class="calendar-room-title">
+          {{ room.title }}
+        </div>
+      </ng-container>
+
+
+    </div>
     <div class="calendar-wrapper">
       <div class="calendar-room-cal-header">
         <div class="calendar-room-left-spacer">

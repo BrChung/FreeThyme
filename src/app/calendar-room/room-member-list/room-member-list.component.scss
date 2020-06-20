@@ -1,0 +1,26 @@
+.user-img {
+  border-radius:50px;
+  width:60px;
+}
+
+.user-profile {
+  display:flex;
+  align-items:center;
+  justify-content:space-evenly;
+}
+
+.user-nickname {
+  font-weight:500;
+  font-size:larger;
+}
+
+.member-list-title-text {
+  font-size: xx-large;
+  font-weight: 600;
+}
+
+.member-list-title-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
