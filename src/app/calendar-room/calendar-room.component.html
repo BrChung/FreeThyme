@@ -35,7 +35,14 @@
     <div class="sidebar">
       <button class="sidebar-button" mat-raised-button color="primary" (click)="openAddCalDialog()">
         <mat-icon> calendar_today </mat-icon>
-        <span class="siderbar-button-name"> Add Calendar </span>
+        <span class="sidebar-button-name"> Add Calendar </span>
+      </button>
+    </div>
+
+    <div>
+      <button class="share-button-wrapper" mat-button (click)="openInviteDialog(1)">
+        <mat-icon> share </mat-icon>
+        <span class="sidebar-button-name"> Share </span>
       </button>
     </div>
     <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
@@ -48,17 +55,13 @@
               [userImg]="room.profileImages">
             </app-room-member-list>
           </div>
-
         </div>
       </ng-container>
     </ng-container>
-    <button mat-raised-button (click)="openInviteDialog(2)">
-      Invite
+    <button class="invite-button-wrapper" mat-stroked-button (click)="openInviteDialog(2)">
+      <mat-icon> group_add </mat-icon>
+      <span class="invite-button-name"> Invite Person </span>
     </button>
-    <!-- <div *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
-
-      </div> -->
-
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="calendar-room-title-container"*ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">

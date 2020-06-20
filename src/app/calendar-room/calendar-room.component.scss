@@ -81,17 +81,32 @@
 }
 
 .sidebar-button {
-  width: 85%;
-  height: 4.5em;
+  width: 80%;
+  height: 3.5em;
   display:flex;
   justify-content: space-around;
   align-items:center;
   margin-top:6.3em;
 }
 
-.siderbar-button-name {
+.share-button-wrapper {
+  margin-left:3em;
+  margin-top: 1em;
+}
+
+.sidebar-button-name {
   font-weight: 600;
-  font-size: large;
+  font-size: medium;
   text-transform: uppercase;
-  padding-left:22.5px;
+  padding-left:1em;
+}
+
+.invite-button-wrapper {
+  width: 80%;
+  margin-left:2em;
+  margin-top:1.5em;
+}
+
+.invite-button-name {
+  margin-left: 1em;
 }

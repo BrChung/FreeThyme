@@ -3,6 +3,8 @@
     <mat-icon> group </mat-icon>
     <span class="member-list-title-text"> Members </span>
   </div>
+  <div class="line-divider">
+  </div>
   <div *ngFor="let user of users | slice: 0:5; let i = index">
     <div class="user-profile" *ngIf="userImg[user.uid]">
       <img

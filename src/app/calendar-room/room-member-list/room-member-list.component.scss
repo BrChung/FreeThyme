@@ -1,26 +1,43 @@
 .user-img {
   border-radius:50px;
-  width:60px;
+  width:40px;
 }
 
 .user-profile {
   display:flex;
   align-items:center;
-  justify-content:space-evenly;
+  margin-top: 0.75em;
+  margin-left: 2em;
 }
+
 
 .user-nickname {
   font-weight:500;
   font-size:larger;
+  margin-left: 1em
 }
 
 .member-list-title-text {
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: 600;
+  margin-left: 1em;
 }
 
 .member-list-title-wrapper {
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
+  margin-left: 2.5em;
+  margin-bottom: 0.75em;
+}
+
+.user-parent {
+  margin-top: 2em;
+}
+
+.line-divider {
+  width:80%;
+  display:flex;
+  border-top: thin solid;
+  margin-left: 1.75em;
+  margin-bottom: 1.25em;
 }
