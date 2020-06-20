@@ -5,7 +5,7 @@ import {
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Observable, combineLatest, of } from "rxjs";
-import { switchMap, map, delay } from "rxjs/operators";
+import { switchMap, map, delay, flatMap } from "rxjs/operators";
 import * as firebase from "firebase/app";
 import { AuthService } from "./auth.service";
 
@@ -38,7 +38,29 @@ export class CalendarService {
   }
 
   getCalData(roomID: string) {
-    return this.afs.doc(`rooms/${roomID}/entire-cal/merged`).valueChanges();
+    let merged = {};
+    return this.afs
+      .doc(`rooms/${roomID}/entire-cal/merged`)
+      .valueChanges()
+      .pipe(
+        switchMap((m) => {
+          merged = m;
+          return this.getIndividualCal(roomID);
+        }),
+        map((individual) => {
+          return { ...merged, individual };
+        })
+      );
+  }
+
+  getIndividualCal(roomID: string) {
+    return this.afAuth.authState.pipe(
+      switchMap((user) => {
+        return this.afs
+          .doc(`rooms/${roomID}/calendars/${user.uid}`)
+          .valueChanges();
+      })
+    );
   }
 
   getMembers(roomID: string) {

@@ -52,6 +52,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   private calendarSub: Subscription;
 
   timezone: String = this.getTimeZone();
+  doc: any;
 
   room$: any;
   member$: any;
@@ -67,6 +68,9 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   events: CalendarEvent[] = [];
 
   activeDayIsOpen: boolean = true;
+
+  //Show your individual events
+  showIndividual: boolean = true;
 
   weekStartsOn: 0 = 0;
 
@@ -84,22 +88,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     });
 
     this.calendarSub = this.calendar.getCalData(this.calID).subscribe((doc) => {
-      let events = [];
-      if (doc && doc["events"]) {
-        doc["events"].forEach((elm) => {
-          const { start, end } = elm;
-          const colorHex = this.countToColor(elm["count"]);
-          const color = { primary: colorHex, secondary: colorHex };
-          events.push({
-            start: start.toDate(),
-            end: end.toDate(),
-            color,
-            title: "",
-          });
-        });
-      }
-      this.events = events;
-      this.refresh.next();
+      this.doc = doc;
+      this.addEventsToCal();
     });
 
     this.member$ = this.calendar.getMemberDoc(this.calID);
@@ -109,6 +99,49 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
     this.calendarSub.unsubscribe();
+  }
+
+  addEventsToCal() {
+    const doc = this.doc;
+    console.log(doc);
+    let events = [];
+    if (doc && doc["events"]) {
+      doc["events"].forEach((elm) => {
+        const { start, end } = elm;
+        const colorHex = this.countToColor(elm["count"]);
+        const color = { primary: colorHex, secondary: colorHex };
+        events.push({
+          start: start.toDate(),
+          end: end.toDate(),
+          color,
+          title: "",
+        });
+      });
+    }
+    if (doc && doc["individual"]["events"] && this.showIndividual) {
+      doc["individual"]["events"].forEach((elm) => {
+        const { start, end, title } = elm;
+        events.push({
+          start: start.toDate(),
+          end: end.toDate(),
+          title,
+          meta: { type: "gc" },
+        });
+      });
+    }
+    if (doc && doc["individual"]["ft_events"] && this.showIndividual) {
+      doc["individual"]["ft_events"].forEach((elm) => {
+        const { start, end, title, description } = elm;
+        events.push({
+          start: start.toDate(),
+          end: end.toDate(),
+          title,
+          meta: { type: "ft", description },
+        });
+      });
+    }
+    this.events = events;
+    this.refresh.next();
   }
 
   toggleFavorite(state: boolean) {
