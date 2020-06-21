@@ -28,6 +28,7 @@ import { finalize, takeUntil } from "rxjs/operators";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AddEventComponent } from "./add-event/add-event.component";
 import { AuthService } from "../services/auth.service";
+import { GraphService } from "../services/graph.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
 import { WeekViewHourSegment } from "calendar-utils";
@@ -79,6 +80,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     private calendar: CalendarService,
     public dialog: MatDialog,
     private auth: AuthService,
+    private graph: GraphService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -99,6 +101,16 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
     this.calendarSub.unsubscribe();
+  }
+
+
+  microsoftEvents () {
+    this.graph.getEvents()
+    .then((events) => {
+      console.log(events);
+      // Temporary to display raw results
+
+    });
   }
 
   addEventsToCal() {
