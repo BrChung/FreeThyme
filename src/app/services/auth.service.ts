@@ -8,6 +8,7 @@ import {
 import { environment } from "../../environments/environment";
 import { auth } from "firebase/app";
 import { User } from "../models/user";
+import { AuthSnackbarService } from "./auth-snackbar.service";
 
 declare var gapi: any;
 
@@ -17,7 +18,11 @@ declare var gapi: any;
 export class AuthService {
   user$: Observable<firebase.User>;
 
-  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) {
+  constructor(
+    public afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    private snack: AuthSnackbarService
+  ) {
     this.initClient();
     this.user$ = afAuth.authState;
   }
@@ -34,7 +39,7 @@ export class AuthService {
     });
   }
 
-  async login() {
+  async googleSignIn() {
     const googleAuth = gapi.auth2.getAuthInstance();
     const googleUser = await googleAuth.signIn();
     const token = googleUser.getAuthResponse().id_token;
@@ -43,6 +48,19 @@ export class AuthService {
       credential
     );
     return this.updateUserData(reterievedData.user);
+  }
+
+  async microsoftSignIn() {
+    var provider = new auth.OAuthProvider("microsoft.com");
+    provider.addScope("calendars.readwrite");
+    this.afAuth.auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        this.snack.authError(error.message);
+      });
   }
 
   logout() {

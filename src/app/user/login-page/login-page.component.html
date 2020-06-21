@@ -2,8 +2,11 @@
   <div *ngIf="!(auth.user$ | async)">
     <h1>Login with your Calendar Provider</h1>
     <br /><br />
-    <button mat-raised-button (click)="login()">
-      <img src="/assets/google-logo.svg" /> Login with Google
+    <button mat-raised-button (click)="googleSignIn()">
+      <img src="/assets/google_logo.svg" /> Login with Google
+    </button>
+    <button mat-raised-button (click)="auth.microsoftSignIn()">
+      <img src="/assets/microsoft_logo.svg" /> Login with Microsoft
     </button>
     <br /><br />
   </div>

@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
     const isLoggedIn = !!user;
     if (!isLoggedIn) {
       this.router.navigate(["/login"]);
-      this.snack.authError();
+      this.snack.authError("You must be logged in!");
     }
     return isLoggedIn;
   }

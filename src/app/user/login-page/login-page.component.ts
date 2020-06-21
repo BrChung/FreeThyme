@@ -12,8 +12,8 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async login() {
-    await this.auth.login();
+  async googleSignIn() {
+    await this.auth.googleSignIn();
     this.router.navigate(["/home/cal"]);
   }
 }
