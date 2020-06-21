@@ -51,6 +51,9 @@ export class AuthService {
     const reterievedData = await this.afAuth.auth.signInAndRetrieveDataWithCredential(
       credential
     );
+    if (await this.isLinkedWithMicrosoft()) {
+      await this.msalSignIn();
+    }
     return this.updateUserData(reterievedData.user);
   }
 
@@ -60,17 +63,7 @@ export class AuthService {
     this.afAuth.auth
       .signInWithPopup(provider)
       .then(async (res) => {
-        // Do MSAL Login
-        let result = await this.msalService
-          .loginPopup(environment.microsoftGraph)
-          .catch((error) => {
-            console.log(error);
-          });
-        if (result) {
-          this.msalAuthenticated = true;
-        } else {
-          console.log("error");
-        }
+        await this.msalSignIn();
       })
       .catch((error) => {
         this.snack.authError(error.message);
@@ -91,16 +84,7 @@ export class AuthService {
           return prevUser
             .linkWithCredential(error.credential)
             .then(async (linkResult) => {
-              let result = await this.msalService
-                .loginPopup(environment.microsoftGraph)
-                .catch((error) => {
-                  console.log(error);
-                });
-              if (result) {
-                this.msalAuthenticated = true;
-              } else {
-                console.log("error");
-              }
+              await this.msalSignIn();
               return this.afAuth.auth.signInWithCredential(
                 linkResult.credential
               );
@@ -109,6 +93,20 @@ export class AuthService {
           this.snack.authError(error.message);
         }
       });
+  }
+
+  async msalSignIn() {
+    const result = await this.msalService
+      .loginPopup(environment.microsoftGraph)
+      .catch((error) => {
+        console.log(error);
+      });
+    if (result) {
+      this.msalAuthenticated = true;
+    } else {
+      console.log("error");
+    }
+    return null;
   }
 
   async getAccessToken(): Promise<string> {
