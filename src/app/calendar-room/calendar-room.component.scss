@@ -46,6 +46,7 @@
 
 .calendar-room-cal-view-but-group {
   margin: 0.8em;
+  border-color: rgba(0, 0, 0, 0.87);
 }
 
 .calendar-room-cal-header-title {
@@ -98,14 +99,4 @@
   font-size: medium;
   text-transform: uppercase;
   padding-left:1em;
-}
-
-.invite-button-wrapper {
-  width: 80%;
-  margin-left:2em;
-  margin-top:1.5em;
-}
-
-.invite-button-name {
-  margin-left: 1em;
 }
