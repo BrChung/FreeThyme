@@ -51,6 +51,7 @@ export class AuthService {
     const reterievedData = await this.afAuth.auth.signInAndRetrieveDataWithCredential(
       credential
     );
+    console.log(reterievedData);
     if (await this.isLinkedWithMicrosoft()) {
       await this.msalSignIn();
     }
@@ -63,6 +64,7 @@ export class AuthService {
     this.afAuth.auth
       .signInWithPopup(provider)
       .then(async (res) => {
+        console.log(res);
         await this.msalSignIn();
       })
       .catch((error) => {
@@ -102,6 +104,7 @@ export class AuthService {
         console.log(error);
       });
     if (result) {
+      console.log(result);
       this.msalAuthenticated = true;
     } else {
       console.log("error");
@@ -110,12 +113,13 @@ export class AuthService {
   }
 
   async getAccessToken(): Promise<string> {
+    console.log("getting access token");
     let result = await this.msalService
       .acquireTokenSilent(environment.microsoftGraph)
       .catch((error) => {
         console.log(error);
       });
-
+    console.log(result);
     if (result) {
       // Temporary to display token in an error box
       console.log("Token acquired", result.accessToken);
