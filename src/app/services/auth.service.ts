@@ -63,6 +63,48 @@ export class AuthService {
       });
   }
 
+  async linkWithMicrosoft() {
+    const prevUser = await this.getCurrentUser();
+    var provider = new auth.OAuthProvider("microsoft.com");
+    provider.addScope("calendars.readwrite");
+    this.afAuth.auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        if (error.code === "auth/account-exists-with-different-credential") {
+          return prevUser
+            .linkWithCredential(error.credential)
+            .then((linkResult) => {
+              return this.afAuth.auth.signInWithCredential(
+                linkResult.credential
+              );
+            });
+        } else {
+          this.snack.authError(error.message);
+        }
+      });
+  }
+
+  async isLinkedWithGoogle() {
+    const user = await this.getCurrentUser();
+    const providers = user.providerData;
+    if (providers.filter((e) => e.providerId === "google.com").length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  async isLinkedWithMicrosoft() {
+    const user = await this.getCurrentUser();
+    const providers = user.providerData;
+    if (providers.filter((e) => e.providerId === "microsoft.com").length > 0) {
+      return true;
+    }
+    return false;
+  }
+
   logout() {
     this.afAuth.auth.signOut();
   }

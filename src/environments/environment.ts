@@ -23,6 +23,10 @@ export const environment = {
     ],
     scope: "https://www.googleapis.com/auth/calendar",
   },
+  microsoftGraph: {
+    appId: "d54fe48f-55b6-4ea1-b242-b2849bda659a",
+    scopes: ["user.read", "calendars.readwrite"],
+  },
 };
 
 /*

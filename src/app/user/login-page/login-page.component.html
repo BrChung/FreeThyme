@@ -17,6 +17,12 @@
       Logged in as <strong>{{ user.email }}</strong>
     </p>
 
+    <div *ngIf="!linkedToMicrosoft">
+      <button mat-raised-button (click)="auth.linkWithMicrosoft()">
+        <img src="/assets/microsoft_logo.svg" /> Link your Microsoft Account
+      </button>
+    </div>
+
     <button mat-raised-button (click)="auth.logout()">Logout</button>
   </div>
 </main>
