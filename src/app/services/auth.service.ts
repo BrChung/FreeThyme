@@ -18,6 +18,7 @@ declare var gapi: any;
 })
 export class AuthService {
   user$: Observable<firebase.User>;
+  public msalAuthenticated: boolean;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -27,6 +28,7 @@ export class AuthService {
   ) {
     this.initClient();
     this.user$ = afAuth.authState;
+    this.msalAuthenticated = this.msalService.getAccount() != null;
   }
 
   // Initialize the Google API client with desired scopes
@@ -53,32 +55,22 @@ export class AuthService {
   }
 
   async microsoftSignIn() {
-    let result = await this.msalService
-      .loginPopup(environment.microsoftGraph)
-      .catch((error) => {
-        console.log(error);
-      });
-    var provider = new auth.OAuthProvider("microsoft.com");
-    provider.addScope("calendars.readwrite");
-    console.log(result);
-    const credential = provider.credential(result.idToken.rawIdToken);
-    this.afAuth.auth
-      .signInAndRetrieveDataWithCredential(credential)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        this.snack.authError(error.message);
-      });
-  }
-
-  async microsoftSignIn1() {
     var provider = new auth.OAuthProvider("microsoft.com");
     provider.addScope("calendars.readwrite");
     this.afAuth.auth
       .signInWithPopup(provider)
-      .then((result) => {
-        console.log(result);
+      .then(async (res) => {
+        // Do MSAL Login
+        let result = await this.msalService
+          .loginPopup(environment.microsoftGraph)
+          .catch((error) => {
+            console.log(error);
+          });
+        if (result) {
+          this.msalAuthenticated = true;
+        } else {
+          console.log("error");
+        }
       })
       .catch((error) => {
         this.snack.authError(error.message);
@@ -129,6 +121,9 @@ export class AuthService {
 
   logout() {
     this.afAuth.auth.signOut();
+    if (this.msalAuthenticated) {
+      this.msalService.logout();
+    }
   }
 
   async freebusy(items: Array<any>, timeMin: Date = new Date(), timeMax: Date) {
