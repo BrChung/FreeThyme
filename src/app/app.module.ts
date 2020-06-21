@@ -18,6 +18,7 @@ import { PlaygroundComponent } from "./playground/playground.component";
 import { CalendarModule } from "angular-calendar";
 import { DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
+import { MsalModule } from "@azure/msal-angular";
 
 @NgModule({
   declarations: [AppComponent, PlaygroundComponent],
@@ -32,6 +33,11 @@ import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
+    }),
+    MsalModule.forRoot({
+      auth: {
+        clientId: environment.microsoftGraph.appId,
+      },
     }),
   ],
   providers: [AuthService, CalendarService],

@@ -9,6 +9,7 @@ import { environment } from "../../environments/environment";
 import { auth } from "firebase/app";
 import { User } from "../models/user";
 import { AuthSnackbarService } from "./auth-snackbar.service";
+import { MsalService } from "@azure/msal-angular";
 
 declare var gapi: any;
 
@@ -21,7 +22,8 @@ export class AuthService {
   constructor(
     public afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private snack: AuthSnackbarService
+    private snack: AuthSnackbarService,
+    private msalService: MsalService
   ) {
     this.initClient();
     this.user$ = afAuth.authState;
@@ -51,6 +53,26 @@ export class AuthService {
   }
 
   async microsoftSignIn() {
+    let result = await this.msalService
+      .loginPopup(environment.microsoftGraph)
+      .catch((error) => {
+        console.log(error);
+      });
+    var provider = new auth.OAuthProvider("microsoft.com");
+    provider.addScope("calendars.readwrite");
+    console.log(result);
+    const credential = provider.credential(result.idToken.rawIdToken);
+    this.afAuth.auth
+      .signInAndRetrieveDataWithCredential(credential)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        this.snack.authError(error.message);
+      });
+  }
+
+  async microsoftSignIn1() {
     var provider = new auth.OAuthProvider("microsoft.com");
     provider.addScope("calendars.readwrite");
     this.afAuth.auth
