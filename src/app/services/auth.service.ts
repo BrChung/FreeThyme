@@ -90,7 +90,17 @@ export class AuthService {
         if (error.code === "auth/account-exists-with-different-credential") {
           return prevUser
             .linkWithCredential(error.credential)
-            .then((linkResult) => {
+            .then(async (linkResult) => {
+              let result = await this.msalService
+                .loginPopup(environment.microsoftGraph)
+                .catch((error) => {
+                  console.log(error);
+                });
+              if (result) {
+                this.msalAuthenticated = true;
+              } else {
+                console.log("error");
+              }
               return this.afAuth.auth.signInWithCredential(
                 linkResult.credential
               );
@@ -101,8 +111,24 @@ export class AuthService {
       });
   }
 
+  async getAccessToken(): Promise<string> {
+    let result = await this.msalService
+      .acquireTokenSilent(environment.microsoftGraph)
+      .catch((error) => {
+        console.log(error);
+      });
+
+    if (result) {
+      // Temporary to display token in an error box
+      console.log("Token acquired", result.accessToken);
+      return result.accessToken;
+    }
+    return null;
+  }
+
   async isLinkedWithGoogle() {
     const user = await this.getCurrentUser();
+    if (!user) return false;
     const providers = user.providerData;
     if (providers.filter((e) => e.providerId === "google.com").length > 0) {
       return true;
@@ -112,6 +138,7 @@ export class AuthService {
 
   async isLinkedWithMicrosoft() {
     const user = await this.getCurrentUser();
+    if (!user) return false;
     const providers = user.providerData;
     if (providers.filter((e) => e.providerId === "microsoft.com").length > 0) {
       return true;
@@ -123,6 +150,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
     if (this.msalAuthenticated) {
       this.msalService.logout();
+      this.msalAuthenticated = false;
     }
   }
 
