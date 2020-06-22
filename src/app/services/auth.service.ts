@@ -60,21 +60,25 @@ export class AuthService {
   }
 
   // Microsoft Sign In Method
-  async microsoftSignIn() {
+  async microsoftSignIn(): Promise<User> {
     var provider = new auth.OAuthProvider("microsoft.com");
     provider.addScope("calendars.readwrite");
-    this.afAuth.auth
+    const reterievedData = await this.afAuth.auth
       .signInWithPopup(provider)
-      .then(async (res) => {
+      .then(async (user) => {
         if (await this.isLinkedWithGoogle()) {
           const googleUser = await this.gapiSignIn();
           if (!googleUser) return this.logout();
         }
         await this.msalSignIn();
+        return user;
       })
       .catch((error) => {
         this.snack.authError(error.message);
       });
+    if (!reterievedData) return null;
+    this.updateUserData(reterievedData.user);
+    return reterievedData.user;
   }
 
   // Link current account with Microsoft Provider
@@ -131,7 +135,7 @@ export class AuthService {
     return null;
   }
 
-  async isLinkedWithGoogle() {
+  async isLinkedWithGoogle(): Promise<boolean> {
     const user = await this.getCurrentUser();
     if (!user) return null;
     const providers = user.providerData;
@@ -141,7 +145,7 @@ export class AuthService {
     return false;
   }
 
-  async isLinkedWithMicrosoft() {
+  async isLinkedWithMicrosoft(): Promise<boolean> {
     const user = await this.getCurrentUser();
     if (!user) return null;
     const providers = user.providerData;
@@ -164,15 +168,15 @@ export class AuthService {
     return this.msalService.getAccount() != null;
   }
 
-  logout() {
+  logout(): void {
     this.afAuth.auth.signOut();
     const googleAuth = gapi.auth2.getAuthInstance();
     if (googleAuth.isSignedIn.get()) {
       googleAuth.signOut();
     }
     if (this.msalAuthenticated) {
-      this.msalService.logout();
       this.msalAuthenticated = false;
+      this.msalService.logout();
     }
   }
 
