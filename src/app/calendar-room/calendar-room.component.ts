@@ -103,13 +103,26 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.calendarSub.unsubscribe();
   }
 
-
+  // This is a temporary test to insert microsoft events into firebase
   microsoftEvents () {
+    let busyTimes = []
     this.graph.getEvents()
     .then((events) => {
       console.log(events);
-      // Temporary to display raw results
-
+      //This is the data we would need to push into firebase,
+      // I think we may have to adjust the event.start and event.end but we'll see
+      for (event of events) {
+        // let tempEvent = {
+        //   'title': event.subject,
+        //   'description': event.bodyPreview,
+        //   'start': event.start.dateTime,
+        //   'end': event.end.dateTime
+        // }
+        console.log(event.start)
+        // busyTimes.push(tempEvent)
+      }
+      // console.log(busyTimes)
+      // this.calendar.addBusyTimes(busyTimes, this.calID)
     });
   }
 
