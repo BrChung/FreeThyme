@@ -20,8 +20,6 @@ export class LoginPageComponent implements OnInit {
   async getLinked() {
     this.linkedToMicrosoft = await this.auth.isLinkedWithMicrosoft();
     this.linkedToGoogle = await this.auth.isLinkedWithGoogle();
-    const user = await this.auth.getCurrentUser();
-    console.log(user);
   }
 
   async googleSignIn() {

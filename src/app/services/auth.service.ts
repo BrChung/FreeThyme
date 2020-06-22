@@ -104,7 +104,6 @@ export class AuthService {
         console.log(error);
       });
     if (result) {
-      console.log(result);
       this.msalAuthenticated = true;
     } else {
       console.log("error");
@@ -113,13 +112,11 @@ export class AuthService {
   }
 
   async getAccessToken(): Promise<string> {
-    console.log("getting access token");
     let result = await this.msalService
       .acquireTokenSilent(environment.microsoftGraph)
       .catch((error) => {
         console.log(error);
       });
-    console.log(result);
     if (result) {
       // Temporary to display token in an error box
       console.log("Token acquired", result.accessToken);
