@@ -112,12 +112,12 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         this.graph.getEvents(calendarList[0].id)
         .then((events) => {
           console.log(events);
-          events.forEach((event) => {
+          events.forEach((msEvent) => {
             let tempEvent = {
-              'title': event.subject,
-              'description': event.bodyPreview,
-              'start': event.start.dateTime + 'z',
-              'end': event.end.dateTime + 'z'
+              'title': msEvent.subject,
+              'description': msEvent.bodyPreview,
+              'start': msEvent.start.dateTime + 'z',
+              'end': msEvent.end.dateTime + 'z'
             }
             busyTimes.push(tempEvent)
           })
@@ -125,7 +125,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           this.calendar.addBusyTimes(busyTimes, this.calID)
         });
       })
-
   }
 
   addEventsToCal() {

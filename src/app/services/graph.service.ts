@@ -29,7 +29,7 @@ export class GraphService implements OnInit {
   ngOnInit() {}
 
   // Purpose: To get events on a given calendar
-  async getEvents(msCalId): Promise<Event[]> {
+  async getEvents(msCalId): Promise<any> {
     // The only parameters we input are the startTime of the desired range and the endTime of the desired
     // Using the date-fns library to get today's date in ISO string and 2 weeks from today in ISO string
     try {
