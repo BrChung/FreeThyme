@@ -1,10 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { PlaygroundComponent } from "./playground/playground.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "/home/cal", pathMatch: "full" },
-  { path: "playground", component: PlaygroundComponent }, //Temp
   {
     path: "home",
     loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),

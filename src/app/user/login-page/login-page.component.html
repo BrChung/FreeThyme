@@ -28,3 +28,11 @@
 </main>
 
 {{ auth.msalAuthenticated }}
+
+<button mat-raised-button (click)="auth.isGapiAuthenticated()">
+  Is Gapi Authed?
+</button>
+
+<button mat-raised-button (click)="auth.isMsalAuthenticated()">
+  Is Msal Authed?
+</button>

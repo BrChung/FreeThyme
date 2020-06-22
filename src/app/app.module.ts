@@ -8,18 +8,21 @@ import { environment } from "../environments/environment";
 import { AngularFireModule } from "angularfire2";
 import { AngularFirestoreModule } from "angularfire2/firestore";
 import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AuthService } from "./services/auth.service";
-import { CalendarService } from "./services/calendar.service";
-import { GraphService } from "./services/graph.service";
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { SharedModule } from "./shared/shared.module";
-import { PlaygroundComponent } from "./playground/playground.component";
 import { CalendarModule } from "angular-calendar";
 import { DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { MsalModule } from "@azure/msal-angular";
+
+// Services
+import { AuthService } from "./services/auth.service";
+import { CalendarService } from "./services/calendar.service";
+import { GraphService } from "./services/graph.service";
+import { AuthSnackbarService } from "./services/auth-snackbar.service";
+import { GoogleCalendarService } from "./services/google-calendar.service";
 
 const isIE =
   window.navigator.userAgent.indexOf("MSIE ") > -1 ||
@@ -29,7 +32,7 @@ export const protectedResourceMap: [string, string[]][] = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, PlaygroundComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -71,7 +74,13 @@ export const protectedResourceMap: [string, string[]][] = [
       }
     ),
   ],
-  providers: [AuthService, CalendarService, GraphService],
+  providers: [
+    AuthService,
+    CalendarService,
+    GraphService,
+    AuthSnackbarService,
+    GoogleCalendarService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

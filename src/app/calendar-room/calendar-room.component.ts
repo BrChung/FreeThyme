@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CalendarService } from "../services/calendar.service";
+import { GoogleCalendarService } from "../services/google-calendar.service";
 import { MatDialog } from "@angular/material/dialog";
 import {
   CalendarEvent,
@@ -27,7 +28,6 @@ import { Subject, Subscription, fromEvent } from "rxjs";
 import { finalize, takeUntil } from "rxjs/operators";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AddEventComponent } from "./add-event/add-event.component";
-import { AuthService } from "../services/auth.service";
 import { GraphService } from "../services/graph.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
@@ -79,8 +79,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private calendar: CalendarService,
     public dialog: MatDialog,
-    private auth: AuthService,
     private graph: GraphService,
+    private gcal: GoogleCalendarService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -112,7 +112,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         this.graph.getEvents(calendarList[0].id)
         .then((events) => {
           console.log(events);
-          for (event of events) {
+          events.forEach((event) => {
             let tempEvent = {
               'title': event.subject,
               'description': event.bodyPreview,
@@ -120,12 +120,11 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
               'end': event.end.dateTime + 'z'
             }
             busyTimes.push(tempEvent)
-          }
+          })
           console.log(busyTimes)
           this.calendar.addBusyTimes(busyTimes, this.calID)
         });
       })
-
 
   }
 
@@ -138,6 +137,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         const { start, end } = elm;
         const colorHex = this.countToColor(elm["count"]);
         const color = { primary: colorHex, secondary: colorHex };
+        console.log(start);
         events.push({
           start: start.toDate(),
           end: end.toDate(),
@@ -204,7 +204,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   async openAddCalDialog() {
-    const calendars = await this.auth.getCalendars();
+    const calendars = await this.gcal.getCalendars();
     calendars.sort((x, y) => {
       x.selected === y.selected ? 0 : x.selected ? -1 : 1;
     });
