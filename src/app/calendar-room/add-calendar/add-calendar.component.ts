@@ -4,6 +4,7 @@ import { startOfDay, endOfDay, addWeeks } from "date-fns";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AuthService } from "../../services/auth.service";
 import { CalendarService } from "../../services/calendar.service";
+import { GoogleCalendarService } from "../../services/google-calendar.service";
 
 @Component({
   selector: "app-add-calendar",
@@ -16,6 +17,7 @@ export class AddCalendarComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private auth: AuthService,
+    private gcal: GoogleCalendarService,
     private calendar: CalendarService,
     public dialogRef: MatDialogRef<AddCalendarComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -45,7 +47,7 @@ export class AddCalendarComponent implements OnInit {
     const items = this.form.value.orders
       .map((v, i) => (v ? { id: this.data.calendars[i].id } : null))
       .filter((v) => v !== null);
-    const data = await this.auth.freebusy(
+    const data = await this.gcal.freebusy(
       items,
       startOfDay(new Date()),
       addWeeks(endOfDay(new Date()), 2)
@@ -53,6 +55,7 @@ export class AddCalendarComponent implements OnInit {
     for (let [key, value] of Object.entries(data.result.calendars)) {
       busyTimes.push(...value["busy"]);
     }
+    console.log(busyTimes);
     this.calendar.addBusyTimes(busyTimes, this.data.calID);
     this.dialogRef.close();
   }

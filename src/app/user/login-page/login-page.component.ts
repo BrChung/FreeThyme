@@ -23,7 +23,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   async googleSignIn() {
-    await this.auth.googleSignIn();
-    this.router.navigate(["/home/cal"]);
+    const user = await this.auth.googleSignIn();
+    if (user) this.router.navigate(["/home/cal"]);
   }
 }

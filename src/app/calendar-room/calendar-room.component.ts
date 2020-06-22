@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CalendarService } from "../services/calendar.service";
+import { GoogleCalendarService } from "../services/google-calendar.service";
 import { MatDialog } from "@angular/material/dialog";
 import {
   CalendarEvent,
@@ -27,7 +28,6 @@ import { Subject, Subscription, fromEvent } from "rxjs";
 import { finalize, takeUntil } from "rxjs/operators";
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AddEventComponent } from "./add-event/add-event.component";
-import { AuthService } from "../services/auth.service";
 import { GraphService } from "../services/graph.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
@@ -79,8 +79,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private calendar: CalendarService,
     public dialog: MatDialog,
-    private auth: AuthService,
     private graph: GraphService,
+    private gcal: GoogleCalendarService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -104,10 +104,9 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   // This is a temporary test to insert microsoft events into firebase
-  microsoftEvents () {
-    let busyTimes = []
-    this.graph.getEvents()
-    .then((events) => {
+  microsoftEvents() {
+    let busyTimes = [];
+    this.graph.getEvents().then((events) => {
       console.log(events);
       //This is the data we would need to push into firebase,
       // I think we may have to adjust the event.start and event.end but we'll see
@@ -118,7 +117,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         //   'start': event.start.dateTime,
         //   'end': event.end.dateTime
         // }
-        console.log(event.start)
+        //console.log(event.start);
         // busyTimes.push(tempEvent)
       }
       // console.log(busyTimes)
@@ -135,6 +134,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         const { start, end } = elm;
         const colorHex = this.countToColor(elm["count"]);
         const color = { primary: colorHex, secondary: colorHex };
+        console.log(start);
         events.push({
           start: start.toDate(),
           end: end.toDate(),
@@ -201,7 +201,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   async openAddCalDialog() {
-    const calendars = await this.auth.getCalendars();
+    const calendars = await this.gcal.getCalendars();
     calendars.sort((x, y) => {
       x.selected === y.selected ? 0 : x.selected ? -1 : 1;
     });
