@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { CalendarService } from "../services/calendar.service";
 import { GoogleCalendarService } from "../services/google-calendar.service";
+import { AuthService } from "../services/auth.service";
 import { MatDialog } from "@angular/material/dialog";
 import {
   CalendarEvent,
@@ -52,6 +53,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   private routerSub: Subscription;
   private calendarSub: Subscription;
 
+  gApiStatus: boolean;
+
   timezone: String = this.getTimeZone();
   doc: any;
 
@@ -81,7 +84,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private graph: GraphService,
     private gcal: GoogleCalendarService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +100,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     this.member$ = this.calendar.getMemberDoc(this.calID);
     this.room$ = this.calendar.getRoomDoc(this.calID);
+    this.gApiStatus = this.auth.isGapiAuthenticated();
   }
 
   ngOnDestroy(): void {
@@ -107,7 +112,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   microsoftEvents () {
     this.graph.getCalendars()
       .then((calendarList) => {
-        console.log("List of calendar", calendarList[0].id)
+        console.log("List of calendar", calendarList[0])
         let busyTimes = []
         this.graph.getEvents(calendarList[0].id)
         .then((events) => {
@@ -202,18 +207,34 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     return color;
   }
 
+  // Function that is run when "add calendar" button is pressed
+  // It renders the Add-calendar component to display the list of available calenders to select
   async openAddCalDialog() {
-    const calendars = await this.gcal.getCalendars();
-    calendars.sort((x, y) => {
-      x.selected === y.selected ? 0 : x.selected ? -1 : 1;
-    });
-    this.dialog.open(AddCalendarComponent, {
-      width: "400px",
-      data: {
-        calendars,
-        calID: this.calID,
-      },
-    });
+    console.log("gapi status: ",this.gApiStatus)
+    console.log("msal status: ", this.auth.msalAuthenticated)
+    if (this.gApiStatus) {
+      const calendars = await this.gcal.getCalendars();
+      calendars.sort((x, y) => {
+        x.selected === y.selected ? 0 : x.selected ? -1 : 1;
+      });
+      this.dialog.open(AddCalendarComponent, {
+        width: "400px",
+        data: {
+          calendars,
+          calID: this.calID,
+        },
+      });
+    }
+    else if (this.auth.msalAuthenticated) {
+      const calendars = await this.graph.getCalendars();
+      this.dialog.open(AddCalendarComponent, {
+        width: "400px",
+        data: {
+          calendars,
+          calID: this.calID,
+        },
+      });
+    }
   }
 
   async openInviteDialog(index: number) {

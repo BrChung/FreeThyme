@@ -1,19 +1,41 @@
 <h4 class="add-calendar-title">Add Events</h4>
 <p>Two weeks of events from selected calendars will be copied to the room.</p>
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div
-    formArrayName="orders"
-    *ngFor="let order of getControls(); let i = index"
-  >
-    <mat-checkbox [formControlName]="i">
-      {{
-        data.calendars[i].summaryOverride
-          ? data.calendars[i].summaryOverride
-          : data.calendars[i].summary
-      }}</mat-checkbox
+<div *ngIf="this.gapiStatus; else msalCheck">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div
+      formArrayName="orders"
+      *ngFor="let order of getControls(); let i = index"
     >
-  </div>
-  <div class="add-calendar-button">
-    <button mat-raised-button color="primary">Add Calendar</button>
-  </div>
-</form>
+      <mat-checkbox [formControlName]="i">
+        {{
+          data.calendars[i].summaryOverride
+            ? data.calendars[i].summaryOverride
+            : data.calendars[i].summary
+        }}</mat-checkbox
+      >
+    </div>
+    <div class="add-calendar-button">
+      <button mat-raised-button color="primary">Add Calendar</button>
+    </div>
+  </form>
+</div>
+
+<ng-template #msalCheck>
+  <ng-container  *ngIf="this.msalStatus">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div
+        formArrayName="orders"
+        *ngFor="let order of getControls(); let i = index"
+      >
+        <mat-checkbox [formControlName]="i">
+          {{
+            data.calendars[i].name
+          }}</mat-checkbox
+        >
+      </div>
+      <div class="add-calendar-button">
+        <button mat-raised-button color="primary">Add Calendar</button>
+      </div>
+    </form>
+  </ng-container>
+</ng-template>

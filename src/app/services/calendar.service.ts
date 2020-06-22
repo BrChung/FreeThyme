@@ -146,10 +146,12 @@ export class CalendarService {
   }
 
   async addBusyTimes(busyTimes: Array<any>, calID: string) {
+    console.log("This is what you gave me to work with: ", busyTimes)
     busyTimes.map((x) => {
       x.start = firebase.firestore.Timestamp.fromDate(new Date(x.start));
       x.end = firebase.firestore.Timestamp.fromDate(new Date(x.end));
     });
+    console.log("new busytimes: ", busyTimes)
     const user = await this.auth.getCurrentUser();
     if (user) {
       return this.afs
