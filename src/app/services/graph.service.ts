@@ -27,19 +27,40 @@ export class GraphService implements OnInit {
   }
 
   ngOnInit() {}
-  async getEvents(): Promise<Event[]> {
+
+  // Purpose: To get events on a given calendar
+  async getEvents(msCalid): Promise<Event[]> {
     // The only parameters we input are the startTime of the desired range and the endTime of the desired
     // Using the date-fns library to get today's date in ISO string and 2 weeks from today in ISO string
-    let start = startOfDay(new Date())
-    console.log(start, start.toISOString())
-
     try {
       let result = await this.graphClient
-        .api(`/me/calendar/calendarView?startDateTime=${start.toISOString()}&endDateTime=${addWeeks(endOfDay(new Date()), 2).toISOString()}`)
+        .api(`/me/calendars/calendarView?startDateTime=${startOfDay(new Date()).toISOString()}&endDateTime=${addWeeks(endOfDay(new Date()), 2).toISOString()}`)
         .get();
       return result.value;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async getCalendars () {
+    try {
+      let result = await this.graphClient
+        .api("/me/calendars").get()
+      return result.value;
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+  async getCalendarGroup () {
+    try {
+      let result = await this.graphClient
+        .api("me/calendarGroups").get()
+      return result.value;
+    }
+    catch (error) {
+      console.log(error)
     }
   }
 }
