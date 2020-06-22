@@ -51,14 +51,6 @@
         </div>
       </button>
     </div>
-    <div class="sidebar-button-wrapper">
-      <button class="sidebar-button" mat-button (click)="microsoftEvents()" style="margin-top:0em;">
-        <div class="sidebar-button-elements">
-          <mat-icon> group_add </mat-icon>
-          <span class="sidebar-button-name">  Get Microsoft Events </span>
-        </div>
-      </button>
-    </div>
     <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
       <ng-container *ngIf="roomMemDoc.room as room">
         <div class="calendar-room-toolbar-members">
