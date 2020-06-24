@@ -8,8 +8,8 @@ import { Router } from "@angular/router";
   styleUrls: ["./login-page.component.scss"],
 })
 export class LoginPageComponent implements OnInit {
-  linkedToMicrosoft: boolean;
-  linkedToGoogle: boolean;
+  linkedToMicrosoft: boolean = false;
+  linkedToGoogle: boolean = false;
 
   constructor(public auth: AuthService, private router: Router) {}
 
