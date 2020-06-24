@@ -2,8 +2,9 @@
 <p>Two weeks of events from selected calendars will be copied to the room.</p>
 
 <!-- Google Sign In Template -->
-<div *ngIf="this.gapiStatus">
+
   <form [formGroup]="form" (ngSubmit)="submit()">
+    <div *ngIf="this.gapiStatus">
     <div
       formArrayName="orders"
       *ngFor="let order of getControls(); let i = index"
@@ -19,8 +20,9 @@
     <div class="add-calendar-button">
       <button mat-raised-button color="primary">Add Calendar</button>
     </div>
+    </div>
   </form>
-</div>
+
 
 <!-- Msal Sign In Template -->
 <ng-container  *ngIf="this.msalStatus">
@@ -42,6 +44,6 @@
 </ng-container>
 
 <!-- Error Checking, if we couldn't tell if they were using google or microsoft login -->
-<ng-template *ngIf="!this.msalStatus && this.gapiStatus">
+<!-- <ng-template *ngIf="!this.msalStatus && this.gapiStatus">
   <span> Hey, we couldn't find your calendar provider. Try again? </span>
-</ng-template>
+</ng-template> -->

@@ -161,14 +161,14 @@ export class AuthService {
   }
 
   // Check if User is authenticated with GAPI
-  isGapiAuthenticated(): boolean {
+  async isGapiAuthenticated(): Promise<boolean> {
     const googleAuth = gapi.auth2.getAuthInstance();
     console.log(googleAuth.isSignedIn.get());
     return googleAuth.isSignedIn.get();
   }
 
   // Check if User is authenticated with MSAL
-  isMsalAuthenticated(): boolean {
+  async isMsalAuthenticated(): Promise<boolean> {
     console.log(this.msalService.getAccount() != null);
     return this.msalService.getAccount() != null;
   }

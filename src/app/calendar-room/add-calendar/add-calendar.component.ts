@@ -13,7 +13,7 @@ import { GraphService } from "../../services/graph.service";
 })
 export class AddCalendarComponent implements OnInit {
   form: FormGroup;
-  gapiStatus: boolean;
+  gapiStatus: Promise<boolean>;
   msalStatus: boolean
 
   constructor(

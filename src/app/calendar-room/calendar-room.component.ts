@@ -53,8 +53,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   private routerSub: Subscription;
   private calendarSub: Subscription;
 
-  gApiStatus: boolean;
-
   timezone: String = this.getTimeZone();
   doc: any;
 
@@ -100,7 +98,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     this.member$ = this.calendar.getMemberDoc(this.calID);
     this.room$ = this.calendar.getRoomDoc(this.calID);
-    this.gApiStatus = this.auth.isGapiAuthenticated();
   }
 
   ngOnDestroy(): void {
@@ -186,31 +183,34 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   // Function that is run when "add calendar" button is pressed
   // It renders the Add-calendar component to display the list of available calenders to select
   async openAddCalDialog() {
-    console.log("gapi status: ",this.gApiStatus)
-    console.log("msal status: ", this.auth.msalAuthenticated)
-    if (this.gApiStatus) {
-      const calendars = await this.gcal.getCalendars();
-      calendars.sort((x, y) => {
-        x.selected === y.selected ? 0 : x.selected ? -1 : 1;
-      });
-      this.dialog.open(AddCalendarComponent, {
-        width: "400px",
-        data: {
-          calendars,
-          calID: this.calID,
-        },
+    const gapiStatus = await this.auth.isGapiAuthenticated();
+    let tempGoogleCalendars, tempMicrosoftCalendars = tempGoogleCalendars = [];
+
+    console.log("init status: ", tempGoogleCalendars)
+
+    console.log("Google status: ", gapiStatus)
+    console.log("Microsoft status: ", this.auth.msalAuthenticated);
+    if (gapiStatus) {
+      tempGoogleCalendars = await this.gcal.getCalendars();
+      tempGoogleCalendars.sort((x, y) => {
+        (x.selected === y.selected) ? 0 : ((x.selected) ? -1 : 1);
       });
     }
-    else if (this.auth.msalAuthenticated) {
-      const calendars = await this.graph.getCalendars();
-      this.dialog.open(AddCalendarComponent, {
-        width: "400px",
-        data: {
-          calendars,
-          calID: this.calID,
-        },
-      });
+    if (this.auth.msalAuthenticated) {
+      tempMicrosoftCalendars = await this.graph.getCalendars();
+
     }
+    console.log("Google Calendars: ", tempGoogleCalendars)
+    console.log("Microsoft Calendars :", tempMicrosoftCalendars)
+    const calendars = tempGoogleCalendars.concat(tempMicrosoftCalendars);
+    console.log("calendars: ", calendars)
+    this.dialog.open(AddCalendarComponent, {
+      width: "400px",
+      data: {
+        calendars,
+        calID: this.calID,
+      }
+    })
   }
 
   async openInviteDialog(index: number) {

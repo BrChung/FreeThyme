@@ -24,6 +24,7 @@
   </ng-container>
 </mat-toolbar> -->
 <mat-sidenav-container class="calendar-room-container">
+  <!-- Navigation Side Bar Elements: Add Calendar, Invite, Share, and Members List -->
   <mat-sidenav class="sidebar-wrapper" mode="side" opened>
     <div class="sidebar-button-wrapper">
       <button class="sidebar-button" mat-raised-button color="primary" (click)="openAddCalDialog()">
@@ -65,6 +66,8 @@
       </ng-container>
     </ng-container>
   </mat-sidenav>
+
+
   <mat-sidenav-content>
     <div class="calendar-room-title-container"*ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
       <button
@@ -88,11 +91,12 @@
           </mat-icon>
         </button>
       </ng-container>
-
     </div>
+
+    <!-- This block represents the header for the calendar and the calendar grid together -->
     <div class="calendar-wrapper">
       <div class="calendar-room-cal-header">
-        <div class="calendar-room-left-spacer">
+        <div class="calendar-room-left-spacer">s
           <!-- <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
             Today
           </button> -->
