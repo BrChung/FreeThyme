@@ -109,6 +109,11 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     const doc = this.doc;
     console.log(doc);
     let events = [];
+
+    const googleEventsColor = '#F39668';
+    const microsoftEventsColor = '#FFE085';
+    const freethymeEventsColor = '#FF7370';
+
     if (doc && doc["events"]) {
       doc["events"].forEach((elm) => {
         const { start, end } = elm;
@@ -131,6 +136,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           end: end.toDate(),
           title,
           meta: { type: "gc" },
+          color: {primary: googleEventsColor, secondary: googleEventsColor},
         });
       });
     }
@@ -142,6 +148,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           end: end.toDate(),
           title,
           meta: { type: "ms", description },
+          color: {primary: microsoftEventsColor, secondary: microsoftEventsColor},
         });
       });
     }
@@ -153,6 +160,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           end: end.toDate(),
           title,
           meta: { type: "ft", description },
+          color: {primary: freethymeEventsColor, secondary: freethymeEventsColor},
         });
       });
     }

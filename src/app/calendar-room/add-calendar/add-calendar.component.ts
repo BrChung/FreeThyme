@@ -63,7 +63,6 @@ export class AddCalendarComponent implements OnInit {
       .filter((v) => v !== null);
 
     // Coogle Cal API Call
-
     const gEvents = await this.gcal.freebusy(
       g_items,
       startOfDay(new Date()),
