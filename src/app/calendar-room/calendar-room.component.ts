@@ -123,14 +123,25 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         });
       });
     }
-    if (doc && doc["individual"]["events"] && this.showIndividual) {
-      doc["individual"]["events"].forEach((elm) => {
+    if (doc && doc["individual"]["gc_events"] && this.showIndividual) {
+      doc["individual"]["gc_events"].forEach((elm) => {
         const { start, end, title } = elm;
         events.push({
           start: start.toDate(),
           end: end.toDate(),
           title,
           meta: { type: "gc" },
+        });
+      });
+    }
+    if (doc && doc["individual"]["ms_events"] && this.showIndividual) {
+      doc["individual"]["ms_events"].forEach((elm) => {
+        const { start, end, title } = elm;
+        events.push({
+          start: start.toDate(),
+          end: end.toDate(),
+          title,
+          meta: { type: "ms" },
         });
       });
     }
@@ -184,24 +195,24 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   // It renders the Add-calendar component to display the list of available calenders to select
   async openAddCalDialog() {
     const gapiStatus = await this.auth.isGapiAuthenticated();
-    let googleCal, microsoftCal = googleCal = [];
+    let googleCal,
+      microsoftCal = (googleCal = []);
 
-    console.log("init status: ", googleCal)
+    console.log("init status: ", googleCal);
 
-    console.log("Google status: ", gapiStatus)
+    console.log("Google status: ", gapiStatus);
     console.log("Microsoft status: ", this.auth.msalAuthenticated);
     if (gapiStatus) {
       googleCal = await this.googleCal.getCalendars();
       googleCal.sort((x, y) => {
-        (x.selected === y.selected) ? 0 : ((x.selected) ? -1 : 1);
+        x.selected === y.selected ? 0 : x.selected ? -1 : 1;
       });
     }
     if (this.auth.msalAuthenticated) {
       microsoftCal = await this.graph.getCalendars();
-
     }
-    console.log("Google Calendars: ", googleCal)
-    console.log("Microsoft Calendars :", microsoftCal)
+    console.log("Google Calendars: ", googleCal);
+    console.log("Microsoft Calendars :", microsoftCal);
 
     this.dialog.open(AddCalendarComponent, {
       width: "400px",
@@ -209,8 +220,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         googleCal,
         microsoftCal,
         calID: this.calID,
-      }
-    })
+      },
+    });
   }
 
   async openInviteDialog(index: number) {
