@@ -6,21 +6,21 @@
   <div class="line-divider">
   </div>
   <div *ngFor="let user of users | slice: 0:5; let i = index">
+
+    <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
     <div class="user-profile" *ngIf="userImg[user.uid]">
       <img
         src="{{ userImg[user.uid] }}"
         class="user-img"
         draggable="false"
       />
+        <span class="user-nickname">{{ user.nickname }}</span>
+    </div>
+    <div class="user-profile" *ngIf="!userImg[user.uid]">
+      <span class="user-text">{{ user.nickname[0] }}</span>
       <span class="user-nickname">{{ user.nickname }}</span>
     </div>
-    <!-- <div
-      *ngIf="!userImg[user.uid]"
-      class="user-text"
-      [ngStyle]="{ left: -i * 0.4 + 'em' }"
-    >
-      <span>{{ user.nickname[0] }}</span>
-    </div> -->
+
   </div>
   <div
     *ngIf="userCount > 5"

@@ -5,6 +5,24 @@ button {
   }
 }
 
+.avatar-text {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: large;
+  background-color: #dfdcdc;
+  color: #707070;
+}
+
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 :host {
   text-align: center;
 }

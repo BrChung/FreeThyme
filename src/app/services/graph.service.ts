@@ -1,3 +1,9 @@
+/*
+  ASSUMPTIONS: A user is logged in through microsoft with a microsoft access token
+  Purpose: Provide all the methods for getting events from a microsoft calendar
+          To get a an event from a calendar, we need the calendar id
+*/
+
 import { Injectable, OnInit } from "@angular/core";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { startOfDay, endOfDay, addWeeks } from "date-fns";
@@ -13,7 +19,7 @@ export class GraphService implements OnInit {
     // Initialize the Graph client
     this.graphClient = Client.init({
       authProvider: async (done) => {
-        // Get the token from the auth service
+        // Get the token from the auth service so we can make requests to the Microsoft Graph API
         let token = await this.authService.getAccessToken().catch((reason) => {
           done(reason, null);
         });
@@ -53,14 +59,4 @@ export class GraphService implements OnInit {
     }
   }
 
-  async getCalendarGroup () {
-    try {
-      let result = await this.graphClient
-        .api("me/calendarGroups").get()
-      return result.value;
-    }
-    catch (error) {
-      console.log(error)
-    }
-  }
 }

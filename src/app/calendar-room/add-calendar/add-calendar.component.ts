@@ -52,6 +52,8 @@ export class AddCalendarComponent implements OnInit {
     const items = this.form.value.orders
       .map((v, i) => (v ? { id: this.data.calendars[i].id } : null))
       .filter((v) => v !== null);
+
+    // Check If user logged in with google
     if (this.gapiStatus) {
       const data = await this.gcal.freebusy(
         items,
@@ -62,6 +64,8 @@ export class AddCalendarComponent implements OnInit {
         busyTimes.push(...value["busy"]);
       }
     }
+
+    // Or if the user logged in with Microsoft
     else if (this.msalStatus) {
       // For each calendar id, we grab events and push it to busy times array
       for (let i = 0; i < items.length; i++) {

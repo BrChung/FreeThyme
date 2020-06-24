@@ -46,24 +46,34 @@ export class AuthService {
     if (!googleUser) return null;
     const token = googleUser.getAuthResponse().id_token;
     const credential = auth.GoogleAuthProvider.credential(token);
-    const reterievedData = await this.afAuth.auth
+    const retrievedData = await this.afAuth.auth
       .signInWithCredential(credential)
       .catch((error) => {
         this.snack.authError(error.message);
       });
-    if (!reterievedData) return null;
+    if (!retrievedData) return null;
     if (await this.isLinkedWithMicrosoft()) {
       await this.msalSignIn();
     }
-    this.updateUserData(reterievedData.user);
-    return reterievedData.user;
+    console.log(retrievedData)
+    this.updateUserData(retrievedData.user);
+    return retrievedData.user;
+  }
+
+  async gapiSignIn(): Promise<any> {
+    const googleAuth = gapi.auth2.getAuthInstance();
+    return await googleAuth.signIn().catch((error: any) => {
+      if (error.error === "popup_closed_by_user")
+        this.snack.authError("Popup was closed, please try again.");
+      else this.snack.authError(error);
+    });
   }
 
   // Microsoft Sign In Method
   async microsoftSignIn(): Promise<User> {
     var provider = new auth.OAuthProvider("microsoft.com");
     provider.addScope("calendars.readwrite");
-    const reterievedData = await this.afAuth.auth
+    const retrievedData = await this.afAuth.auth
       .signInWithPopup(provider)
       .then(async (user) => {
         if (await this.isLinkedWithGoogle()) {
@@ -71,14 +81,16 @@ export class AuthService {
           if (!googleUser) return this.logout();
         }
         await this.msalSignIn();
+        console.log(user)
         return user;
       })
       .catch((error) => {
         this.snack.authError(error.message);
       });
-    if (!reterievedData) return null;
-    this.updateUserData(reterievedData.user);
-    return reterievedData.user;
+    if (!retrievedData) return null;
+    console.log(retrievedData.user)
+    this.updateUserData(retrievedData.user);
+    return retrievedData.user;
   }
 
   // Link current account with Microsoft Provider
@@ -113,14 +125,7 @@ export class AuthService {
     return null;
   }
 
-  async gapiSignIn(): Promise<any> {
-    const googleAuth = gapi.auth2.getAuthInstance();
-    return await googleAuth.signIn().catch((error: any) => {
-      if (error.error === "popup_closed_by_user")
-        this.snack.authError("Popup was closed, please try again.");
-      else this.snack.authError(error);
-    });
-  }
+
 
   async getAccessToken(): Promise<string> {
     let result = await this.msalService

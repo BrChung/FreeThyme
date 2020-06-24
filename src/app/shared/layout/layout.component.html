@@ -37,11 +37,19 @@
       <!-- DROPDOWN MENU -->
 
       <div *ngIf="afAuth.authState | async as user" class="avatar-container">
+        <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
         <a routerLink="/login">
-          <img
-            class="avatar"
-            [src]="user.photoURL || 'assets/default-user.svg'"
-          />
+          <ng-container *ngIf="user.photoURL">
+            <img
+              class="avatar"
+              [src]="user.photoURL || 'assets/default-user.svg'"
+            />
+          </ng-container>
+          <ng-container *ngIf="!user.photoURL">
+            <div class="avatar-text">
+              <span> {{ user.displayName[0] }}</span>
+            </div>
+          </ng-container>
         </a>
         <button
           mat-icon-button
