@@ -136,12 +136,12 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     }
     if (doc && doc["individual"]["ms_events"] && this.showIndividual) {
       doc["individual"]["ms_events"].forEach((elm) => {
-        const { start, end, title } = elm;
+        const { start, end, title, description } = elm;
         events.push({
           start: start.toDate(),
           end: end.toDate(),
           title,
-          meta: { type: "ms" },
+          meta: { type: "ms", description },
         });
       });
     }
