@@ -145,21 +145,22 @@ export class CalendarService {
     }
   }
 
-  async addBusyTimes(busyTimes: Array<any>, calID: string) {
+  async addBusyTimes(
+    busyTimes: Array<any>,
+    calID: string,
+    calendarType: string
+  ) {
     busyTimes.map((x) => {
       x.start = firebase.firestore.Timestamp.fromDate(new Date(x.start));
       x.end = firebase.firestore.Timestamp.fromDate(new Date(x.end));
     });
     const user = await this.auth.getCurrentUser();
     if (user) {
+      var updateValue = {};
+      updateValue[calendarType] = busyTimes;
       return this.afs
         .doc(`rooms/${calID}/calendars/${user.uid}`)
-        .set(
-          {
-            events: busyTimes,
-          },
-          { merge: true }
-        )
+        .set(updateValue, { merge: true })
         .catch((error) => console.error("Error Adding Document: ", error));
     }
   }
