@@ -4,44 +4,36 @@
 <!-- Google Sign In Template -->
 
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <div *ngIf="this.gapiStatus">
-    <div
-      formArrayName="orders"
-      *ngFor="let order of getControls(); let i = index"
-    >
-      <mat-checkbox [formControlName]="i">
-        {{
-          data.calendars[i].summaryOverride
-            ? data.calendars[i].summaryOverride
-            : data.calendars[i].summary
-        }}</mat-checkbox
+      <div
+        formArrayName="g_calendar"
+        *ngFor="let order of getGCalControls(); let i = index"
       >
-    </div>
-    <div class="add-calendar-button">
-      <button mat-raised-button color="primary">Add Calendar</button>
-    </div>
-    </div>
+        <mat-checkbox [formControlName]="i">
+          {{
+            data.googleCal[i].summaryOverride
+              ? data.googleCal[i].summaryOverride
+              : data.googleCal[i].summary
+          }}</mat-checkbox
+        >
+      </div>
+      <div
+        formArrayName="ms_calendar"
+        *ngFor="let order of getMsCalControls(); let i = index"
+      >
+        <mat-checkbox [formControlName]="i">
+          {{
+            data.microsoftCal[i].name
+          }}</mat-checkbox
+        >
+      </div>
+      <div class="add-calendar-button">
+        <button mat-raised-button color="primary">Add Calendar</button>
+      </div>
   </form>
 
 
 <!-- Msal Sign In Template -->
-<ng-container  *ngIf="this.msalStatus">
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <div
-      formArrayName="orders"
-      *ngFor="let order of getControls(); let i = index"
-    >
-      <mat-checkbox [formControlName]="i">
-        {{
-          data.calendars[i].name
-        }}</mat-checkbox
-      >
-    </div>
-    <div class="add-calendar-button">
-      <button mat-raised-button color="primary">Add Calendar</button>
-    </div>
-  </form>
-</ng-container>
+
 
 <!-- Error Checking, if we couldn't tell if they were using google or microsoft login -->
 <!-- <ng-template *ngIf="!this.msalStatus && this.gapiStatus">

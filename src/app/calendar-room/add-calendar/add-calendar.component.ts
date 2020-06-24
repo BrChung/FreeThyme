@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 import { startOfDay, endOfDay, addWeeks } from "date-fns";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { AuthService } from "../../services/auth.service";
 import { CalendarService } from "../../services/calendar.service";
 import { GoogleCalendarService } from "../../services/google-calendar.service";
 import { GraphService } from "../../services/graph.service";
@@ -13,12 +12,9 @@ import { GraphService } from "../../services/graph.service";
 })
 export class AddCalendarComponent implements OnInit {
   form: FormGroup;
-  gapiStatus: Promise<boolean>;
-  msalStatus: boolean
 
   constructor(
     private formBuilder: FormBuilder,
-    private auth: AuthService,
     private gcal: GoogleCalendarService,
     private calendar: CalendarService,
     private graph: GraphService,
@@ -26,50 +22,67 @@ export class AddCalendarComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.formBuilder.group({
-      orders: new FormArray([]),
-    });
+       g_calendar: new FormArray([]),
+       ms_calendar: new FormArray([]),
+     });
   }
 
   ngOnInit(): void {
     this.addCheckboxes();
-    this.gapiStatus = this.auth.isGapiAuthenticated()
-    this.msalStatus = this.auth.msalAuthenticated
-  }
-
-  getControls() {
-    return (this.form.get("orders") as FormArray).controls;
   }
 
   private addCheckboxes() {
-    this.data.calendars.forEach((o, i) => {
-      const control = new FormControl(i === 0); // if first item set to true, else false
-      (this.form.controls.orders as FormArray).push(control);
+    this.data.googleCal.forEach((o, i) => {
+      const g_calendar = new FormControl(i === 0); // if first item set to true, else false
+      (this.form.controls.g_calendar as FormArray).push(g_calendar);
+    });
+    this.data.microsoftCal.forEach((o, i) => {
+      const ms_calendar = new FormControl(i === 0); // if first item set to true, else false
+      (this.form.controls.ms_calendar as FormArray).push(ms_calendar);
     });
   }
 
+  getGCalControls() {
+    return (this.form.get("g_calendar") as FormArray).controls;
+  }
+
+  getMsCalControls(){
+    return (this.form.get("ms_calendar") as FormArray).controls;
+  }
+
   async submit() {
-    let busyTimes = [];
-    const items = this.form.value.orders
-      .map((v, i) => (v ? { id: this.data.calendars[i].id } : null))
+    let gBusyTimes = [];
+    let msBusyTimes = [];
+
+    const g_items = this.form.value.g_calendar
+      .map((v, i) => (v ? { id: this.data.googleCal[i].id } : null))
       .filter((v) => v !== null);
 
-    // Check If user logged in with google
-    if (this.gapiStatus) {
-      const data = await this.gcal.freebusy(
-        items,
-        startOfDay(new Date()),
-        addWeeks(endOfDay(new Date()), 2)
-      );
-      for (let [key, value] of Object.entries(data.result.calendars)) {
-        busyTimes.push(...value["busy"]);
-      }
-    }
+    const ms_items = this.form.value.ms_calendar
+      .map((v, i) => (v ? { id: this.data.microsoftCal[i].id } : null))
+      .filter((v) => v !== null);
 
-    // Or if the user logged in with Microsoft
-    else if (this.msalStatus) {
-      // For each calendar id, we grab events and push it to busy times array
-      for (let i = 0; i < items.length; i++) {
-        const msEvents = await this.graph.getEvents(items[i].id);
+    // Coogle Cal API Call
+
+    const gEvents = await this.gcal.freebusy(
+      g_items,
+      startOfDay(new Date()),
+      addWeeks(endOfDay(new Date()), 2)
+    );
+
+    console.log(g_items)
+    console.log(ms_items)
+
+    if (g_items.length > 0) {
+      for (let [key, value] of Object.entries(gEvents.result.calendars)) {
+        gBusyTimes.push(...value["busy"]);
+      }
+      this.calendar.addBusyTimes(gBusyTimes, this.data.calID, "gc_events");
+    }
+    if (ms_items.length > 0) {
+      // Microsoft Graph API calls
+      for (let i = 0; i < ms_items.length; i++) {
+        const msEvents = await this.graph.getEvents(ms_items[i].id);
         msEvents.forEach((msEvent) => {
           let tempEvent = {
             'title': msEvent.subject,
@@ -77,12 +90,11 @@ export class AddCalendarComponent implements OnInit {
             'start': msEvent.start.dateTime + 'z',
             'end': msEvent.end.dateTime + 'z'
           }
-          busyTimes.push(tempEvent)
+          msBusyTimes.push(tempEvent)
         })
       }
+      this.calendar.addBusyTimes(msBusyTimes, this.data.calID, "ms_events");
     }
-    console.log(busyTimes);
-    this.calendar.addBusyTimes(busyTimes, this.data.calID);
     this.dialogRef.close();
   }
 
