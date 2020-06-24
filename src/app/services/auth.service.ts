@@ -55,7 +55,7 @@ export class AuthService {
     if (await this.isLinkedWithMicrosoft()) {
       await this.msalSignIn();
     }
-    console.log(retrievedData)
+    console.log(retrievedData);
     this.updateUserData(retrievedData.user);
     return retrievedData.user;
   }
@@ -81,14 +81,14 @@ export class AuthService {
           if (!googleUser) return this.logout();
         }
         await this.msalSignIn();
-        console.log(user)
+        console.log(user);
         return user;
       })
       .catch((error) => {
         this.snack.authError(error.message);
       });
     if (!retrievedData) return null;
-    console.log(retrievedData.user)
+    console.log(retrievedData.user);
     this.updateUserData(retrievedData.user);
     return retrievedData.user;
   }
@@ -99,7 +99,52 @@ export class AuthService {
     if (!prevUser) return;
     var provider = new auth.OAuthProvider("microsoft.com");
     provider.addScope("calendars.readwrite");
-    this.afAuth.auth.signInWithPopup(provider).catch((error) => {
+    this.afAuth.auth
+      .signInWithPopup(provider)
+      .then((res) => {
+        if (res.user.email != prevUser.email) {
+          this.snack.authError(
+            "Accounts must have same Email. Please create a new account."
+          );
+          return setTimeout(() => {
+            this.logout();
+          }, 5000);
+        }
+      })
+      .catch((error) => {
+        if (error.code === "auth/account-exists-with-different-credential") {
+          return prevUser
+            .linkWithCredential(error.credential)
+            .then(async (linkResult) => {
+              await this.msalSignIn();
+              return this.afAuth.auth.signInWithCredential(
+                linkResult.credential
+              );
+            });
+        } else {
+          this.snack.authError(error.message);
+        }
+      });
+  }
+
+  // Link current account with Google Provider
+  async linkWithGoogle() {
+    const prevUser = await this.getCurrentUser();
+    if (!prevUser) return;
+    const googleUser = await this.gapiSignIn();
+    if (!googleUser) return null;
+    const profile = googleUser.getBasicProfile();
+    if (prevUser.email != profile.getEmail()) {
+      this.snack.authError(
+        "Accounts must have same Email. Please create a new account."
+      );
+      return setTimeout(() => {
+        this.logout();
+      }, 5000);
+    }
+    const token = googleUser.getAuthResponse().id_token;
+    const credential = auth.GoogleAuthProvider.credential(token);
+    this.afAuth.auth.signInWithCredential(credential).catch((error) => {
       if (error.code === "auth/account-exists-with-different-credential") {
         return prevUser
           .linkWithCredential(error.credential)
@@ -124,8 +169,6 @@ export class AuthService {
     }
     return null;
   }
-
-
 
   async getAccessToken(): Promise<string> {
     let result = await this.msalService

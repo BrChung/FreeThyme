@@ -15,7 +15,7 @@
     <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
     <div class="avatar-wrapper">
       <ng-container *ngIf="user.photoURL">
-        <img src="{{ user.photoURL }}" width="50px"/>
+        <img src="{{ user.photoURL }}" width="50px" />
       </ng-container>
       <ng-container *ngIf="!user.photoURL">
         <div class="avatar-text">
@@ -31,6 +31,12 @@
     <div *ngIf="!linkedToMicrosoft">
       <button mat-raised-button (click)="auth.linkWithMicrosoft()">
         <img src="/assets/microsoft_logo.svg" /> Link your Microsoft Account
+      </button>
+    </div>
+
+    <div *ngIf="!linkedToGoogle">
+      <button mat-raised-button (click)="auth.linkWithGoogle()">
+        <img src="/assets/google_logo.svg" /> Link your Google Account
       </button>
     </div>
 
