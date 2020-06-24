@@ -67,7 +67,8 @@ def merge_calendar(data, context):
 
     for doc in calendar_docs:
         data = doc.to_dict()
-        all_events.extend(data["events"] if "events" in data else [])
+        all_events.extend(data["gc_events"] if "gc_events" in data else [])
+        all_events.extend(data["ms_events"] if "ms_events" in data else [])
         all_events.extend(data["ft_events"] if "ft_events" in data else [])
 
     merged_cal = find_overlap(all_events)
