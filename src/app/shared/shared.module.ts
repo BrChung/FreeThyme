@@ -34,7 +34,9 @@ import { LayoutComponent } from "./layout/layout.component";
 import { MonthCalendarComponent } from "./components/month-calendar/month-calendar.component";
 import { UserBarComponent } from "./components/user-bar/user-bar.component";
 import { ShareInviteMembersComponent } from "./components/share-invite-members/share-invite-members.component";
+
 import { OutsideClickDirective } from "./outside-click.directive";
+import { PreventDoubleClickDirective } from "./prevent-double-click.directive";
 
 const components = [
   LayoutComponent,
@@ -42,6 +44,7 @@ const components = [
   UserBarComponent,
   ShareInviteMembersComponent,
   OutsideClickDirective,
+  PreventDoubleClickDirective,
 ];
 
 const modules = [

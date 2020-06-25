@@ -17,8 +17,6 @@ import { DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { MsalModule } from "@azure/msal-angular";
 
-import { DebounceClickDirective } from './calendar-room/debounce-click.directive';
-
 // Services
 import { AuthService } from "./services/auth.service";
 import { CalendarService } from "./services/calendar.service";
@@ -34,7 +32,7 @@ export const protectedResourceMap: [string, string[]][] = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, DebounceClickDirective],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

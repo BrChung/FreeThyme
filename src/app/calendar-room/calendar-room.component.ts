@@ -107,10 +107,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.calendarSub.unsubscribe();
   }
 
-  log() {
-    this.count++;
-    console.log('Clicked!');
-  }
   addEventsToCal() {
     const doc = this.doc;
     let events = [];
