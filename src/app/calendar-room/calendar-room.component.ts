@@ -50,6 +50,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   @ViewChild("monthCalendar")
   monthCalendar: MonthCalendarComponent;
 
+  count = 0;
+
   private routerSub: Subscription;
   private calendarSub: Subscription;
 
@@ -105,6 +107,10 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.calendarSub.unsubscribe();
   }
 
+  log() {
+    this.count++;
+    console.log('Clicked!');
+  }
   addEventsToCal() {
     const doc = this.doc;
     console.log(doc);
@@ -174,7 +180,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   // I am using the green gradient from https://coolors.co/030202-36534b-638279-729164-9576a7
   // and then using Russian Green (729164 and selecting the view shades)
-
   countToColor(count: number) {
     var color: string;
     switch (count) {

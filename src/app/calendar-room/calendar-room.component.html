@@ -27,7 +27,10 @@
   <!-- Navigation Side Bar Elements: Add Calendar, Invite, Share, and Members List -->
   <mat-sidenav class="sidebar-wrapper" mode="side" opened>
     <div class="sidebar-button-wrapper">
-      <button class="sidebar-button" mat-raised-button color="primary" (click)="openAddCalDialog()">
+      <button class="sidebar-button" mat-raised-button color="primary"
+        appDebounceClick (debounceClick)="log()"
+
+      >
         <div class="sidebar-button-elements">
           <mat-icon> calendar_today </mat-icon>
           <span class="sidebar-button-name"> Add Calendar </span>
