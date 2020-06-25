@@ -28,6 +28,15 @@ export class GoogleCalendarService {
     });
   }
 
+  async getEvents(calID: string, timeMin: Date = new Date(), timeMax: Date) {
+    return await gapi.client.calendar.events.list({
+      calendarId: calID,
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
+      singleEvents: true,
+    });
+  }
+
   async getCalendars() {
     return new Promise<any>(async (resolve, reject) => {
       const data = await gapi.client.calendar.calendarList.list({});

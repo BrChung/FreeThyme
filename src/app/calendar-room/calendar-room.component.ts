@@ -113,19 +113,17 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
   addEventsToCal() {
     const doc = this.doc;
-    console.log(doc);
     let events = [];
 
-    const googleEventsColor = '#F39668';
-    const microsoftEventsColor = '#FFE085';
-    const freethymeEventsColor = '#FF7370';
+    const googleEventsColor = "#F39668";
+    const microsoftEventsColor = "#FFE085";
+    const freethymeEventsColor = "#FF7370";
 
     if (doc && doc["events"]) {
       doc["events"].forEach((elm) => {
         const { start, end } = elm;
         const colorHex = this.countToColor(elm["count"]);
         const color = { primary: colorHex, secondary: colorHex };
-        console.log(start);
         events.push({
           start: start.toDate(),
           end: end.toDate(),
@@ -142,7 +140,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           end: end.toDate(),
           title,
           meta: { type: "gc" },
-          color: {primary: googleEventsColor, secondary: googleEventsColor},
+          color: { primary: googleEventsColor, secondary: googleEventsColor },
         });
       });
     }
@@ -154,7 +152,10 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           end: end.toDate(),
           title,
           meta: { type: "ms", description },
-          color: {primary: microsoftEventsColor, secondary: microsoftEventsColor},
+          color: {
+            primary: microsoftEventsColor,
+            secondary: microsoftEventsColor,
+          },
         });
       });
     }
@@ -166,7 +167,10 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
           end: end.toDate(),
           title,
           meta: { type: "ft", description },
-          color: {primary: freethymeEventsColor, secondary: freethymeEventsColor},
+          color: {
+            primary: freethymeEventsColor,
+            secondary: freethymeEventsColor,
+          },
         });
       });
     }
@@ -210,11 +214,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     const gapiStatus = await this.auth.isGapiAuthenticated();
     let googleCal,
       microsoftCal = (googleCal = []);
-
-    console.log("init status: ", googleCal);
-
-    console.log("Google status: ", gapiStatus);
-    console.log("Microsoft status: ", this.auth.msalAuthenticated);
     if (gapiStatus) {
       googleCal = await this.googleCal.getCalendars();
       googleCal.sort((x, y) => {
@@ -224,9 +223,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     if (this.auth.msalAuthenticated) {
       microsoftCal = await this.graph.getCalendars();
     }
-    console.log("Google Calendars: ", googleCal);
-    console.log("Microsoft Calendars :", microsoftCal);
-
     this.dialog.open(AddCalendarComponent, {
       width: "400px",
       data: {
