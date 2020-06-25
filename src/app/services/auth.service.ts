@@ -55,7 +55,6 @@ export class AuthService {
     if (await this.isLinkedWithMicrosoft()) {
       await this.msalSignIn();
     }
-    console.log(retrievedData);
     this.updateUserData(retrievedData.user);
     return retrievedData.user;
   }
@@ -81,14 +80,12 @@ export class AuthService {
           if (!googleUser) return this.logout();
         }
         await this.msalSignIn();
-        console.log(user);
         return user;
       })
       .catch((error) => {
         this.snack.authError(error.message);
       });
     if (!retrievedData) return null;
-    console.log(retrievedData.user);
     this.updateUserData(retrievedData.user);
     return retrievedData.user;
   }
@@ -177,7 +174,6 @@ export class AuthService {
         this.snack.authError("Popup was closed, please try again.");
       });
     if (result) {
-      console.log("Token acquired", result.accessToken);
       return result.accessToken;
     }
     return null;
@@ -206,13 +202,11 @@ export class AuthService {
   // Check if User is authenticated with GAPI
   async isGapiAuthenticated(): Promise<boolean> {
     const googleAuth = gapi.auth2.getAuthInstance();
-    console.log(googleAuth.isSignedIn.get());
     return googleAuth.isSignedIn.get();
   }
 
   // Check if User is authenticated with MSAL
   async isMsalAuthenticated(): Promise<boolean> {
-    console.log(this.msalService.getAccount() != null);
     return this.msalService.getAccount() != null;
   }
 

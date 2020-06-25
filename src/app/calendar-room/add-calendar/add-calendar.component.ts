@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
-import { startOfDay, endOfDay, addWeeks } from "date-fns";
+import { startOfDay, endOfDay, addWeeks, addDays } from "date-fns";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { CalendarService } from "../../services/calendar.service";
 import { GoogleCalendarService } from "../../services/google-calendar.service";
 import { GraphService } from "../../services/graph.service";
+
 @Component({
   selector: "app-add-calendar",
   templateUrl: "./add-calendar.component.html",
@@ -22,9 +23,9 @@ export class AddCalendarComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.formBuilder.group({
-       g_calendar: new FormArray([]),
-       ms_calendar: new FormArray([]),
-     });
+      g_calendar: new FormArray([]),
+      ms_calendar: new FormArray([]),
+    });
   }
 
   ngOnInit(): void {
@@ -46,7 +47,7 @@ export class AddCalendarComponent implements OnInit {
     return (this.form.get("g_calendar") as FormArray).controls;
   }
 
-  getMsCalControls(){
+  getMsCalControls() {
     return (this.form.get("ms_calendar") as FormArray).controls;
   }
 
@@ -62,35 +63,41 @@ export class AddCalendarComponent implements OnInit {
       .map((v, i) => (v ? { id: this.data.microsoftCal[i].id } : null))
       .filter((v) => v !== null);
 
-    // Coogle Cal API Call
-    const gEvents = await this.gcal.freebusy(
-      g_items,
-      startOfDay(new Date()),
-      addWeeks(endOfDay(new Date()), 2)
-    );
-
-    console.log(g_items)
-    console.log(ms_items)
-
     if (g_items.length > 0) {
-      for (let [key, value] of Object.entries(gEvents.result.calendars)) {
-        gBusyTimes.push(...value["busy"]);
+      for (let i = 0; i < g_items.length; i++) {
+        const result = await this.gcal.getEvents(
+          g_items[i].id,
+          startOfDay(new Date()),
+          addWeeks(endOfDay(new Date()), 2)
+        );
+        if (!result) return;
+        const events = result.result.items.map((value) => ({
+          title: value.summary ? value.summary : "",
+          description: value.description ? value.description : "",
+          location: value.location ? value.location : "",
+          start: value.start.dateTime
+            ? value.start.dateTime
+            : startOfDay(addDays(new Date(value.start.date), 1)),
+          end: value.end.dateTime
+            ? value.end.dateTime
+            : endOfDay(new Date(value.end.date)),
+          allday: value.start.dateTime ? false : true,
+        }));
+        gBusyTimes.push(...events);
       }
       this.calendar.addBusyTimes(gBusyTimes, this.data.calID, "gc_events");
     }
     if (ms_items.length > 0) {
       // Microsoft Graph API calls
       for (let i = 0; i < ms_items.length; i++) {
-        const msEvents = await this.graph.getEvents(ms_items[i].id);
-        msEvents.forEach((msEvent) => {
-          let tempEvent = {
-            'title': msEvent.subject,
-            'description': msEvent.bodyPreview,
-            'start': msEvent.start.dateTime + 'z',
-            'end': msEvent.end.dateTime + 'z'
-          }
-          msBusyTimes.push(tempEvent)
-        })
+        const result = await this.graph.getEvents(ms_items[i].id);
+        const events = result.map((value) => ({
+          title: value.subject,
+          description: value.bodyPreview,
+          start: value.start.dateTime + "z",
+          end: value.end.dateTime + "z",
+        }));
+        msBusyTimes.push(...events);
       }
       this.calendar.addBusyTimes(msBusyTimes, this.data.calID, "ms_events");
     }
