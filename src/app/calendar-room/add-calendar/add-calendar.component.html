@@ -30,7 +30,13 @@
         >
       </div>
       <div class="add-calendar-button">
-        <button mat-raised-button color="primary">Add Calendar</button>
+        <button mat-raised-button color="primary"
+        appPreventDoubleClick
+        (throttledClick)="submit()"
+        [throttleTime]="1000"
+        >
+          Add Calendar
+        </button>
       </div>
   </form>
 
