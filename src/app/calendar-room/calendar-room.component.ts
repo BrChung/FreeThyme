@@ -1,3 +1,4 @@
+// Angular Modules
 import {
   Component,
   OnInit,
@@ -7,10 +8,16 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+
+
+// Services
+import { GraphService } from "../services/graph.service";
 import { CalendarService } from "../services/calendar.service";
 import { GoogleCalendarService } from "../services/google-calendar.service";
 import { AuthService } from "../services/auth.service";
-import { MatDialog } from "@angular/material/dialog";
+
+// Calendar Helper Libraries + Modules
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
@@ -25,14 +32,18 @@ import {
   addMinutes,
   endOfWeek,
 } from "date-fns";
+import { WeekViewHourSegment } from "calendar-utils";
+
+// Rxjs
 import { Subject, Subscription, fromEvent } from "rxjs";
 import { finalize, takeUntil } from "rxjs/operators";
+
+// Components
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AddEventComponent } from "./add-event/add-event.component";
-import { GraphService } from "../services/graph.service";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
-import { WeekViewHourSegment } from "calendar-utils";
+
 
 @Component({
   selector: "app-calendar-room",
@@ -74,7 +85,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   activeDayIsOpen: boolean = true;
 
   //Show your individual events
-  showIndividual: boolean = true;
+  showIndividual: boolean = false;
 
   weekStartsOn: 0 = 0;
 
@@ -105,6 +116,11 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
     this.calendarSub.unsubscribe();
+  }
+
+  seeIndividualEvents(event) {
+    this.showIndividual = event.checked;
+    this.addEventsToCal();
   }
 
   addEventsToCal() {

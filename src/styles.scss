@@ -188,7 +188,7 @@ $cal-bg-secondary: #fff;
   // This affects the time Labels on the left-hand side
   .cal-time {
     position: relative;
-    top: -13.5px;
+    top: -15px;
     font-weight: 300;
   }
 
@@ -248,6 +248,18 @@ $cal-bg-secondary: #fff;
   color: white;
 }
 
+// This removes the right border on the siderbar column
 .mat-drawer-side {
   border-right: solid 0px;
+}
+
+// This is for the Month/Week/Day Toggle buttons
+.mat-button-toggle-label-content {
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+// Left Button Toggle Borders
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+  border-left: 0px;
 }

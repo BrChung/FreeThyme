@@ -57,6 +57,15 @@
       </button>
     </div>
 
+
+    <div class="sidebar-button-wrapper">
+      <div class="slide-toggle-wrapper">
+        <mat-slide-toggle (change)="seeIndividualEvents($event)">
+          <span class="sidebar-button-name"> View Your events </span>
+        </mat-slide-toggle>
+      </div>
+    </div>
+
     <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
       <ng-container *ngIf="roomMemDoc.room as room">
         <div class="calendar-room-toolbar-members">

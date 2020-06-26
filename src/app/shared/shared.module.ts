@@ -26,6 +26,7 @@ import {
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -75,6 +76,7 @@ const modules = [
   MatCheckboxModule,
   MatTabsModule,
   MatAutocompleteModule,
+  MatSlideToggleModule
 ];
 
 @NgModule({

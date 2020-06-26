@@ -35,8 +35,11 @@
 
 .calendar-room-left-spacer {
   width: 185px;
-  height: 48px;
+  height: 20px;
   margin: 12.8px;
+  // background-image: linear-gradient(90deg, #C8D6C2 0%, #33710B 100%);
+  // border-radius: 8px;
+
 }
 .calendar-room-cal-nav-but-group {
   margin: 1em;
@@ -45,8 +48,8 @@
 }
 
 .calendar-room-cal-view-but-group {
-  margin: 0.8em;
-  border-color: rgba(0, 0, 0, 0.87);
+  margin: 1.5em;
+  border: medium solid #e0e0e0;
 }
 
 .calendar-room-cal-header-title {
@@ -99,4 +102,9 @@
   font-size: medium;
   text-transform: uppercase;
   padding-left:1em;
+}
+
+.slide-toggle-wrapper {
+  margin-top: 0.8em;
+
 }

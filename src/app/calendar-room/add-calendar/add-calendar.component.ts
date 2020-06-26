@@ -91,11 +91,16 @@ export class AddCalendarComponent implements OnInit {
       // Microsoft Graph API calls
       for (let i = 0; i < ms_items.length; i++) {
         const result = await this.graph.getEvents(ms_items[i].id);
+        console.log(result)
         const events = result.map((value) => ({
           title: value.subject,
           description: value.bodyPreview,
           start: value.start.dateTime + "z",
           end: value.end.dateTime + "z",
+          allDay: value.isAllDay,
+          location: value.locations.length ?
+                    value.location.address
+                    : ""
         }));
         msBusyTimes.push(...events);
       }
