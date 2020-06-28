@@ -72,7 +72,7 @@ export class AddCalendarComponent implements OnInit {
         const result = await this.gcal.getEvents(
           g_items[i].id,
           startOfDay(new Date()),
-          freeThymeEndDate
+          freeThymeEndDate//freeThymeEndDate
         );
         if (!result) return;
         const events = result.result.items.map((value) => ({
@@ -97,7 +97,7 @@ export class AddCalendarComponent implements OnInit {
         const result = await this.graph.getEvents(
           ms_items[i].id,
           startOfDay(new Date()),
-          freeThymeEndDate);
+          freeThymeEndDate); //freeThymeEndDate);
         console.log(result)
         const events = result.map((value) => ({
           title: value.subject,

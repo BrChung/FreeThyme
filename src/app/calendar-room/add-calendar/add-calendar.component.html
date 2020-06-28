@@ -5,17 +5,8 @@
 <!-- Google Sign In Template -->
 
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <!-- <mat-form-field appearance="fill">
-      <mat-label> Weeks In Advance </mat-label>
-      <mat-select>
-        <mat-option value="1"> 1 </mat-option>
-        <mat-option value="2"> 2 </mat-option>
-        <mat-option value="3"> 3 </mat-option>
-        <mat-option value="4"> 4 </mat-option>
-      </mat-select>
-    </mat-form-field> -->
-    <mat-form-field appearance="fill">
-      <mat-label>Angular forms (w/ deserialization)</mat-label>
+    <mat-form-field color="primary" appearance="fill">
+      <mat-label> Pick an End Datetime</mat-label>
       <input matInput [matDatepicker]="endPicker"
              formControlName="endDate">
       <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
