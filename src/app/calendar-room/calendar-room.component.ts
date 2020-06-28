@@ -10,7 +10,6 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 
-
 // Services
 import { GraphService } from "../services/graph.service";
 import { CalendarService } from "../services/calendar.service";
@@ -36,14 +35,13 @@ import { WeekViewHourSegment } from "calendar-utils";
 
 // Rxjs
 import { Subject, Subscription, fromEvent } from "rxjs";
-import { finalize, takeUntil } from "rxjs/operators";
+import { finalize, takeUntil, take } from "rxjs/operators";
 
 // Components
 import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AddEventComponent } from "./add-event/add-event.component";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
-
 
 @Component({
   selector: "app-calendar-room",
@@ -65,12 +63,14 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription;
   private calendarSub: Subscription;
-
+  private suggestedFTSub: Subscription;
   timezone: String = this.getTimeZone();
   doc: any;
 
   room$: any;
   member$: any;
+  suggestedFT$: any;
+  suggestedFT: any;
   calID: string;
 
   refresh: Subject<any> = new Subject();
@@ -111,11 +111,23 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
     this.member$ = this.calendar.getMemberDoc(this.calID);
     this.room$ = this.calendar.getRoomDoc(this.calID);
+    this.suggestedFT$ = this.calendar.getSuggestedMeetingTimes(this.calID, [
+      10,
+      12,
+      14,
+    ]);
+    this.suggestedFTSub = this.calendar
+      .getSuggestedMeetingTimes(this.calID, [10, 12, 14])
+      .subscribe((res) => {
+        this.suggestedFT = res;
+        console.log(this.suggestedFT);
+      });
   }
 
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
     this.calendarSub.unsubscribe();
+    this.suggestedFTSub.unsubscribe();
   }
 
   seeIndividualEvents(event) {

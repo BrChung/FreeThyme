@@ -79,6 +79,12 @@
         </div>
       </ng-container>
     </ng-container>
+
+    <div *ngIf="(suggestedFT$ | async) as meetingTimes">
+      <div *ngFor="let meetingTime of meetingTimes">
+        {{meetingTime | json}}
+      </div>
+    </div>
   </mat-sidenav>
 
 

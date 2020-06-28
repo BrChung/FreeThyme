@@ -1,13 +1,22 @@
 import { Injectable } from "@angular/core";
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-} from "@angular/fire/firestore";
+import { AngularFirestore } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { Observable, combineLatest, of } from "rxjs";
-import { switchMap, map, delay, flatMap } from "rxjs/operators";
+import { combineLatest, of } from "rxjs";
+import { switchMap, map, delay } from "rxjs/operators";
 import * as firebase from "firebase/app";
 import { AuthService } from "./auth.service";
+import {
+  differenceInMinutes,
+  addMinutes,
+  closestTo,
+  addDays,
+  setHours,
+  setMinutes,
+  isBefore,
+  isAfter,
+  roundToNearestMinutes,
+  isSameHour,
+} from "date-fns";
 
 @Injectable({
   providedIn: "root",
@@ -163,6 +172,72 @@ export class CalendarService {
         .set(updateValue, { merge: true })
         .catch((error) => console.error("Error Adding Document: ", error));
     }
+  }
+
+  /**
+   * Function finds suggested meeting times based on freetime
+   * @param calID Unique ID for Calendar
+   * @param preferredHours Array of preferred hours
+   * @return Observable<Array>
+   */
+
+  getSuggestedMeetingTimes(calID: string, preferredHours: Array<number>) {
+    let freeTime = [];
+    const documentRef = this.afs.doc(`rooms/${calID}/entire-cal/freetime`);
+    return documentRef.valueChanges().pipe(
+      switchMap((doc) => {
+        freeTime = doc["events"].map((value) => ({
+          start: value.start.toDate(),
+          end: value.end.toDate(),
+        }));
+        const calendarDoc = this.afs.doc(`rooms/${calID}`).valueChanges();
+        return calendarDoc ? combineLatest(calendarDoc) : of([]);
+      }),
+      map((doc) => {
+        let meetingTimes = [];
+        let suggested = [];
+        let lookupDates = [];
+        const meetingLength = doc[0]["meetingLength"];
+        for (const event of freeTime) {
+          if (
+            differenceInMinutes(event.end, event.start) > meetingLength &&
+            isBefore(new Date(), event.end)
+          ) {
+            for (
+              let i = roundToNearestMinutes(event.start, { nearestTo: 15 });
+              i < event.end;
+              i = addMinutes(i, meetingLength)
+            ) {
+              if (
+                addMinutes(i, meetingLength) < event.end &&
+                isAfter(i, new Date())
+              )
+                meetingTimes.push(i);
+            }
+          }
+        }
+        for (
+          let i = new Date();
+          i < addDays(new Date(), 7);
+          i = addDays(i, 1)
+        ) {
+          for (const hour of preferredHours) {
+            lookupDates.push(setMinutes(setHours(i, hour), 0));
+          }
+        }
+        for (const date of lookupDates) {
+          const foundStart = closestTo(date, meetingTimes);
+          suggested.push({
+            start: foundStart,
+            end: addMinutes(foundStart, meetingLength),
+          });
+        }
+        return suggested.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => isSameHour(t.start, item.start))
+        );
+      })
+    );
   }
 
   /* Retrieve Rooms that the user is a member of
