@@ -18,6 +18,13 @@
   align-items: center;
   margin-block-start: 1.5em;
   margin-block-end: 1.5em;
+  justify-content: space-between;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.calendar-room-title-wrapper {
+  display: flex;
 }
 
 .calendar-room-title {

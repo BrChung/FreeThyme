@@ -84,27 +84,32 @@
 
   <mat-sidenav-content>
     <div class="calendar-room-title-container"*ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
-      <button
-      mat-icon-button
-      routerLink="/home/cal">
-        <mat-icon> west </mat-icon>
-      </button>
-
-      <ng-container *ngIf="roomMemDoc.room as room" >
-        <div class="calendar-room-title">
-          {{ room.title }}
-        </div>
-      </ng-container>
-      <ng-container *ngIf="roomMemDoc.member as member">
-        <button mat-icon-button (click)="toggleFavorite(member.favorite)">
-          <mat-icon class="favorite-button" *ngIf="member.favorite">
-            star
-          </mat-icon>
-          <mat-icon class="favorite-button" *ngIf="!member.favorite">
-            star_border
-          </mat-icon>
+      <div class="calendar-room-title-wrapper">
+        <button
+        mat-icon-button
+        routerLink="/home/cal">
+          <mat-icon> west </mat-icon>
         </button>
-      </ng-container>
+
+        <ng-container *ngIf="roomMemDoc.room as room" >
+          <div class="calendar-room-title">
+            {{ room.title }}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="roomMemDoc.member as member">
+          <button mat-icon-button (click)="toggleFavorite(member.favorite)">
+            <mat-icon class="favorite-button" *ngIf="member.favorite">
+              star
+            </mat-icon>
+            <mat-icon class="favorite-button" *ngIf="!member.favorite">
+              star_border
+            </mat-icon>
+          </button>
+        </ng-container>
+      </div>
+      <button mat-icon-button (click)="openSettingsDialog()">
+        <mat-icon> settings </mat-icon>
+      </button>
     </div>
 
     <!-- This block represents the header for the calendar and the calendar grid together -->

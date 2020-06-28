@@ -43,6 +43,7 @@ import { AddCalendarComponent } from "./add-calendar/add-calendar.component";
 import { AddEventComponent } from "./add-event/add-event.component";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
+import { SettingsComponent } from "./settings/settings.component";
 
 
 @Component({
@@ -273,6 +274,12 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       removeByAttr(this.events, "id", eventId);
       this.refreshDom();
     });
+  }
+
+  async openSettingsDialog() {
+    this.dialog.open(SettingsComponent, {
+      width: "550px",
+    })
   }
 
   getTimeZone() {

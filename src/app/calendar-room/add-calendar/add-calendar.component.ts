@@ -23,6 +23,7 @@ export class AddCalendarComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.formBuilder.group({
+      endDate: new FormControl(new Date()),
       g_calendar: new FormArray([]),
       ms_calendar: new FormArray([]),
     });
@@ -55,6 +56,8 @@ export class AddCalendarComponent implements OnInit {
     let gBusyTimes = [];
     let msBusyTimes = [];
 
+    const freeThymeEndDate = this.form.value.endDate;
+    console.log(freeThymeEndDate)
     const g_items = this.form.value.g_calendar
       .map((v, i) => (v ? { id: this.data.googleCal[i].id } : null))
       .filter((v) => v !== null);
@@ -65,10 +68,11 @@ export class AddCalendarComponent implements OnInit {
 
     if (g_items.length > 0) {
       for (let i = 0; i < g_items.length; i++) {
+
         const result = await this.gcal.getEvents(
           g_items[i].id,
           startOfDay(new Date()),
-          addWeeks(endOfDay(new Date()), 2)
+          freeThymeEndDate
         );
         if (!result) return;
         const events = result.result.items.map((value) => ({
@@ -90,7 +94,10 @@ export class AddCalendarComponent implements OnInit {
     if (ms_items.length > 0) {
       // Microsoft Graph API calls
       for (let i = 0; i < ms_items.length; i++) {
-        const result = await this.graph.getEvents(ms_items[i].id);
+        const result = await this.graph.getEvents(
+          ms_items[i].id,
+          startOfDay(new Date()),
+          freeThymeEndDate);
         console.log(result)
         const events = result.map((value) => ({
           title: value.subject,
