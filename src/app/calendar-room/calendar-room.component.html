@@ -78,13 +78,30 @@
           </div>
         </div>
       </ng-container>
-    </ng-container>
 
-    <div *ngIf="(suggestedFT$ | async) as meetingTimes">
-      <div *ngFor="let meetingTime of meetingTimes">
-        {{meetingTime | json}}
-      </div>
-    </div>
+      <ng-container *ngIf="roomMemDoc.member as member">
+        <div *ngIf="(suggestedFT$ | async) as meetingTimes">
+          <!-- For each when each suggested time is clicked, it should:
+          1) increment the userCount
+          2) append current user to the users list
+          3) append current user's profile image
+
+          Then send that information to app-user-bar for the UI to render
+          -->
+          <div *ngFor="let meetingTime of meetingTimes">
+            <button (click)="addVote(member)" >
+              <span>{{meetingTime.start | date:'MMM dd, yyyy'}} </span>
+              <span> {{meetingTime.start | date:'h:mm aaa' }} - {{meetingTime.end | date:'h:mm aaa'}}</span>
+              <app-user-bar>
+                [userCount]=""
+                [users]="[]"
+                [usersImg]="[]"
+              </app-user-bar>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
   </mat-sidenav>
 
 

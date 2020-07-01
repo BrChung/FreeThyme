@@ -200,7 +200,6 @@ export class CalendarService {
         const meetingLength = doc[0]["meetingLength"];
         for (const event of freeTime) {
           if (
-            differenceInMinutes(event.end, event.start) > meetingLength &&
             isBefore(new Date(), event.end)
           ) {
             for (

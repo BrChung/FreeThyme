@@ -136,6 +136,11 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.addEventsToCal();
   }
 
+  addVote(member) {
+    console.log("You clicked me: ", member);
+    return member;
+  }
+
   addEventsToCal() {
     const doc = this.doc;
     let events = [];

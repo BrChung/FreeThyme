@@ -56,8 +56,8 @@ export class AddCalendarComponent implements OnInit {
     let gBusyTimes = [];
     let msBusyTimes = [];
 
-    const freeThymeEndDate = this.form.value.endDate;
-    console.log(freeThymeEndDate)
+    const freeThymeEndDate = endOfDay(this.form.value.endDate);
+    console.log(endOfDay(freeThymeEndDate))
     const g_items = this.form.value.g_calendar
       .map((v, i) => (v ? { id: this.data.googleCal[i].id } : null))
       .filter((v) => v !== null);
