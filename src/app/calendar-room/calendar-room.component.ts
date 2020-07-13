@@ -122,6 +122,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.suggestedFT = res;
         console.log(this.suggestedFT);
+        console.timeEnd("Calculate FreeTime");
       });
   }
 
@@ -296,7 +297,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   async openSettingsDialog() {
     this.dialog.open(SettingsComponent, {
       width: "550px",
-    })
+    });
   }
 
   getTimeZone() {

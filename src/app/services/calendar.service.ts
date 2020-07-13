@@ -194,14 +194,13 @@ export class CalendarService {
         return calendarDoc ? combineLatest(calendarDoc) : of([]);
       }),
       map((doc) => {
+        console.time("Calculate FreeTime");
         let meetingTimes = [];
         let suggested = [];
         let lookupDates = [];
         const meetingLength = doc[0]["meetingLength"];
         for (const event of freeTime) {
-          if (
-            isBefore(new Date(), event.end)
-          ) {
+          if (isBefore(new Date(), event.end)) {
             for (
               let i = roundToNearestMinutes(event.start, { nearestTo: 15 });
               i < event.end;
