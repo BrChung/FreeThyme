@@ -1,10 +1,12 @@
-<div class="user-parent">
-  <div class="member-list-title-wrapper">
-    <mat-icon> group </mat-icon>
-    <span class="member-list-title-text"> Members </span>
-  </div>
-  <div class="line-divider">
-  </div>
+<mat-accordion class="user-parent">
+  <mat-expansion-panel class="member-expansion-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="member-list-title-wrapper">
+        <mat-icon> group </mat-icon>
+        <span class="member-list-title-text"> Members </span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  <mat-divider class="line-divider"></mat-divider>
   <div *ngFor="let user of users | slice: 0:5; let i = index">
 
     <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
@@ -28,4 +30,5 @@
   >
     <span>{{ "+" + (userCount - 5) }}</span>
   </div>
-</div>
+  </mat-expansion-panel>
+</mat-accordion>

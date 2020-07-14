@@ -31,15 +31,20 @@
 
 .member-list-title-text {
   font-size: x-large;
-  font-weight: 600;
+  font-weight: 500;
   margin-left: 1em;
 }
 
 .member-list-title-wrapper {
   display: flex;
   align-items: center;
-  margin-left: 2.5em;
-  margin-bottom: 0.75em;
+  margin-left: 1.25em;
+  // margin-bottom: 0.75em;
+}
+.member-expansion-panel {
+  background-color: #fcfcfc;
+  box-shadow: 0 0 0 0;
+  margin-top: 1em;
 }
 
 .user-parent {

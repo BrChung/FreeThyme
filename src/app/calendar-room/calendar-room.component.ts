@@ -59,7 +59,6 @@ import { SettingsComponent } from "./settings/settings.component";
 export class CalendarRoomComponent implements OnInit, OnDestroy {
   @ViewChild("monthCalendar")
   monthCalendar: MonthCalendarComponent;
-
   count = 0;
 
   private routerSub: Subscription;

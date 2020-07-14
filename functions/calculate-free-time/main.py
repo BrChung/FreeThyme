@@ -16,6 +16,7 @@ client = firestore.Client()
 def find_free_time(busy_times, meetingLength):
     freetime_list = list()
 
+    print("Busy pls: ", busy_times)
     meetingLengthDelta = timedelta(minutes=meetingLength)
     print(meetingLengthDelta)
 
@@ -27,7 +28,7 @@ def find_free_time(busy_times, meetingLength):
         if (eventIndex + 1 != len(busy_times)):
             # Calculate time in between events
             timeDelta = busy_times[eventIndex + 1]['start'] - busy_times[eventIndex]['end']
-            print("Test: ", timeDelta, " vs ", meetingLengthDelta )
+            # print("Test: ", timeDelta, " vs ", meetingLengthDelta )
 
             # This means that the calculated free time interval is greater than the desired meeting length
             if (timeDelta > meetingLengthDelta):
@@ -36,6 +37,15 @@ def find_free_time(busy_times, meetingLength):
                     'end': busy_times[eventIndex + 1]['start']
                 }
                 freetime_list.append(time_interval)
+
+
+    # Now that we have a freetime list, we can directly use that to calculate the suggest meeting times
+
+    # Assuming the freetime list is sorted,
+    # We check if the preferred time > the end time of the freetime range
+
+        # If the preferred time > the end time of the freetime range
+        # we go on to the next freetime range
 
     return freetime_list
 
@@ -59,7 +69,7 @@ def calculate_free_time(data, context):
     room_info_data = room_info_snapshot.to_dict()
 
     transaction = client.transaction()
-    print("just created a transaction theoreotically")
+    # print("just created a transaction theoreotically")
 
     @firestore.transactional
     def set_freetime(transaction, group_cal_ref, room_info_data):

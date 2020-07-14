@@ -1,3 +1,7 @@
+$hover-color: '##BFCCB7';
+$active-color: '#A0B394';
+$light-color: '#fcfcfc';
+
 .calendar-room-container {
   position: relative;
   top: 0;
@@ -113,5 +117,41 @@
 
 .slide-toggle-wrapper {
   margin-top: 0.8em;
+}
 
+.suggestedTimeList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.suggestedTime {
+  width: 18em;
+  text-align: left;
+  margin-bottom: 0.5em;
+}
+
+.sidebar-title-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 1em;
+}
+
+.sidebar-title-text {
+  font-size: x-large;
+  font-weight: 500;
+  margin-left: 1.25em;
+}
+
+.line-divider {
+  width: 80%;
+  display: flex;
+  border-top: thin solid;
+  margin-left: 1.75em;
+  margin-bottom: 1.25em;
+}
+
+.expansion-panel {
+  background-color: #fcfcfc;
+  box-shadow: 0 0 0 0;
 }

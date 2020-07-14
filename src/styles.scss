@@ -263,3 +263,19 @@ $cal-bg-secondary: #fff;
 .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
   border-left: 0px;
 }
+
+// Takes off the padding that happens when expand a list
+// utilized in Room Member List and Freethyme List
+// .mat-expansion-panel-body {
+//   padding: 0 0 0 0;
+// }
+
+.mat-stroked-button:not([disabled]) {
+  border-color: black;
+}
+
+.mat-stroked-button:not([disabled]):hover {
+  border-color: #C7A6DA;
+  background-color: #C7A6DA;
+  color: white;
+}
