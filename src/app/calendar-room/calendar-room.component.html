@@ -157,34 +157,37 @@
     <div class="calendar-wrapper">
       <div class="calendar-room-cal-header">
         <div class="calendar-room-left-spacer">
-          <!-- <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
+          <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
             Today
-          </button> -->
-        </div>
-        <div class="calendar-room-cal-nav-but-group">
-          <button
-            mat-icon-button
-            mwlCalendarPreviousView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="closeOpenMonthViewDay()"
-          >
-            <mat-icon>keyboard_arrow_left</mat-icon>
           </button>
+          <div class="navigation-buttons">
+            <button
+              mat-icon-button
+              mwlCalendarPreviousView
+              [view]="view"
+              [(viewDate)]="viewDate"
+              (viewDateChange)="closeOpenMonthViewDay()"
+            >
+              <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              mwlCalendarNextView
+              [view]="view"
+              [(viewDate)]="viewDate"
+              (viewDateChange)="closeOpenMonthViewDay()"
+            >
+              <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="calendar-room-cal-nav-but-group">
           <div>
             <h3 class="calendar-room-cal-header-title">
               {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
             </h3>
           </div>
-          <button
-            mat-icon-button
-            mwlCalendarNextView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="closeOpenMonthViewDay()"
-          >
-            <mat-icon>keyboard_arrow_right</mat-icon>
-          </button>
         </div>
 
       <mat-button-toggle-group
