@@ -13,7 +13,8 @@ import { GraphService } from "../../services/graph.service";
 })
 export class AddCalendarComponent implements OnInit {
   form: FormGroup;
-
+  minDate = new Date();
+  maxDate = new Date(this.minDate.getFullYear(), this.minDate.getMonth() + 3, this.minDate.getDate());
   constructor(
     private formBuilder: FormBuilder,
     private gcal: GoogleCalendarService,

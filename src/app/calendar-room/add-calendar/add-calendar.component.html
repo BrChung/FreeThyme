@@ -7,7 +7,7 @@
   <form [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field color="primary" appearance="fill">
       <mat-label> Pick an End Datetime</mat-label>
-      <input matInput [matDatepicker]="endPicker"
+      <input [min]="minDate" [max]="maxDate" matInput [matDatepicker]="endPicker"
              formControlName="endDate">
       <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
       <mat-datepicker #endPicker></mat-datepicker>
