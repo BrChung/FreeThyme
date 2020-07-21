@@ -136,6 +136,9 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.addEventsToCal();
   }
 
+  // TODO:
+  //  Increments the total number of votes for the suggested time 
+  //  Adds the users profile picture for the suggested time
   addVote(member) {
     console.log("You clicked me: ", member);
     return member;
@@ -153,10 +156,10 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     };
     this.events = [...this.events, tempEvent];
     this.refresh.next();
+    console.log(this.events)
   }
 
   removeTempEvent() {
-    console.log("we out");
     this.events.pop();
     this.refresh.next();
   }
