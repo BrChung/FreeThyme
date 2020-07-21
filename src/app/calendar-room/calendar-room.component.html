@@ -99,12 +99,21 @@
           <mat-divider class="line-divider"></mat-divider>
           <div class="suggestedTimeList">
             <div *ngFor="let meetingTime of meetingTimes">
-              <button class="suggestedTime" mat-stroked-button (click)="addVote(member)" >
+              <button class="suggestedTime"
+              mat-stroked-button (click)="addVote(member)"
+              (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
+              (mouseleave)="removeTempEvent()">
                 <span>{{meetingTime.start | date:'MMM dd, yyyy'}} | </span>
                 <span> {{meetingTime.start | date:'h:mm aaa' }} - {{meetingTime.end | date:'h:mm aaa'}}</span>
-                <!-- <app-user-bar
-                  [users]="[member]">
-                </app-user-bar> -->
+                <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+                  <ng-container *ngIf="roomMemDoc.room as room">
+                    <app-user-bar
+                      [userCount]="room.memberCount"
+                      [users]="room.members"
+                      [userImg]="room.profileImages"
+                    ></app-user-bar>
+                  </ng-container>
+                </ng-container>
               </button>
             </div>
           </div>

@@ -141,6 +141,26 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     return member;
   }
 
+  addTempEvent(tempEventStart,tempEventEnd) {
+    const tempEvent: CalendarEvent = {
+      title: "",
+      start: tempEventStart,
+      end: tempEventEnd,
+      color: {primary: '#C7A6DA', secondary: '#C7A6DA'},
+      meta: {
+        tmpEvent: true,
+      },
+    };
+    this.events = [...this.events, tempEvent];
+    this.refresh.next();
+  }
+
+  removeTempEvent() {
+    console.log("we out");
+    this.events.pop();
+    this.refresh.next();
+  }
+
   addEventsToCal() {
     const doc = this.doc;
     let events = [];
