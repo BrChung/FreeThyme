@@ -230,7 +230,7 @@ export class CalendarService {
             end: addMinutes(foundStart, meetingLength),
           });
         }
-        console.log(meetingTimes);
+        // console.log(meetingTimes);
         return suggested.filter(
           (item, index, self) =>
             index === self.findIndex((t) => isSameHour(t.start, item.start))
@@ -244,17 +244,30 @@ export class CalendarService {
   */
   getVotesFT(calID) {
     const docRef = this.afs.doc(`rooms/${calID}/entire-cal/votes`);
-    return docRef.get()
+    return docRef.valueChanges().pipe(
+      switchMap((doc) => {
+        console.log()
+      })
+    );
   }
 
   /*
     Combines the suggestion free time and the suggestions
     with votes to update the front-end
   */
-  // combineSuggestions(calID, suggestedFT, votesFT) {
-  //
-  //   return combinedArray
-  // }
+  combineSuggestions(calID, suggestedFT, votesFT) {
+    console.log(calID, suggestedFT, votesFT);
+    // meetingLength = time(1)
+    // Convert votes to an array
+    let newVotesFT = Object.entries(votesFT.votedTimes).map(el => ({
+      start: new Date(el[0]),
+      end: addMinutes(Date.parse(el[0]), MeetingLength}),
+      UIDs: el[1]["UIDs"],
+      profileImages: el[1]["profileImages"]}))
+
+    console.log(newVotesFT.concat(suggestedFT))
+    return newVotesFT.concat(suggestedFT)
+  }
 
   /* Retrieve Rooms that the user is a member of
       First pipe authState to query all subcollections in afs with uid.

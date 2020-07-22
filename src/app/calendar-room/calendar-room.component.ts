@@ -64,15 +64,19 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   private routerSub: Subscription;
   private calendarSub: Subscription;
   private suggestedFTSub: Subscription;
+  private votesSub: Subscription;
   timezone: String = this.getTimeZone();
   doc: any;
 
   room$: any;
   member$: any;
-  votesFT$: any;
+  votesFT: any;
   suggestedFT$: any;
   suggestedFT: any;
   calID: string;
+
+  // Combines the suggestFT (from client function) and votesFT (from firebase)
+  combinedSuggestion: any;
 
   refresh: Subject<any> = new Subject();
 
@@ -109,7 +113,17 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       this.doc = doc;
       this.addEventsToCal();
     });
-
+    this.suggestedFTSub = this.calendar
+      .getSuggestedMeetingTimes(this.calID, [10, 12, 14])
+      .subscribe((res) => {
+        this.suggestedFT = res;
+        console.log(this.suggestedFT);
+        console.timeEnd("Calculate FreeTime");
+    this.votesSub = this.calendar.getVotesFT(this.calID).subscribe((data) => {
+      this.votesFT = data;
+      console.log(this.votesFT);
+      this.combinedSuggestion = this.calendar.combineSuggestions(this.calID, this.suggestedFT, this.votesFT);
+    })
     this.member$ = this.calendar.getMemberDoc(this.calID);
     this.room$ = this.calendar.getRoomDoc(this.calID);
     this.suggestedFT$ = this.calendar.getSuggestedMeetingTimes(this.calID, [
@@ -117,14 +131,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       12,
       14,
     ]);
-    this.votesFT$ = this.calendar.getVotesFT(this.calID)
     // this.combinedSuggested = this.calendar.combineSuggestions(this.calID, this.suggestedFT$, this.votesFT$)
-    this.suggestedFTSub = this.calendar
-      .getSuggestedMeetingTimes(this.calID, [10, 12, 14])
-      .subscribe((res) => {
-        this.suggestedFT = res;
-        console.log(this.suggestedFT);
-        console.timeEnd("Calculate FreeTime");
+
       });
   }
 
@@ -133,6 +141,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.routerSub.unsubscribe();
     this.calendarSub.unsubscribe();
     this.suggestedFTSub.unsubscribe();
+    this.votesSub.unsubscribe();
   }
 
   seeIndividualEvents(event) {
@@ -141,23 +150,14 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   printVotes() {
-    console.log(this.votesFT$);
+    console.log(this.votesSub);
   }
 
   // TODO:
   //  Increments the total number of votes for the suggested time
-<<<<<<< HEAD
-  //  Adds the user to the voted-member List for the suggested time
-  //  Adds the users profile picture to list for the suggested time
-  addVote(member, start) {
-    console.log("You clicked me: ", member);
-    console.log()
-    return member;
-=======
   //  Adds the users profile picture for the suggested time
   addVote(startTime: Date) {
     this.calendar.addVoteTime(startTime.toISOString(), this.calID);
->>>>>>> 05216f0f4ce62c34da7812477f7e93631164daf3
   }
 
   addTempEvent(tempEventStart, tempEventEnd) {
