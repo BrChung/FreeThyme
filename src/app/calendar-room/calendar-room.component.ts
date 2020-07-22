@@ -69,6 +69,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   room$: any;
   member$: any;
+  votesFT$: any;
   suggestedFT$: any;
   suggestedFT: any;
   calID: string;
@@ -116,6 +117,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       12,
       14,
     ]);
+    this.votesFT$ = this.calendar.getVotesFT(this.calID)
+    // this.combinedSuggested = this.calendar.combineSuggestions(this.calID, this.suggestedFT$, this.votesFT$)
     this.suggestedFTSub = this.calendar
       .getSuggestedMeetingTimes(this.calID, [10, 12, 14])
       .subscribe((res) => {
@@ -124,6 +127,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         console.timeEnd("Calculate FreeTime");
       });
   }
+
 
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
@@ -136,11 +140,17 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.addEventsToCal();
   }
 
+  printVotes() {
+    console.log(this.votesFT$);
+  }
+
   // TODO:
-  //  Increments the total number of votes for the suggested time 
-  //  Adds the users profile picture for the suggested time
-  addVote(member) {
+  //  Increments the total number of votes for the suggested time
+  //  Adds the user to the voted-member List for the suggested time
+  //  Adds the users profile picture to list for the suggested time
+  addVote(member, start) {
     console.log("You clicked me: ", member);
+    console.log()
     return member;
   }
 

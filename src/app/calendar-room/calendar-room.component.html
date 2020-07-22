@@ -100,7 +100,7 @@
           <div class="suggestedTimeList">
             <div *ngFor="let meetingTime of meetingTimes">
               <button class="suggestedTime"
-              mat-stroked-button (click)="addVote(member)"
+              mat-stroked-button (click)="addVote(member, meetingTime.start)"
               (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
               (mouseleave)="removeTempEvent()">
                 <span>{{meetingTime.start | date:'MMM dd, yyyy'}} | </span>
@@ -124,7 +124,7 @@
 
 
   <mat-sidenav-content>
-    <div class="calendar-room-title-container"*ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+    <div class="calendar-room-title-container" *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
       <div class="calendar-room-title-wrapper">
         <button
         mat-icon-button

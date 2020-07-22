@@ -238,6 +238,23 @@ export class CalendarService {
     );
   }
 
+  /*
+    Gets the list of suggested times that have votes
+  */
+  getVotesFT(calID) {
+    const docRef = this.afs.doc(`rooms/${calID}/entire-cal/votes`);
+    return docRef.get()
+  }
+
+  /*
+    Combines the suggestion free time and the suggestions
+    with votes to update the front-end
+  */
+  // combineSuggestions(calID, suggestedFT, votesFT) {
+  //
+  //   return combinedArray
+  // }
+
   /* Retrieve Rooms that the user is a member of
       First pipe authState to query all subcollections in afs with uid.
       Once membership documents are retrieved, temporarily store roomIDs in hash and retrieve each doc
