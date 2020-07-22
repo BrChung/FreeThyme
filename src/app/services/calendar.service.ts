@@ -369,10 +369,13 @@ export class CalendarService {
             {
               votedTimes: {
                 [startTime]: {
-                  UIDs: firebase.firestore.FieldValue.arrayUnion(user.uid),
-                  profileImages: firebase.firestore.FieldValue.arrayUnion(
-                    user.photoURL
-                  ),
+                  UIDs: firebase.firestore.FieldValue.arrayUnion({
+                    uid: user.uid,
+                    nickname: user.displayName,
+                  }),
+                  profileImages: firebase.firestore.FieldValue.arrayUnion({
+                    [user.uid]: user.photoURL,
+                  }),
                   count: firebase.firestore.FieldValue.increment(1),
                 },
               },
@@ -399,10 +402,13 @@ export class CalendarService {
             {
               votedTimes: {
                 [startTime]: {
-                  UIDs: firebase.firestore.FieldValue.arrayRemove(user.uid),
-                  profileImages: firebase.firestore.FieldValue.arrayRemove(
-                    user.photoURL
-                  ),
+                  UIDs: firebase.firestore.FieldValue.arrayRemove({
+                    uid: user.uid,
+                    nickname: user.displayName,
+                  }),
+                  profileImages: firebase.firestore.FieldValue.arrayRemove({
+                    [user.uid]: user.photoURL,
+                  }),
                   count: firebase.firestore.FieldValue.increment(-1),
                 },
               },
