@@ -230,6 +230,7 @@ export class CalendarService {
             end: addMinutes(foundStart, meetingLength),
           });
         }
+        console.log(meetingTimes);
         return suggested.filter(
           (item, index, self) =>
             index === self.findIndex((t) => isSameHour(t.start, item.start))
@@ -325,5 +326,65 @@ export class CalendarService {
   // Convert hours and mins to minutes, ES6 destructing
   convertToMins({ hours, mins, ...docData }) {
     return { ...docData, meetingLength: hours * 60 + mins };
+  }
+
+  async addVoteTime(startTime: string, roomID: string) {
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      try {
+        return this.afs
+          .collection("rooms/" + roomID + "/entire-cal")
+          .doc("votes")
+          .set(
+            {
+              votedTimes: {
+                [startTime]: {
+                  UIDs: firebase.firestore.FieldValue.arrayUnion(user.uid),
+                  profileImages: firebase.firestore.FieldValue.arrayUnion(
+                    user.photoURL
+                  ),
+                  count: firebase.firestore.FieldValue.increment(1),
+                },
+              },
+            },
+            { merge: true }
+          )
+          .catch((error) => console.error("Error Updating Document: ", error));
+      } catch (error) {
+        console.error("Error with Voting: ", error);
+      }
+    } else {
+      console.error("Not signed in");
+    }
+  }
+
+  async removeVoteTime(startTime: string, roomID: string) {
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      try {
+        return this.afs
+          .collection("rooms/" + roomID + "/entire-cal")
+          .doc("votes")
+          .set(
+            {
+              votedTimes: {
+                [startTime]: {
+                  UIDs: firebase.firestore.FieldValue.arrayRemove(user.uid),
+                  profileImages: firebase.firestore.FieldValue.arrayRemove(
+                    user.photoURL
+                  ),
+                  count: firebase.firestore.FieldValue.increment(-1),
+                },
+              },
+            },
+            { merge: true }
+          )
+          .catch((error) => console.error("Error Updating Document: ", error));
+      } catch (error) {
+        console.error("Error with un-Voting: ", error);
+      }
+    } else {
+      console.error("Not signed in");
+    }
   }
 }

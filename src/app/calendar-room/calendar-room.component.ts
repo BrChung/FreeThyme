@@ -137,26 +137,25 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   // TODO:
-  //  Increments the total number of votes for the suggested time 
+  //  Increments the total number of votes for the suggested time
   //  Adds the users profile picture for the suggested time
-  addVote(member) {
-    console.log("You clicked me: ", member);
-    return member;
+  addVote(startTime: Date) {
+    this.calendar.addVoteTime(startTime.toISOString(), this.calID);
   }
 
-  addTempEvent(tempEventStart,tempEventEnd) {
+  addTempEvent(tempEventStart, tempEventEnd) {
     const tempEvent: CalendarEvent = {
       title: "",
       start: tempEventStart,
       end: tempEventEnd,
-      color: {primary: '#C7A6DA', secondary: '#C7A6DA'},
+      color: { primary: "#C7A6DA", secondary: "#C7A6DA" },
       meta: {
         tmpEvent: true,
       },
     };
     this.events = [...this.events, tempEvent];
     this.refresh.next();
-    console.log(this.events)
+    console.log(this.events);
   }
 
   removeTempEvent() {
