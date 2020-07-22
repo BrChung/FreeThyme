@@ -27,7 +27,10 @@
   <!-- Navigation Side Bar Elements: Add Calendar, Invite, Share, and Members List -->
   <mat-sidenav class="sidebar-wrapper" mode="side" opened>
     <div class="sidebar-button-wrapper">
-      <button class="sidebar-button" mat-raised-button color="primary"
+      <button
+        class="sidebar-button"
+        mat-raised-button
+        color="primary"
         appPreventDoubleClick
         (throttledClick)="openAddCalDialog()"
         [throttleTime]="3000"
@@ -40,7 +43,12 @@
     </div>
 
     <div class="sidebar-button-wrapper">
-      <button class="sidebar-button" mat-button (click)="openInviteDialog(1)" style="margin-top:0em;">
+      <button
+        class="sidebar-button"
+        mat-button
+        (click)="openInviteDialog(1)"
+        style="margin-top: 0em;"
+      >
         <div class="sidebar-button-elements">
           <mat-icon> share </mat-icon>
           <span class="sidebar-button-name"> Share </span>
@@ -49,7 +57,12 @@
     </div>
 
     <div class="sidebar-button-wrapper">
-      <button class="sidebar-button" mat-button (click)="openInviteDialog(2)" style="margin-top:0em;">
+      <button
+        class="sidebar-button"
+        mat-button
+        (click)="openInviteDialog(2)"
+        style="margin-top: 0em;"
+      >
         <div class="sidebar-button-elements">
           <mat-icon> group_add </mat-icon>
           <span class="sidebar-button-name"> Invite Person </span>
@@ -57,30 +70,37 @@
       </button>
     </div>
 
-
     <div class="sidebar-button-wrapper">
       <div class="slide-toggle-wrapper">
-        <mat-slide-toggle color='primary' (change)="seeIndividualEvents($event)">
+        <mat-slide-toggle
+          color="primary"
+          (change)="seeIndividualEvents($event)"
+        >
           <span class="sidebar-button-name"> View Your events </span>
         </mat-slide-toggle>
       </div>
     </div>
 
-    <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+    <ng-container
+      *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
+    >
       <ng-container *ngIf="roomMemDoc.room as room">
         <div class="calendar-room-toolbar-members">
           <div>
             <app-room-member-list
               [userCount]="room.memberCount"
               [users]="room.members"
-              [userImg]="room.profileImages">
+              [userImg]="room.profileImages"
+            >
             </app-room-member-list>
           </div>
         </div>
       </ng-container>
 
       <mat-accordion *ngIf="roomMemDoc.member as member">
-        <mat-expansion-panel class="expansion-panel" *ngIf="(suggestedFT$ | async) as meetingTimes"
+        <mat-expansion-panel
+          class="expansion-panel"
+          *ngIf="suggestedFT$ | async as meetingTimes"
           [expanded]="true"
         >
           <!-- For each when each suggested time is clicked, it should:
@@ -99,6 +119,7 @@
           <mat-divider class="line-divider"></mat-divider>
           <div class="suggestedTimeList">
             <div *ngFor="let meetingTime of meetingTimes">
+<<<<<<< HEAD
               <button class="suggestedTime"
               mat-stroked-button (click)="addVote(member, meetingTime.start)"
               (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
@@ -106,6 +127,26 @@
                 <span>{{meetingTime.start | date:'MMM dd, yyyy'}} | </span>
                 <span> {{meetingTime.start | date:'h:mm aaa' }} - {{meetingTime.end | date:'h:mm aaa'}}</span>
                 <ng-container *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+=======
+              <button
+                class="suggestedTime"
+                mat-stroked-button
+                (click)="addVote(meetingTime.start)"
+                (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
+                (mouseleave)="removeTempEvent()"
+              >
+                <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} | </span>
+                <span>
+                  {{ meetingTime.start | date: "h:mm aaa" }} -
+                  {{ meetingTime.end | date: "h:mm aaa" }}</span
+                >
+                <ng-container
+                  *ngIf="{
+                    room: room$ | async,
+                    member: member$ | async
+                  } as roomMemDoc"
+                >
+>>>>>>> 05216f0f4ce62c34da7812477f7e93631164daf3
                   <ng-container *ngIf="roomMemDoc.room as room">
                     <app-user-bar
                       [userCount]="room.memberCount"
@@ -122,17 +163,21 @@
     </ng-container>
   </mat-sidenav>
 
-
   <mat-sidenav-content>
+<<<<<<< HEAD
     <div class="calendar-room-title-container" *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc">
+=======
+    <div
+      class="calendar-room-title-container"
+      *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
+    >
+>>>>>>> 05216f0f4ce62c34da7812477f7e93631164daf3
       <div class="calendar-room-title-wrapper">
-        <button
-        mat-icon-button
-        routerLink="/home/cal">
+        <button mat-icon-button routerLink="/home/cal">
           <mat-icon> west </mat-icon>
         </button>
 
-        <ng-container *ngIf="roomMemDoc.room as room" >
+        <ng-container *ngIf="roomMemDoc.room as room">
           <div class="calendar-room-title">
             {{ room.title }}
           </div>
@@ -190,33 +235,33 @@
           </div>
         </div>
 
-      <mat-button-toggle-group
-        class="calendar-room-cal-view-but-group"
-        value="Week"
-      >
-        <mat-button-toggle
-          (click)="setView(CalendarView.Month)"
-          [class.active]="view === CalendarView.Month"
-          value="Month"
-        >
-          Month
-        </mat-button-toggle>
-        <mat-button-toggle
-          (click)="setView(CalendarView.Week)"
-          [class.active]="view === CalendarView.Week"
+        <mat-button-toggle-group
+          class="calendar-room-cal-view-but-group"
           value="Week"
         >
-          Week
-        </mat-button-toggle>
-        <mat-button-toggle
-          (click)="setView(CalendarView.Day)"
-          [class.active]="view === CalendarView.Day"
-          value="Day"
-        >
-          Day
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+          <mat-button-toggle
+            (click)="setView(CalendarView.Month)"
+            [class.active]="view === CalendarView.Month"
+            value="Month"
+          >
+            Month
+          </mat-button-toggle>
+          <mat-button-toggle
+            (click)="setView(CalendarView.Week)"
+            [class.active]="view === CalendarView.Week"
+            value="Week"
+          >
+            Week
+          </mat-button-toggle>
+          <mat-button-toggle
+            (click)="setView(CalendarView.Day)"
+            [class.active]="view === CalendarView.Day"
+            value="Day"
+          >
+            Day
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
       <!-- Template to get rid of 12 am in the time label column -->
       <ng-template
@@ -226,37 +271,39 @@
         let-segmentHeight="segmentHeight"
         let-isTimeLabel="isTimeLabel"
       >
-      <div
-        #segmentElement
-        class="cal-hour-segment"
-        [style.height.px]="segmentHeight"
-        [class.cal-hour-start]="segment.isStart"
-        [class.cal-after-hour-start]="!segment.isStart"
-        [ngClass]="segment.cssClass"
-        (mousedown)="startDragToCreate(segment, $event, segmentElement)"
-      >
-        <div class="calculations" *ngIf="isTimeLabel">
-          <div
-            *ngIf="segment.date | calendarDate: 'weekViewHour':locale as result"
-          >
-            <div class="cal-time" *ngIf="result != '12 AM'">
-              {{ result }}
+        <div
+          #segmentElement
+          class="cal-hour-segment"
+          [style.height.px]="segmentHeight"
+          [class.cal-hour-start]="segment.isStart"
+          [class.cal-after-hour-start]="!segment.isStart"
+          [ngClass]="segment.cssClass"
+          (mousedown)="startDragToCreate(segment, $event, segmentElement)"
+        >
+          <div class="calculations" *ngIf="isTimeLabel">
+            <div
+              *ngIf="
+                segment.date | calendarDate: 'weekViewHour':locale as result
+              "
+            >
+              <div class="cal-time" *ngIf="result != '12 AM'">
+                {{ result }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </ng-template>
+      </ng-template>
 
-    <!-- Template to Get rid of the weekends -->
-    <ng-template
-      #customTemplate
-      let-days="days"
-      let-locale="locale"
-      let-dayHeaderClicked="dayHeaderClicked"
-      let-eventDropped="eventDropped"
-      let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
-      let-dragEnter="dragEnter"
-    >
+      <!-- Template to Get rid of the weekends -->
+      <ng-template
+        #customTemplate
+        let-days="days"
+        let-locale="locale"
+        let-dayHeaderClicked="dayHeaderClicked"
+        let-eventDropped="eventDropped"
+        let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
+        let-dragEnter="dragEnter"
+      >
         <div class="cal-day-headers" role="row">
           <div class="time-label-column">
             <mat-icon> access_time </mat-icon>
@@ -291,7 +338,7 @@
             }}</span>
           </div>
         </div>
-    </ng-template>
+      </ng-template>
 
       <div [ngSwitch]="view">
         <mwl-calendar-month-view
