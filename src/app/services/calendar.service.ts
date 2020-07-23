@@ -186,6 +186,7 @@ export class CalendarService {
     const documentRef = this.afs.doc(`rooms/${calID}/entire-cal/freetime`);
     return documentRef.valueChanges().pipe(
       switchMap((doc) => {
+        console.log(doc)
         freeTime = doc["events"].map((value) => ({
           start: value.start.toDate(),
           end: value.end.toDate(),
@@ -195,6 +196,7 @@ export class CalendarService {
       }),
       map((doc) => {
         console.time("Calculate FreeTime");
+        console.log(doc)
         let meetingTimes = [];
         let suggested = [];
         let lookupDates = [];
@@ -230,7 +232,10 @@ export class CalendarService {
             end: addMinutes(foundStart, meetingLength),
           });
         }
-        // console.log(meetingTimes);
+        console.log(suggested.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => isSameHour(t.start, item.start))
+        ))
         return suggested.filter(
           (item, index, self) =>
             index === self.findIndex((t) => isSameHour(t.start, item.start))
@@ -243,13 +248,22 @@ export class CalendarService {
     Gets the list of suggested times that have votes
   */
   getVotesFT(calID) {
+    let votedTimesData = {}
     const docRef = this.afs.doc(`rooms/${calID}/entire-cal/votes`);
     return docRef.valueChanges().pipe(
       switchMap((doc) => {
-        console.log()
+        votedTimesData = doc
+        console.log(doc)
+        const calendarDoc = this.afs.doc(`rooms/${calID}`).valueChanges();
+        return calendarDoc;
+      }),
+      map((calDoc) => {
+        votedTimesData['meetingLength']=calDoc["meetingLength"]
+        return votedTimesData;
       })
-    );
+    )
   }
+
 
   /*
     Combines the suggestion free time and the suggestions
@@ -257,15 +271,16 @@ export class CalendarService {
   */
   combineSuggestions(calID, suggestedFT, votesFT) {
     console.log(calID, suggestedFT, votesFT);
-    // meetingLength = time(1)
+    console.log(votesFT.meetingLength)
     // Convert votes to an array
     let newVotesFT = Object.entries(votesFT.votedTimes).map(el => ({
       start: new Date(el[0]),
-      end: addMinutes(Date.parse(el[0]), MeetingLength}),
+      end: addMinutes(Date.parse(el[0]), votesFT.meetingLength),
       UIDs: el[1]["UIDs"],
       profileImages: el[1]["profileImages"]}))
-
-    console.log(newVotesFT.concat(suggestedFT))
+    console.log(newVotesFT)
+    // console.log(_.unionBy(newVotesFT, suggestedFT, 'start'))
+    // console.log(newVotesFT.concat(suggestedFT))
     return newVotesFT.concat(suggestedFT)
   }
 

@@ -60,20 +60,6 @@
       <button
         class="sidebar-button"
         mat-button
-        (click)="printVotes()"
-        style="margin-top: 0em;"
-      >
-        <div class="sidebar-button-elements">
-          <mat-icon> share </mat-icon>
-          <span class="sidebar-button-name"> Print </span>
-        </div>
-      </button>
-    </div>
-
-    <div class="sidebar-button-wrapper">
-      <button
-        class="sidebar-button"
-        mat-button
         (click)="openInviteDialog(2)"
         style="margin-top: 0em;"
       >
@@ -112,59 +98,75 @@
       </ng-container>
 
       <mat-accordion *ngIf="roomMemDoc.member as member">
-        <mat-expansion-panel
-          class="expansion-panel"
-          *ngIf="combinedSuggestion as meetingTimes"
-          [expanded]="true"
-        >
-
-      <!-- *ngIf = "combinedSuggestion | async as meetingTimes" -->
-          <!-- For each when each suggested time is clicked, it should:
-          1) increment the userCount
-          2) append current user to the users list
-          3) append current user's profile image
-
-          Then send that information to app-user-bar for the UI to render
-          -->
-          <mat-expansion-panel-header>
-            <mat-panel-title class="sidebar-title-wrapper">
-              <mat-icon> date_range </mat-icon>
-              <span class="sidebar-title-text"> FreeThyme </span>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-divider class="line-divider"></mat-divider>
-          <div class="suggestedTimeList">
-            <div *ngFor="let meetingTime of meetingTimes">
-              <button
-                class="suggestedTime"
-                mat-stroked-button
-                (click)="addVote(meetingTime.start)"
-                (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
-                (mouseleave)="removeTempEvent()"
-              >
-                <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
-                <span>
-                  {{ meetingTime.start | date: "h:mm aaa" }} -
-                  {{ meetingTime.end | date: "h:mm aaa" }}</span
+        <ng-container *ngIf="votesFT === undefined; else hasVotes">
+          <mat-expansion-panel
+            class="expansion-panel"
+            *ngIf="suggestedFT$ | async as meetingTimes"
+            [expanded]="true"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="sidebar-title-wrapper">
+                <mat-icon> date_range </mat-icon>
+                <span class="sidebar-title-text"> FreeThyme </span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-divider class="line-divider"></mat-divider>
+            <div class="suggestedTimeList">
+              <div *ngFor="let meetingTime of meetingTimes">
+                <button
+                  class="suggestedTime"
+                  mat-stroked-button
+                  (click)="addVote(meetingTime.start)"
+                  (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
+                  (mouseleave)="removeTempEvent()"
                 >
-                <ng-container
-                  *ngIf="{
-                    room: room$ | async,
-                    member: member$ | async
-                  } as roomMemDoc"
-                >
-                  <ng-container *ngIf="roomMemDoc.room as room">
-                    <app-user-bar
-                      [userCount]="meetingTime.count"
-                      [users]="meetingTime.UIDs"
-                      [userImg]="meetingTime.profileImages"
-                    ></app-user-bar>
-                  </ng-container>
-                </ng-container>
-              </button>
+                  <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
+                  <span>
+                    {{ meetingTime.start | date: "h:mm aaa" }} -
+                    {{ meetingTime.end | date: "h:mm aaa" }}</span
+                  >
+                </button>
+              </div>
             </div>
-          </div>
-        </mat-expansion-panel>
+          </mat-expansion-panel>
+        </ng-container>
+        <ng-template #hasVotes>
+          <mat-expansion-panel
+            class="expansion-panel"
+            *ngIf="combinedSuggestion as meetingTimes"
+            [expanded]="true"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="sidebar-title-wrapper">
+                <mat-icon> date_range </mat-icon>
+                <span class="sidebar-title-text"> FreeThyme </span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-divider class="line-divider"></mat-divider>
+            <div class="suggestedTimeList">
+              <div *ngFor="let meetingTime of meetingTimes">
+                <button
+                  class="suggestedTime"
+                  mat-stroked-button
+                  (click)="addVote(meetingTime.start)"
+                  (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
+                  (mouseleave)="removeTempEvent()"
+                >
+                  <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
+                  <span>
+                    {{ meetingTime.start | date: "h:mm aaa" }} -
+                    {{ meetingTime.end | date: "h:mm aaa" }}</span
+                  >
+                  <app-user-bar
+                    [userCount]="meetingTime.count"
+                    [users]="meetingTime.UIDs"
+                    [userImg]="meetingTime.profileImages"
+                  ></app-user-bar>
+                </button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </ng-template>
       </mat-accordion>
     </ng-container>
   </mat-sidenav>

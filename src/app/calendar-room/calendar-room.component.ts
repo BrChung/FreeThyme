@@ -119,10 +119,11 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         this.suggestedFT = res;
         console.log(this.suggestedFT);
         console.timeEnd("Calculate FreeTime");
-    this.votesSub = this.calendar.getVotesFT(this.calID).subscribe((data) => {
-      this.votesFT = data;
-      console.log(this.votesFT);
-      this.combinedSuggestion = this.calendar.combineSuggestions(this.calID, this.suggestedFT, this.votesFT);
+    this.votesSub = this.calendar.getVotesFT(this.calID).subscribe((docData) => {
+      if (docData !== undefined) {
+        this.votesFT = docData;
+        this.combinedSuggestion = this.calendar.combineSuggestions(this.calID, this.suggestedFT, this.votesFT);
+      }
     })
     this.member$ = this.calendar.getMemberDoc(this.calID);
     this.room$ = this.calendar.getRoomDoc(this.calID);
@@ -131,7 +132,6 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
       12,
       14,
     ]);
-    // this.combinedSuggested = this.calendar.combineSuggestions(this.calID, this.suggestedFT$, this.votesFT$)
 
       });
   }
