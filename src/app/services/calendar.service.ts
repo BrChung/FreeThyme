@@ -186,7 +186,6 @@ export class CalendarService {
     const documentRef = this.afs.doc(`rooms/${calID}/entire-cal/freetime`);
     return documentRef.valueChanges().pipe(
       switchMap((doc) => {
-        console.log(doc)
         freeTime = doc["events"].map((value) => ({
           start: value.start.toDate(),
           end: value.end.toDate(),
@@ -196,7 +195,6 @@ export class CalendarService {
       }),
       map((doc) => {
         console.time("Calculate FreeTime");
-        console.log(doc)
         let meetingTimes = [];
         let suggested = [];
         let lookupDates = [];
@@ -232,10 +230,6 @@ export class CalendarService {
             end: addMinutes(foundStart, meetingLength),
           });
         }
-        console.log(suggested.filter(
-          (item, index, self) =>
-            index === self.findIndex((t) => isSameHour(t.start, item.start))
-        ))
         return suggested.filter(
           (item, index, self) =>
             index === self.findIndex((t) => isSameHour(t.start, item.start))
@@ -251,16 +245,29 @@ export class CalendarService {
     let votedTimesData = {}
     const docRef = this.afs.doc(`rooms/${calID}/entire-cal/votes`);
     return docRef.valueChanges().pipe(
-      switchMap((doc) => {
-        votedTimesData = doc
-        console.log(doc)
-        const calendarDoc = this.afs.doc(`rooms/${calID}`).valueChanges();
-        return calendarDoc;
-      }),
-      map((calDoc) => {
-        votedTimesData['meetingLength']=calDoc["meetingLength"]
-        return votedTimesData;
-      })
+        switchMap((doc) => {
+          // console.log(doc)
+
+          // If votes in firebase exists and is not empty,
+          // then send the calendar-room document to the map
+          if (doc !== undefined && Object.keys(doc).length !== 0) {
+            votedTimesData = doc
+            return this.afs.doc(`rooms/${calID}`).valueChanges();
+          }
+          else {
+            // Sends an empty document to the map when votes does not exist
+            return of({})
+          }
+        }),
+        // This received the calendar-room ref and gets the meeting length
+        map((calDoc) => {
+          // If document it receives is not empty, then grab the meeting length
+          if (Object.keys(calDoc).length !== 0) {
+            votedTimesData['meetingLength']=calDoc["meetingLength"];
+          }
+          console.log("Data provided to Calendar-Room.ts: ", votedTimesData)
+          return votedTimesData;
+        })
     )
   }
 
@@ -270,15 +277,15 @@ export class CalendarService {
     with votes to update the front-end
   */
   combineSuggestions(calID, suggestedFT, votesFT) {
-    console.log(calID, suggestedFT, votesFT);
-    console.log(votesFT.meetingLength)
+    console.log("Trying to combine votes + suggestions: ", calID, suggestedFT, votesFT);
+    // console.log(votesFT.meetingLength)
     // Convert votes to an array
     let newVotesFT = Object.entries(votesFT.votedTimes).map(el => ({
       start: new Date(el[0]),
       end: addMinutes(Date.parse(el[0]), votesFT.meetingLength),
       UIDs: el[1]["UIDs"],
       profileImages: el[1]["profileImages"]}))
-    console.log(newVotesFT)
+    // console.log(newVotesFT)
     // console.log(_.unionBy(newVotesFT, suggestedFT, 'start'))
     // console.log(newVotesFT.concat(suggestedFT))
     return newVotesFT.concat(suggestedFT)

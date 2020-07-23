@@ -120,7 +120,9 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         console.log(this.suggestedFT);
         console.timeEnd("Calculate FreeTime");
     this.votesSub = this.calendar.getVotesFT(this.calID).subscribe((docData) => {
-      if (docData !== undefined) {
+      console.log(docData)
+      // If there is data to be combined, then it should have > 1 keys: "meetingLength" + "votedTimes" (2 keys)
+      if (Object.keys(docData).length > 1) {
         this.votesFT = docData;
         this.combinedSuggestion = this.calendar.combineSuggestions(this.calID, this.suggestedFT, this.votesFT);
       }
