@@ -1,34 +1,36 @@
-<mat-accordion class="user-parent">
-  <mat-expansion-panel class="member-expansion-panel">
-    <mat-expansion-panel-header>
-      <mat-panel-title class="member-list-title-wrapper">
-        <mat-icon> group </mat-icon>
-        <span class="member-list-title-text"> Members </span>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-  <mat-divider class="line-divider"></mat-divider>
-  <div *ngFor="let user of users | slice: 0:5; let i = index">
+<div class="room-member-wrapper">
+  <mat-accordion class="user-parent">
+    <mat-expansion-panel class="member-expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="member-list-title-wrapper">
+          <mat-icon> group </mat-icon>
+          <span class="member-list-title-text"> Members </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    <mat-divider class="line-divider"></mat-divider>
+    <div *ngFor="let user of users | slice: 0:5; let i = index">
 
-    <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
-    <div class="user-profile" *ngIf="userImg[user.uid]">
-      <img
-        src="{{ userImg[user.uid] }}"
-        class="user-img"
-        draggable="false"
-      />
+      <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
+      <div class="user-profile" *ngIf="userImg[user.uid]">
+        <img
+          src="{{ userImg[user.uid] }}"
+          class="user-img"
+          draggable="false"
+        />
+          <span class="user-nickname">{{ user.nickname }}</span>
+      </div>
+      <div class="user-profile" *ngIf="!userImg[user.uid]">
+        <span class="user-text">{{ user.nickname[0] }}</span>
         <span class="user-nickname">{{ user.nickname }}</span>
-    </div>
-    <div class="user-profile" *ngIf="!userImg[user.uid]">
-      <span class="user-text">{{ user.nickname[0] }}</span>
-      <span class="user-nickname">{{ user.nickname }}</span>
-    </div>
+      </div>
 
-  </div>
-  <div
-    *ngIf="userCount > 5"
-    class="user-text"
-  >
-    <span>{{ "+" + (userCount - 5) }}</span>
-  </div>
-  </mat-expansion-panel>
-</mat-accordion>
+    </div>
+    <div
+      *ngIf="userCount > 5"
+      class="user-text"
+    >
+      <span>{{ "+" + (userCount - 5) }}</span>
+    </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

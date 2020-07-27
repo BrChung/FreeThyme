@@ -112,24 +112,24 @@
             </mat-expansion-panel-header>
             <mat-divider class="line-divider"></mat-divider>
             <div class="suggestedTimeList">
-              <div *ngFor="let meetingTime of meetingTimes">
-                <button
-                  class="suggestedTime"
-                  mat-stroked-button
-                  (click)="addVote(meetingTime.start)"
-                  (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
-                  (mouseleave)="removeTempEvent()"
+              <button
+                *ngFor="let meetingTime of meetingTimes | slice:0:10"
+                class="suggestedTime"
+                mat-stroked-button
+                (click)="addVote(meetingTime.start)"
+                (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
+                (mouseleave)="removeTempEvent()"
+              >
+                <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
+                <span>
+                  {{ meetingTime.start | date: "h:mm aaa" }} -
+                  {{ meetingTime.end | date: "h:mm aaa" }}</span
                 >
-                  <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
-                  <span>
-                    {{ meetingTime.start | date: "h:mm aaa" }} -
-                    {{ meetingTime.end | date: "h:mm aaa" }}</span
-                  >
-                </button>
-              </div>
+              </button>
             </div>
           </mat-expansion-panel>
         </ng-container>
+
         <ng-template #hasVotes>
           <mat-expansion-panel
             class="expansion-panel"
@@ -144,26 +144,25 @@
             </mat-expansion-panel-header>
             <mat-divider class="line-divider"></mat-divider>
             <div class="suggestedTimeList">
-              <div *ngFor="let meetingTime of meetingTimes">
-                <button
-                  class="suggestedTime"
-                  mat-stroked-button
-                  (click)="addVote(meetingTime.start)"
-                  (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
-                  (mouseleave)="removeTempEvent()"
+              <button
+                *ngFor="let meetingTime of meetingTimes | slice:suggestStart:suggestEnd"
+                class="suggestedTime"
+                mat-stroked-button
+                (click)="addVote(meetingTime.start)"
+                (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
+                (mouseleave)="removeTempEvent()"
+              >
+                <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
+                <span>
+                  {{ meetingTime.start | date: "h:mm aaa" }} -
+                  {{ meetingTime.end | date: "h:mm aaa" }}</span
                 >
-                  <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
-                  <span>
-                    {{ meetingTime.start | date: "h:mm aaa" }} -
-                    {{ meetingTime.end | date: "h:mm aaa" }}</span
-                  >
-                  <app-user-bar
-                    [userCount]="meetingTime.count"
-                    [users]="meetingTime.UIDs"
-                    [userImg]="meetingTime.profileImages"
-                  ></app-user-bar>
-                </button>
-              </div>
+                <app-user-bar
+                  [userCount]="meetingTime.count"
+                  [users]="meetingTime.UIDs"
+                  [userImg]="meetingTime.profileImages"
+                ></app-user-bar>
+              </button>
             </div>
           </mat-expansion-panel>
         </ng-template>
@@ -242,6 +241,7 @@
         <mat-button-toggle-group
           class="calendar-room-cal-view-but-group"
           value="Week"
+          appearance="legacy"
         >
           <mat-button-toggle
             (click)="setView(CalendarView.Month)"

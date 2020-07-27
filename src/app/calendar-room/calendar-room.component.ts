@@ -78,6 +78,11 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   // Combines the suggestFT (from client function) and votesFT (from firebase)
   combinedSuggestion: any;
 
+  // For displaying the suggested times
+  suggestListSize: number = 10;
+  suggestStart: number = 0;
+  suggestEnd: number = this.suggestStart + this.suggestListSize;
+
   refresh: Subject<any> = new Subject();
 
   view: CalendarView = CalendarView.Week;

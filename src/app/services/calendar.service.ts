@@ -278,7 +278,6 @@ export class CalendarService {
   */
   combineSuggestions(calID, suggestedFT, votesFT) {
     console.log("Trying to combine votes + suggestions: ", calID, suggestedFT, votesFT);
-    // console.log(votesFT.meetingLength)
 
     // Convert votes to an array
     let newVotesFT = Object.entries(votesFT.votedTimes).map(el => ({
@@ -287,6 +286,9 @@ export class CalendarService {
       UIDs: el[1]["UIDs"],
       profileImages: el[1]["profileImages"],
       count: el[1]["count"]}))
+
+    // We compare the start times of all of the suggestedFT with the newVotesFT
+    // To remove duplicates in the suggestedFT array
     for(const [suggestedIndex, suggestedObj] of suggestedFT.entries()) {
       // console.log(suggestedIndex, suggestedObj)
     	for(const [votesIndex, votesObj] of (newVotesFT.entries())) {
@@ -298,6 +300,7 @@ export class CalendarService {
               }
           }
     }
+    // Votes should be returned first, and then the other suggested times
     return newVotesFT.concat(suggestedFT)
   }
 
