@@ -279,15 +279,25 @@ export class CalendarService {
   combineSuggestions(calID, suggestedFT, votesFT) {
     console.log("Trying to combine votes + suggestions: ", calID, suggestedFT, votesFT);
     // console.log(votesFT.meetingLength)
+
     // Convert votes to an array
     let newVotesFT = Object.entries(votesFT.votedTimes).map(el => ({
       start: new Date(el[0]),
       end: addMinutes(Date.parse(el[0]), votesFT.meetingLength),
       UIDs: el[1]["UIDs"],
-      profileImages: el[1]["profileImages"]}))
-    // console.log(newVotesFT)
-    // console.log(_.unionBy(newVotesFT, suggestedFT, 'start'))
-    // console.log(newVotesFT.concat(suggestedFT))
+      profileImages: el[1]["profileImages"],
+      count: el[1]["count"]}))
+    for(const [suggestedIndex, suggestedObj] of suggestedFT.entries()) {
+      // console.log(suggestedIndex, suggestedObj)
+    	for(const [votesIndex, votesObj] of (newVotesFT.entries())) {
+        console.log(suggestedObj.start, " vs ", votesObj.start)
+            if(suggestedObj.start.getTime() === votesObj.start.getTime()) {
+              console.log('WE ARE THE SAME: ',suggestedObj.start, votesObj.start)
+                suggestedFT.splice(suggestedIndex, 1);
+                  break;
+              }
+          }
+    }
     return newVotesFT.concat(suggestedFT)
   }
 
