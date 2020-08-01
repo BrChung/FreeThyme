@@ -17,6 +17,20 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@firebase/app",
+              "angularfire2",
+              "angular-calendar/date-adapters/date-fns",
+              "firebase/app",
+              "element-resize-detector",
+              "calendar-utils/date-adapters/date-fns",
+              "angularfire2/firestore",
+              "@mattlewis92/dom-autoscroller",
+              "batch-processor",
+              "dom-plane",
+              "dom-set",
+              "@firebase/firestore"
+            ],
             "outputPath": "dist/freethyme",
             "index": "src/index.html",
             "main": "src/main.ts",
