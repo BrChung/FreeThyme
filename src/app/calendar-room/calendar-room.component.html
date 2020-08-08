@@ -116,14 +116,26 @@
   </app-toolbar>
   <mat-sidenav-container>
     <mat-sidenav mode="side" position="start" opened>
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="toggleSidebar()"
-      >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
+      <div class="side-nav-controller">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="toggleSidebar()"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+
+        <button>
+          <mat-icon> group </mat-icon>
+        </button>
+        <button>
+          <mat-icon> date-date_range </mat-icon>
+        </button>
+        <button>
+          <mat-icon> calendar_today </mat-icon>
+        </button>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <mat-sidenav-container class="calendar-room-container">
@@ -207,87 +219,31 @@
               </div>
             </ng-container>
 
-            <mat-accordion *ngIf="roomMemDoc.member as member">
+            <div>
               <ng-container *ngIf="votesFT === undefined; else hasVotes">
-                <mat-expansion-panel
-                  class="expansion-panel"
+                <div
                   *ngIf="suggestedFT$ | async as meetingTimes"
-                  [expanded]="true"
                 >
-                  <mat-expansion-panel-header>
-                    <mat-panel-title class="sidebar-title-wrapper">
-                      <mat-icon> date_range </mat-icon>
-                      <span class="sidebar-title-text"> FreeThyme </span>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <mat-divider class="line-divider"></mat-divider>
-                  <div class="suggestedTimeList">
-                    <button
-                      *ngFor="let meetingTime of meetingTimes | slice: 0:10"
-                      class="suggestedTime"
-                      mat-stroked-button
-                      (click)="addVote(meetingTime.start)"
-                      (mouseenter)="
-                        addTempEvent(meetingTime.start, meetingTime.end)
-                      "
-                      (mouseleave)="removeTempEvent()"
-                    >
-                      <span
-                        >{{ meetingTime.start | date: "MMM dd, yyyy" }}
-                      </span>
-                      <span>
-                        {{ meetingTime.start | date: "h:mm aaa" }} -
-                        {{ meetingTime.end | date: "h:mm aaa" }}</span
-                      >
-                    </button>
-                  </div>
-                </mat-expansion-panel>
+                <app-sidenav-suggestion
+                  [votesFT] = "votesFT"
+                  [meetingTimes] = "meetingTimes"
+                >
+                </app-sidenav-suggestion>
+                </div>
               </ng-container>
 
               <ng-template #hasVotes>
-                <mat-expansion-panel
-                  class="expansion-panel"
+                <div
                   *ngIf="combinedSuggestion as meetingTimes"
-                  [expanded]="true"
                 >
-                  <mat-expansion-panel-header>
-                    <mat-panel-title class="sidebar-title-wrapper">
-                      <mat-icon> date_range </mat-icon>
-                      <span class="sidebar-title-text"> FreeThyme </span>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <mat-divider class="line-divider"></mat-divider>
-                  <div class="suggestedTimeList">
-                    <button
-                      *ngFor="
-                        let meetingTime of meetingTimes
-                          | slice: suggestStart:suggestEnd
-                      "
-                      class="suggestedTime"
-                      mat-stroked-button
-                      (click)="addVote(meetingTime.start)"
-                      (mouseenter)="
-                        addTempEvent(meetingTime.start, meetingTime.end)
-                      "
-                      (mouseleave)="removeTempEvent()"
-                    >
-                      <span
-                        >{{ meetingTime.start | date: "MMM dd, yyyy" }}
-                      </span>
-                      <span>
-                        {{ meetingTime.start | date: "h:mm aaa" }} -
-                        {{ meetingTime.end | date: "h:mm aaa" }}</span
-                      >
-                      <app-user-bar
-                        [userCount]="meetingTime.count"
-                        [users]="meetingTime.UIDs"
-                        [userImg]="meetingTime.profileImages"
-                      ></app-user-bar>
-                    </button>
-                  </div>
-                </mat-expansion-panel>
+                </div>
+                <app-sidenav-suggestion
+                  [votesFT] = "votesFT"
+                  [meetingTimes] = "meetingTimes"
+                >
+                </app-sidenav-suggestion>
               </ng-template>
-            </mat-accordion>
+            </div>
           </ng-container>
         </mat-sidenav>
 

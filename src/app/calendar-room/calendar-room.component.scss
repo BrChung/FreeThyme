@@ -124,6 +124,11 @@ $light-color: "#fcfcfc";
   align-items: center;
   margin-left: 1em;
 }
+.side-nav-controller {
+  display:flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 .slide-toggle-wrapper {
   margin-top: 0.8em;
 }

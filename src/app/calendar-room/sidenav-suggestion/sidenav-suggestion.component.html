@@ -1,0 +1,35 @@
+<mat-expansion-panel-header>
+  <mat-panel-title class="sidebar-title-wrapper">
+    <mat-icon> date_range </mat-icon>
+    <span class="sidebar-title-text"> FreeThyme </span>
+  </mat-panel-title>
+</mat-expansion-panel-header>
+<mat-divider class="line-divider"></mat-divider>
+<div class="suggestedTimeList">
+  <button
+    *ngFor="let meetingTime of meetingTimes | slice: 0:10"
+    class="suggestedTime"
+    mat-stroked-button
+    (click)="addVote(meetingTime.start)"
+    (mouseenter)="
+      addTempEvent(meetingTime.start, meetingTime.end)
+    "
+    (mouseleave)="removeTempEvent()"
+  >
+    <span
+      >{{ meetingTime.start | date: "MMM dd, yyyy" }}
+    </span>
+    <span>
+      {{ meetingTime.start | date: "h:mm aaa" }} -
+      {{ meetingTime.end | date: "h:mm aaa" }}</span
+    >
+    <!-- in a container to check if it has votes or not -->
+    <ng-container *ngIf="votesFT !== undefined">
+      <app-user-bar
+        [userCount]="meetingTime.count"
+        [users]="meetingTime.UIDs"
+        [userImg]="meetingTime.profileImages"
+      ></app-user-bar>
+    </ng-container>
+  </button>
+</div>
