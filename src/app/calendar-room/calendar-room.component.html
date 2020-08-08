@@ -126,13 +126,13 @@
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
 
-        <button>
+        <button mat-icon-button (click)="setSideNavPage('members')">
           <mat-icon> group </mat-icon>
         </button>
-        <button>
-          <mat-icon> date-date_range </mat-icon>
+        <button mat-icon-button (click)="setSideNavPage('suggestions')">
+          <mat-icon> date_range </mat-icon>
         </button>
-        <button>
+        <button mat-icon-button (click)="setSideNavPage('coreButtons')">
           <mat-icon> calendar_today </mat-icon>
         </button>
       </div>
@@ -145,106 +145,172 @@
           mode="side"
           [opened]="sidenavOpened"
         >
-          <div class="sidebar-button-wrapper">
-            <button
-              class="sidebar-button"
-              mat-raised-button
-              color="primary"
-              appPreventDoubleClick
-              (throttledClick)="openAddCalDialog()"
-              [throttleTime]="3000"
-            >
-              <div class="sidebar-button-elements">
-                <mat-icon> calendar_today </mat-icon>
-                <span class="sidebar-button-name"> Add Calendar </span>
-              </div>
-            </button>
-          </div>
-
-          <div class="sidebar-button-wrapper">
-            <button
-              class="sidebar-button"
-              mat-button
-              (click)="openInviteDialog(1)"
-              style="margin-top: 0em;"
-            >
-              <div class="sidebar-button-elements">
-                <mat-icon> share </mat-icon>
-                <span class="sidebar-button-name"> Share </span>
-              </div>
-            </button>
-          </div>
-
-          <div class="sidebar-button-wrapper">
-            <button
-              class="sidebar-button"
-              mat-button
-              (click)="openInviteDialog(2)"
-              style="margin-top: 0em;"
-            >
-              <div class="sidebar-button-elements">
-                <mat-icon> group_add </mat-icon>
-                <span class="sidebar-button-name"> Invite Person </span>
-              </div>
-            </button>
-          </div>
-
-          <div class="sidebar-button-wrapper">
-            <div class="slide-toggle-wrapper">
-              <mat-slide-toggle
-                color="primary"
-                (change)="seeIndividualEvents($event)"
-              >
-                <span class="sidebar-button-name"> View Your events </span>
-              </mat-slide-toggle>
-            </div>
-          </div>
-
-          <ng-container
-            *ngIf="{
-              room: room$ | async,
-              member: member$ | async
-            } as roomMemDoc"
+          <div class="side-nav-content"
+            [ngSwitch] = "sideNavPage"
           >
-            <ng-container *ngIf="roomMemDoc.room as room">
-              <div class="calendar-room-toolbar-members">
-                <div>
-                  <app-room-member-list
-                    [userCount]="room.memberCount"
-                    [users]="room.members"
-                    [userImg]="room.profileImages"
+            <div *ngSwitchCase="'coreButtons'">
+              <div class="sidebar-button-wrapper">
+                <button
+                  class="sidebar-button"
+                  mat-raised-button
+                  color="primary"
+                  appPreventDoubleClick
+                  (throttledClick)="openAddCalDialog()"
+                  [throttleTime]="3000"
+                >
+                  <div class="sidebar-button-elements">
+                    <mat-icon> calendar_today </mat-icon>
+                    <span class="sidebar-button-name"> Add Calendar </span>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sidebar-button-wrapper">
+                <button
+                  class="sidebar-button"
+                  mat-button
+                  (click)="openInviteDialog(1)"
+                  style="margin-top: 0em;"
+                >
+                  <div class="sidebar-button-elements">
+                    <mat-icon> share </mat-icon>
+                    <span class="sidebar-button-name"> Share </span>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sidebar-button-wrapper">
+                <button
+                  class="sidebar-button"
+                  mat-button
+                  (click)="openInviteDialog(2)"
+                  style="margin-top: 0em;"
+                >
+                  <div class="sidebar-button-elements">
+                    <mat-icon> group_add </mat-icon>
+                    <span class="sidebar-button-name"> Invite Person </span>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sidebar-button-wrapper">
+                <div class="slide-toggle-wrapper">
+                  <mat-slide-toggle
+                    color="primary"
+                    (change)="seeIndividualEvents($event)"
                   >
-                  </app-room-member-list>
+                    <span class="sidebar-button-name"> View Your events </span>
+                  </mat-slide-toggle>
                 </div>
               </div>
-            </ng-container>
-
-            <div>
-              <ng-container *ngIf="votesFT === undefined; else hasVotes">
-                <div
-                  *ngIf="suggestedFT$ | async as meetingTimes"
-                >
-                <app-sidenav-suggestion
-                  [votesFT] = "votesFT"
-                  [meetingTimes] = "meetingTimes"
-                >
-                </app-sidenav-suggestion>
-                </div>
-              </ng-container>
-
-              <ng-template #hasVotes>
-                <div
-                  *ngIf="combinedSuggestion as meetingTimes"
-                >
-                </div>
-                <app-sidenav-suggestion
-                  [votesFT] = "votesFT"
-                  [meetingTimes] = "meetingTimes"
-                >
-                </app-sidenav-suggestion>
-              </ng-template>
             </div>
-          </ng-container>
+
+            <div *ngSwitchCase="'members'">
+              <ng-container
+                *ngIf="{
+                  room: room$ | async,
+                  member: member$ | async
+                } as roomMemDoc"
+              >
+                <ng-container *ngIf="roomMemDoc.room as room">
+                  <div class="calendar-room-toolbar-members">
+                    <div>
+                      <app-room-member-list
+                        [userCount]="room.memberCount"
+                        [users]="room.members"
+                        [userImg]="room.profileImages"
+                      >
+                      </app-room-member-list>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+
+            <div *ngSwitchCase="'suggestions'">
+              <mat-accordion>
+                <ng-container *ngIf="votesFT === undefined; else hasVotes">
+                  <mat-expansion-panel
+                    class="expansion-panel"
+                    *ngIf="suggestedFT$ | async as meetingTimes"
+                    [expanded]="true"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="sidebar-title-wrapper">
+                        <mat-icon> date_range </mat-icon>
+                        <span class="sidebar-title-text"> FreeThyme </span>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-divider class="line-divider"></mat-divider>
+                    <div class="suggestedTimeList">
+                      <button
+                        *ngFor="let meetingTime of meetingTimes | slice: 0:10"
+                        class="suggestedTime"
+                        mat-stroked-button
+                        (click)="addVote(meetingTime.start)"
+                        (mouseenter)="
+                          addTempEvent(meetingTime.start, meetingTime.end)
+                        "
+                        (mouseleave)="removeTempEvent()"
+                      >
+                        <span
+                          >{{ meetingTime.start | date: "MMM dd, yyyy" }}
+                        </span>
+                        <span>
+                          {{ meetingTime.start | date: "h:mm aaa" }} -
+                          {{ meetingTime.end | date: "h:mm aaa" }}</span
+                        >
+                      </button>
+                    </div>
+                  </mat-expansion-panel>
+                </ng-container>
+
+                <ng-template #hasVotes>
+                  <mat-expansion-panel
+                    class="expansion-panel"
+                    *ngIf="combinedSuggestion as meetingTimes"
+                    [expanded]="true"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="sidebar-title-wrapper">
+                        <mat-icon> date_range </mat-icon>
+                        <span class="sidebar-title-text"> FreeThyme </span>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-divider class="line-divider"></mat-divider>
+                    <div class="suggestedTimeList">
+                      <button
+                        *ngFor="
+                          let meetingTime of meetingTimes
+                            | slice: suggestStart:suggestEnd
+                        "
+                        class="suggestedTime"
+                        mat-stroked-button
+                        (click)="addVote(meetingTime.start)"
+                        (mouseenter)="
+                          addTempEvent(meetingTime.start, meetingTime.end)
+                        "
+                        (mouseleave)="removeTempEvent()"
+                      >
+                        <span
+                          >{{ meetingTime.start | date: "MMM dd, yyyy" }}
+                        </span>
+                        <span>
+                          {{ meetingTime.start | date: "h:mm aaa" }} -
+                          {{ meetingTime.end | date: "h:mm aaa" }}</span
+                        >
+                        <app-user-bar
+                          [userCount]="meetingTime.count"
+                          [users]="meetingTime.UIDs"
+                          [userImg]="meetingTime.profileImages"
+                        ></app-user-bar>
+                      </button>
+                    </div>
+                  </mat-expansion-panel>
+                </ng-template>
+              </mat-accordion>
+            </div>
+          </div>
         </mat-sidenav>
 
         <mat-sidenav-content>
@@ -329,6 +395,7 @@
                 </div>
               </div>
             </ng-template>
+
 
             <div [ngSwitch]="view">
               <mwl-calendar-month-view

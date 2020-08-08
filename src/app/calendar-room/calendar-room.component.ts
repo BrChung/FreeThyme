@@ -87,6 +87,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   refresh: Subject<any> = new Subject();
 
   view: CalendarView = CalendarView.Week;
+  sideNavPage: any;
 
   CalendarView = CalendarView;
 
@@ -173,7 +174,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     console.log(this.votesSub);
   }
 
-  // TODO:
+  // DONE:
   //  Increments the total number of votes for the suggested time
   //  Adds the users profile picture for the suggested time
   addVote(startTime: Date) {
@@ -411,6 +412,10 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     this.view = view;
   }
 
+  setSideNavPage(pageView) {
+    console.log(pageView);
+    this.sideNavPage = pageView;
+  }
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }

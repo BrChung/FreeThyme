@@ -23,7 +23,6 @@ import { CalendarService } from "./services/calendar.service";
 import { GraphService } from "./services/graph.service";
 import { AuthSnackbarService } from "./services/auth-snackbar.service";
 import { GoogleCalendarService } from "./services/google-calendar.service";
-import { SidenavSuggestionComponent } from './calendar-room/sidenav-suggestion/sidenav-suggestion.component';
 
 const isIE =
   window.navigator.userAgent.indexOf("MSIE ") > -1 ||
@@ -33,7 +32,7 @@ export const protectedResourceMap: [string, string[]][] = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, SidenavSuggestionComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
