@@ -121,15 +121,16 @@
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
 
+        <button mat-icon-button (click)="setSideNavPage('coreButtons')">
+          <mat-icon> calendar_today </mat-icon>
+        </button>
         <button mat-icon-button (click)="setSideNavPage('members')">
           <mat-icon> group </mat-icon>
         </button>
         <button mat-icon-button (click)="setSideNavPage('suggestions')">
           <mat-icon> date_range </mat-icon>
         </button>
-        <button mat-icon-button (click)="setSideNavPage('coreButtons')">
-          <mat-icon> calendar_today </mat-icon>
-        </button>
+
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -304,6 +305,14 @@
                   </mat-expansion-panel>
                 </ng-template>
               </mat-accordion>
+            </div>
+
+            <div *ngSwitchDefault>
+              <app-month-calendar
+                #monthCalendar
+                (dateSelected)="dateSelected($event)"
+                [selectedDate]="viewDate"
+              ></app-month-calendar>
             </div>
           </div>
         </mat-sidenav>
