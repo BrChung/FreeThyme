@@ -1,9 +1,9 @@
 <mat-toolbar>
   <!-- TRANSCLUSION -->
   <ng-content></ng-content>
-
-  <mat-icon> notifications </mat-icon>
-
+  <button mat-icon-button class="notifications-button">
+    <mat-icon> notifications </mat-icon>
+  </button>
   <button mat-button routerLink="/login" *ngIf="!(afAuth.authState | async)">
     Login
   </button>

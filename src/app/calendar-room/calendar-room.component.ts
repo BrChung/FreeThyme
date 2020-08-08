@@ -44,6 +44,7 @@ import { MonthCalendarComponent } from "../shared/components/month-calendar/mont
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { Title } from "@angular/platform-browser";
+import { WeekDay } from "@angular/common";
 
 @Component({
   selector: "app-calendar-room",
