@@ -52,6 +52,7 @@ i {
 .avatar {
   width: 2em;
   border-radius: 50%;
+  margin-right: 0.2em;
 }
 
 .avatar-container {
@@ -86,4 +87,8 @@ i {
 
 .avatar-button:focus {
   outline: none;
+}
+
+.notifications-button {
+  margin-right: 1em;
 }

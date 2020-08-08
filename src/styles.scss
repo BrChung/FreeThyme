@@ -137,7 +137,7 @@ $cal-bg-secondary: #fff;
 );
 
 .cal-week-view .cal-time-events {
-  max-height: 750px;
+  max-height: calc(100vh - 124px);
   overflow-y: auto;
 }
 
