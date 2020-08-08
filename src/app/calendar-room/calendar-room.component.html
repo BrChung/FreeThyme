@@ -23,9 +23,66 @@
     </ng-container>
   </ng-container>
 </mat-toolbar> -->
+<app-toolbar (toggleSidebar)="toggleSidebar()">
+  <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
+    Today
+  </button>
+  <div class="navigation-buttons">
+    <button
+      mat-icon-button
+      mwlCalendarPreviousView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="closeOpenMonthViewDay()"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      mwlCalendarNextView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="closeOpenMonthViewDay()"
+    >
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+  <h3 class="calendar-room-cal-header-title">
+    {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
+  </h3>
+
+  <span class="fill-space"></span>
+  <mat-button-toggle-group
+    class="calendar-room-cal-view-but-group"
+    value="Week"
+    appearance="legacy"
+  >
+    <mat-button-toggle
+      (click)="setView(CalendarView.Month)"
+      [class.active]="view === CalendarView.Month"
+      value="Month"
+    >
+      Month
+    </mat-button-toggle>
+    <mat-button-toggle
+      (click)="setView(CalendarView.Week)"
+      [class.active]="view === CalendarView.Week"
+      value="Week"
+    >
+      Week
+    </mat-button-toggle>
+    <mat-button-toggle
+      (click)="setView(CalendarView.Day)"
+      [class.active]="view === CalendarView.Day"
+      value="Day"
+    >
+      Day
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</app-toolbar>
 <mat-sidenav-container class="calendar-room-container">
   <!-- Navigation Side Bar Elements: Add Calendar, Invite, Share, and Members List -->
-  <mat-sidenav class="sidebar-wrapper" mode="side" opened>
+  <mat-sidenav class="sidebar-wrapper" mode="side" [opened]="sidenavOpened">
     <div class="sidebar-button-wrapper">
       <button
         class="sidebar-button"
@@ -113,7 +170,7 @@
             <mat-divider class="line-divider"></mat-divider>
             <div class="suggestedTimeList">
               <button
-                *ngFor="let meetingTime of meetingTimes | slice:0:10"
+                *ngFor="let meetingTime of meetingTimes | slice: 0:10"
                 class="suggestedTime"
                 mat-stroked-button
                 (click)="addVote(meetingTime.start)"
@@ -145,7 +202,10 @@
             <mat-divider class="line-divider"></mat-divider>
             <div class="suggestedTimeList">
               <button
-                *ngFor="let meetingTime of meetingTimes | slice:suggestStart:suggestEnd"
+                *ngFor="
+                  let meetingTime of meetingTimes
+                    | slice: suggestStart:suggestEnd
+                "
                 class="suggestedTime"
                 mat-stroked-button
                 (click)="addVote(meetingTime.start)"

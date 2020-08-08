@@ -3,47 +3,45 @@
 @import "~@angular/material/theming";
 @import "~angular-calendar/scss/angular-calendar.scss";
 
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap");
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-
 // http://mcg.mbitson.com/
 $ft-palette: (
-50 : #eef2ec,
-100 : #d5ded1,
-200 : #b9c8b2,
-300 : #9cb293,
-400 : #87a27b,
-500 : #729164,
-600 : #6a895c,
-700 : #5f7e52,
-800 : #557448,
-900 : #426236,
-A100 : #c7ffb3,
-A200 : #a1ff80,
-A400 : #7bff4d,
-A700 : #68ff34,
-contrast: (
-    50 : #000000,
-    100 : #000000,
-    200 : #000000,
-    300 : #000000,
-    400 : #000000,
-    500 : #000000,
-    600 : #ffffff,
-    700 : #ffffff,
-    800 : #ffffff,
-    900 : #ffffff,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #000000,
-    A700 : #000000,
-),
+  50: #eef2ec,
+  100: #d5ded1,
+  200: #b9c8b2,
+  300: #9cb293,
+  400: #87a27b,
+  500: #729164,
+  600: #6a895c,
+  700: #5f7e52,
+  800: #557448,
+  900: #426236,
+  A100: #c7ffb3,
+  A200: #a1ff80,
+  A400: #7bff4d,
+  A700: #68ff34,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
 );
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
@@ -66,8 +64,7 @@ $ft-theme: mat-light-theme($ft-primary, $ft-accent, $ft-warn);
 @include angular-material-theme($ft-theme);
 
 /* You can add global styles to this file, and also import other style files */
-$primary-font:  'Source Sans Pro', sans-serif;
-
+$primary-font: "Source Sans Pro", sans-serif;
 
 html,
 body {
@@ -139,7 +136,6 @@ $cal-bg-secondary: #fff;
   )
 );
 
-
 .cal-week-view .cal-time-events {
   max-height: 750px;
   overflow-y: auto;
@@ -154,12 +150,12 @@ $cal-bg-secondary: #fff;
 }
 
 .cal-week-view {
-  .cal-day-header-wrapper{
-    background-color: #F9F9F9;
+  .cal-day-header-wrapper {
+    background-color: #f9f9f9;
   }
 
   .cal-header.cal-today {
-    background-color: #BCD8F0;
+    background-color: #bcd8f0;
   }
   .cal-hour:not(:last-child) .cal-hour-segment {
     border-bottom: thin;
@@ -214,7 +210,7 @@ $cal-bg-secondary: #fff;
     border: 0px solid;
     border-bottom: 1px solid;
     border-color: #e1e1e1;
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
 
     // This applies to the Weekday Headers
     b {
@@ -261,7 +257,9 @@ $cal-bg-secondary: #fff;
 }
 
 // Left Button Toggle Borders
-.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+.mat-button-toggle-group-appearance-standard
+  .mat-button-toggle
+  + .mat-button-toggle {
   border-left: 0px;
 }
 
@@ -276,7 +274,7 @@ $cal-bg-secondary: #fff;
 }
 
 .mat-stroked-button:not([disabled]):hover {
-  border-color: #C7A6DA;
-  background-color: #C7A6DA;
+  border-color: #c7a6da;
+  background-color: #c7a6da;
   color: white;
 }

@@ -99,6 +99,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   weekStartsOn: 0 = 0;
 
+  sidenavOpened: boolean = true;
+
   constructor(
     private route: ActivatedRoute,
     private calendar: CalendarService,
@@ -124,31 +126,39 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
         this.suggestedFT = res;
         console.log(this.suggestedFT);
         console.timeEnd("Calculate FreeTime");
-    this.votesSub = this.calendar.getVotesFT(this.calID).subscribe((docData) => {
-      console.log(docData)
-      // If there is data to be combined, then it should have > 1 keys: "meetingLength" + "votedTimes" (2 keys)
-      if (Object.keys(docData).length > 1) {
-        this.votesFT = docData;
-        this.combinedSuggestion = this.calendar.combineSuggestions(this.calID, this.suggestedFT, this.votesFT);
-      }
-    })
-    this.member$ = this.calendar.getMemberDoc(this.calID);
-    this.room$ = this.calendar.getRoomDoc(this.calID);
-    this.suggestedFT$ = this.calendar.getSuggestedMeetingTimes(this.calID, [
-      10,
-      12,
-      14,
-    ]);
-
+        this.votesSub = this.calendar
+          .getVotesFT(this.calID)
+          .subscribe((docData) => {
+            console.log(docData);
+            // If there is data to be combined, then it should have > 1 keys: "meetingLength" + "votedTimes" (2 keys)
+            if (Object.keys(docData).length > 1) {
+              this.votesFT = docData;
+              this.combinedSuggestion = this.calendar.combineSuggestions(
+                this.calID,
+                this.suggestedFT,
+                this.votesFT
+              );
+            }
+          });
+        this.member$ = this.calendar.getMemberDoc(this.calID);
+        this.room$ = this.calendar.getRoomDoc(this.calID);
+        this.suggestedFT$ = this.calendar.getSuggestedMeetingTimes(this.calID, [
+          10,
+          12,
+          14,
+        ]);
       });
   }
-
 
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
     this.calendarSub.unsubscribe();
     this.suggestedFTSub.unsubscribe();
     this.votesSub.unsubscribe();
+  }
+
+  toggleSidebar(): void {
+    this.sidenavOpened = !this.sidenavOpened;
   }
 
   seeIndividualEvents(event) {

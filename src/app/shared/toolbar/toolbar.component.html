@@ -1,0 +1,47 @@
+<mat-toolbar>
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="toggleSidebar.emit()"
+  >
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <h1 class="logo" routerLink="/">FreeThyme</h1>
+
+  <!-- TRANSCLUSION -->
+  <ng-content></ng-content>
+
+  <mat-icon> notifications </mat-icon>
+
+  <button mat-button routerLink="/login" *ngIf="!(afAuth.authState | async)">
+    Login
+  </button>
+
+  <!-- DROPDOWN MENU -->
+
+  <div *ngIf="afAuth.authState | async as user" class="avatar-container">
+    <!-- Uses either a given photoURL or the default one with the first letter of their display name -->
+    <button role="button" class="avatar-button" [matMenuTriggerFor]="menu">
+      <ng-container *ngIf="user.photoURL">
+        <img
+          class="avatar"
+          [src]="user.photoURL || 'assets/default-user.svg'"
+        />
+      </ng-container>
+      <ng-container *ngIf="!user.photoURL">
+        <div class="avatar-text">
+          <span> {{ user.displayName[0] }}</span>
+        </div>
+      </ng-container>
+    </button>
+  </div>
+
+  <mat-menu #menu="matMenu">
+    <h2>Header</h2>
+    <span>Test</span>
+    <a mat-menu-item>
+      <span>Profile</span>
+    </a>
+  </mat-menu>
+</mat-toolbar>

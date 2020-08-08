@@ -26,7 +26,7 @@ import {
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatTabsModule } from "@angular/material/tabs";
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -40,9 +40,11 @@ import { ShareInviteMembersComponent } from "./components/share-invite-members/s
 
 import { OutsideClickDirective } from "./outside-click.directive";
 import { PreventDoubleClickDirective } from "./prevent-double-click.directive";
+import { ToolbarComponent } from "./toolbar/toolbar.component";
 
 const components = [
   LayoutComponent,
+  ToolbarComponent,
   MonthCalendarComponent,
   UserBarComponent,
   ShareInviteMembersComponent,
@@ -80,7 +82,7 @@ const modules = [
   MatAutocompleteModule,
   MatSlideToggleModule,
   MatDividerModule,
-  MatExpansionModule
+  MatExpansionModule,
 ];
 
 @NgModule({
