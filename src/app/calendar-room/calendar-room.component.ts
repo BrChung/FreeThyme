@@ -43,6 +43,7 @@ import { AddEventComponent } from "./add-event/add-event.component";
 import { MonthCalendarComponent } from "../shared/components/month-calendar/month-calendar.component";
 import { ShareInviteMembersComponent } from "../shared/components/share-invite-members/share-invite-members.component";
 import { SettingsComponent } from "./settings/settings.component";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-calendar-room",
@@ -108,10 +109,12 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     private graph: GraphService,
     private googleCal: GoogleCalendarService,
     private cdr: ChangeDetectorRef,
-    private auth: AuthService
+    private auth: AuthService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle("Room Title | FreeThyme");
     this.routerSub = this.route.params.subscribe((params) => {
       this.calID = params["calID"];
     });

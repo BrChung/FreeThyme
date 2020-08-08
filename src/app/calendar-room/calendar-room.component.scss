@@ -151,3 +151,11 @@ $light-color: "#fcfcfc";
 .fill-space {
   flex: 1 1 auto;
 }
+
+.logo-img {
+  width: 2.5em;
+}
+.logo-img-container {
+  display: flex;
+  align-items: flex-start;
+}

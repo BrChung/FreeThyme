@@ -23,223 +23,20 @@
     </ng-container>
   </ng-container>
 </mat-toolbar> -->
-<app-toolbar (toggleSidebar)="toggleSidebar()">
-  <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
-    Today
-  </button>
-  <div class="navigation-buttons">
-    <button
-      mat-icon-button
-      mwlCalendarPreviousView
-      [view]="view"
-      [(viewDate)]="viewDate"
-      (viewDateChange)="closeOpenMonthViewDay()"
-    >
-      <mat-icon>keyboard_arrow_left</mat-icon>
+<ng-container
+  *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
+>
+  <app-toolbar>
+    <button mat-icon-button routerLink="/home/cal">
+      <mat-icon> west </mat-icon>
     </button>
-    <button
-      mat-icon-button
-      mwlCalendarNextView
-      [view]="view"
-      [(viewDate)]="viewDate"
-      (viewDateChange)="closeOpenMonthViewDay()"
-    >
-      <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
-  </div>
-  <h3 class="calendar-room-cal-header-title">
-    {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
-  </h3>
 
-  <span class="fill-space"></span>
-  <mat-button-toggle-group
-    class="calendar-room-cal-view-but-group"
-    value="Week"
-    appearance="legacy"
-  >
-    <mat-button-toggle
-      (click)="setView(CalendarView.Month)"
-      [class.active]="view === CalendarView.Month"
-      value="Month"
-    >
-      Month
-    </mat-button-toggle>
-    <mat-button-toggle
-      (click)="setView(CalendarView.Week)"
-      [class.active]="view === CalendarView.Week"
-      value="Week"
-    >
-      Week
-    </mat-button-toggle>
-    <mat-button-toggle
-      (click)="setView(CalendarView.Day)"
-      [class.active]="view === CalendarView.Day"
-      value="Day"
-    >
-      Day
-    </mat-button-toggle>
-  </mat-button-toggle-group>
-</app-toolbar>
-<mat-sidenav-container class="calendar-room-container">
-  <!-- Navigation Side Bar Elements: Add Calendar, Invite, Share, and Members List -->
-  <mat-sidenav class="sidebar-wrapper" mode="side" [opened]="sidenavOpened">
-    <div class="sidebar-button-wrapper">
-      <button
-        class="sidebar-button"
-        mat-raised-button
-        color="primary"
-        appPreventDoubleClick
-        (throttledClick)="openAddCalDialog()"
-        [throttleTime]="3000"
-      >
-        <div class="sidebar-button-elements">
-          <mat-icon> calendar_today </mat-icon>
-          <span class="sidebar-button-name"> Add Calendar </span>
-        </div>
-      </button>
-    </div>
+    <a routerLink="/" class="logo-img-container">
+      <img class="logo-img" [src]="'assets/thyme-logo.png'" />
+    </a>
 
-    <div class="sidebar-button-wrapper">
-      <button
-        class="sidebar-button"
-        mat-button
-        (click)="openInviteDialog(1)"
-        style="margin-top: 0em;"
-      >
-        <div class="sidebar-button-elements">
-          <mat-icon> share </mat-icon>
-          <span class="sidebar-button-name"> Share </span>
-        </div>
-      </button>
-    </div>
-
-    <div class="sidebar-button-wrapper">
-      <button
-        class="sidebar-button"
-        mat-button
-        (click)="openInviteDialog(2)"
-        style="margin-top: 0em;"
-      >
-        <div class="sidebar-button-elements">
-          <mat-icon> group_add </mat-icon>
-          <span class="sidebar-button-name"> Invite Person </span>
-        </div>
-      </button>
-    </div>
-
-    <div class="sidebar-button-wrapper">
-      <div class="slide-toggle-wrapper">
-        <mat-slide-toggle
-          color="primary"
-          (change)="seeIndividualEvents($event)"
-        >
-          <span class="sidebar-button-name"> View Your events </span>
-        </mat-slide-toggle>
-      </div>
-    </div>
-
-    <ng-container
-      *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
-    >
-      <ng-container *ngIf="roomMemDoc.room as room">
-        <div class="calendar-room-toolbar-members">
-          <div>
-            <app-room-member-list
-              [userCount]="room.memberCount"
-              [users]="room.members"
-              [userImg]="room.profileImages"
-            >
-            </app-room-member-list>
-          </div>
-        </div>
-      </ng-container>
-
-      <mat-accordion *ngIf="roomMemDoc.member as member">
-        <ng-container *ngIf="votesFT === undefined; else hasVotes">
-          <mat-expansion-panel
-            class="expansion-panel"
-            *ngIf="suggestedFT$ | async as meetingTimes"
-            [expanded]="true"
-          >
-            <mat-expansion-panel-header>
-              <mat-panel-title class="sidebar-title-wrapper">
-                <mat-icon> date_range </mat-icon>
-                <span class="sidebar-title-text"> FreeThyme </span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-divider class="line-divider"></mat-divider>
-            <div class="suggestedTimeList">
-              <button
-                *ngFor="let meetingTime of meetingTimes | slice: 0:10"
-                class="suggestedTime"
-                mat-stroked-button
-                (click)="addVote(meetingTime.start)"
-                (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
-                (mouseleave)="removeTempEvent()"
-              >
-                <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
-                <span>
-                  {{ meetingTime.start | date: "h:mm aaa" }} -
-                  {{ meetingTime.end | date: "h:mm aaa" }}</span
-                >
-              </button>
-            </div>
-          </mat-expansion-panel>
-        </ng-container>
-
-        <ng-template #hasVotes>
-          <mat-expansion-panel
-            class="expansion-panel"
-            *ngIf="combinedSuggestion as meetingTimes"
-            [expanded]="true"
-          >
-            <mat-expansion-panel-header>
-              <mat-panel-title class="sidebar-title-wrapper">
-                <mat-icon> date_range </mat-icon>
-                <span class="sidebar-title-text"> FreeThyme </span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-divider class="line-divider"></mat-divider>
-            <div class="suggestedTimeList">
-              <button
-                *ngFor="
-                  let meetingTime of meetingTimes
-                    | slice: suggestStart:suggestEnd
-                "
-                class="suggestedTime"
-                mat-stroked-button
-                (click)="addVote(meetingTime.start)"
-                (mouseenter)="addTempEvent(meetingTime.start, meetingTime.end)"
-                (mouseleave)="removeTempEvent()"
-              >
-                <span>{{ meetingTime.start | date: "MMM dd, yyyy" }} </span>
-                <span>
-                  {{ meetingTime.start | date: "h:mm aaa" }} -
-                  {{ meetingTime.end | date: "h:mm aaa" }}</span
-                >
-                <app-user-bar
-                  [userCount]="meetingTime.count"
-                  [users]="meetingTime.UIDs"
-                  [userImg]="meetingTime.profileImages"
-                ></app-user-bar>
-              </button>
-            </div>
-          </mat-expansion-panel>
-        </ng-template>
-      </mat-accordion>
-    </ng-container>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <div
-      class="calendar-room-title-container"
-      *ngIf="{ room: room$ | async, member: member$ | async } as roomMemDoc"
-    >
+    <div class="calendar-room-title-container">
       <div class="calendar-room-title-wrapper">
-        <button mat-icon-button routerLink="/home/cal">
-          <mat-icon> west </mat-icon>
-        </button>
-
         <ng-container *ngIf="roomMemDoc.room as room">
           <div class="calendar-room-title">
             {{ room.title }}
@@ -256,188 +53,364 @@
           </button>
         </ng-container>
       </div>
-      <button mat-icon-button (click)="openSettingsDialog()">
-        <mat-icon> settings </mat-icon>
+    </div>
+
+    <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
+      Today
+    </button>
+    <div class="navigation-buttons">
+      <button
+        mat-icon-button
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
     </div>
+    <h3 class="calendar-room-cal-header-title">
+      {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
+    </h3>
 
-    <!-- This block represents the header for the calendar and the calendar grid together -->
-    <div class="calendar-wrapper">
-      <div class="calendar-room-cal-header">
-        <div class="calendar-room-left-spacer">
-          <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate">
-            Today
-          </button>
-          <div class="navigation-buttons">
-            <button
-              mat-icon-button
-              mwlCalendarPreviousView
-              [view]="view"
-              [(viewDate)]="viewDate"
-              (viewDateChange)="closeOpenMonthViewDay()"
-            >
-              <mat-icon>keyboard_arrow_left</mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              mwlCalendarNextView
-              [view]="view"
-              [(viewDate)]="viewDate"
-              (viewDateChange)="closeOpenMonthViewDay()"
-            >
-              <mat-icon>keyboard_arrow_right</mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <div class="calendar-room-cal-nav-but-group">
-          <div>
-            <h3 class="calendar-room-cal-header-title">
-              {{ viewDate | calendarDate: view + "ViewTitle":"en" }}
-            </h3>
-          </div>
-        </div>
-
-        <mat-button-toggle-group
-          class="calendar-room-cal-view-but-group"
-          value="Week"
-          appearance="legacy"
-        >
-          <mat-button-toggle
-            (click)="setView(CalendarView.Month)"
-            [class.active]="view === CalendarView.Month"
-            value="Month"
-          >
-            Month
-          </mat-button-toggle>
-          <mat-button-toggle
-            (click)="setView(CalendarView.Week)"
-            [class.active]="view === CalendarView.Week"
-            value="Week"
-          >
-            Week
-          </mat-button-toggle>
-          <mat-button-toggle
-            (click)="setView(CalendarView.Day)"
-            [class.active]="view === CalendarView.Day"
-            value="Day"
-          >
-            Day
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-
-      <!-- Template to get rid of 12 am in the time label column -->
-      <ng-template
-        #customTimeLabelTemplate
-        let-segment="segment"
-        let-locale="locale"
-        let-segmentHeight="segmentHeight"
-        let-isTimeLabel="isTimeLabel"
+    <span class="fill-space"></span>
+    <mat-button-toggle-group
+      class="calendar-room-cal-view-but-group"
+      value="Week"
+      appearance="legacy"
+    >
+      <mat-button-toggle
+        (click)="setView(CalendarView.Month)"
+        [class.active]="view === CalendarView.Month"
+        value="Month"
       >
-        <div
-          #segmentElement
-          class="cal-hour-segment"
-          [style.height.px]="segmentHeight"
-          [class.cal-hour-start]="segment.isStart"
-          [class.cal-after-hour-start]="!segment.isStart"
-          [ngClass]="segment.cssClass"
-          (mousedown)="startDragToCreate(segment, $event, segmentElement)"
+        Month
+      </mat-button-toggle>
+      <mat-button-toggle
+        (click)="setView(CalendarView.Week)"
+        [class.active]="view === CalendarView.Week"
+        value="Week"
+      >
+        Week
+      </mat-button-toggle>
+      <mat-button-toggle
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+        value="Day"
+      >
+        Day
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <button mat-icon-button (click)="openSettingsDialog()">
+      <mat-icon> settings </mat-icon>
+    </button>
+  </app-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav mode="side" position="start" opened>
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="toggleSidebar()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-sidenav-container class="calendar-room-container">
+        <!-- Navigation Side Bar Elements: Add Calendar, Invite, Share, and Members List -->
+        <mat-sidenav
+          class="sidebar-wrapper"
+          mode="side"
+          [opened]="sidenavOpened"
         >
-          <div class="calculations" *ngIf="isTimeLabel">
-            <div
-              *ngIf="
-                segment.date | calendarDate: 'weekViewHour':locale as result
-              "
+          <div class="sidebar-button-wrapper">
+            <button
+              class="sidebar-button"
+              mat-raised-button
+              color="primary"
+              appPreventDoubleClick
+              (throttledClick)="openAddCalDialog()"
+              [throttleTime]="3000"
             >
-              <div class="cal-time" *ngIf="result != '12 AM'">
-                {{ result }}
+              <div class="sidebar-button-elements">
+                <mat-icon> calendar_today </mat-icon>
+                <span class="sidebar-button-name"> Add Calendar </span>
               </div>
+            </button>
+          </div>
+
+          <div class="sidebar-button-wrapper">
+            <button
+              class="sidebar-button"
+              mat-button
+              (click)="openInviteDialog(1)"
+              style="margin-top: 0em;"
+            >
+              <div class="sidebar-button-elements">
+                <mat-icon> share </mat-icon>
+                <span class="sidebar-button-name"> Share </span>
+              </div>
+            </button>
+          </div>
+
+          <div class="sidebar-button-wrapper">
+            <button
+              class="sidebar-button"
+              mat-button
+              (click)="openInviteDialog(2)"
+              style="margin-top: 0em;"
+            >
+              <div class="sidebar-button-elements">
+                <mat-icon> group_add </mat-icon>
+                <span class="sidebar-button-name"> Invite Person </span>
+              </div>
+            </button>
+          </div>
+
+          <div class="sidebar-button-wrapper">
+            <div class="slide-toggle-wrapper">
+              <mat-slide-toggle
+                color="primary"
+                (change)="seeIndividualEvents($event)"
+              >
+                <span class="sidebar-button-name"> View Your events </span>
+              </mat-slide-toggle>
             </div>
           </div>
-        </div>
-      </ng-template>
 
-      <!-- Template to Get rid of the weekends -->
-      <ng-template
-        #customTemplate
-        let-days="days"
-        let-locale="locale"
-        let-dayHeaderClicked="dayHeaderClicked"
-        let-eventDropped="eventDropped"
-        let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
-        let-dragEnter="dragEnter"
-      >
-        <div class="cal-day-headers" role="row">
-          <div class="time-label-column">
-            <mat-icon> access_time </mat-icon>
-            <span> {{ timezone }}</span>
-          </div>
-          <div
-            class="cal-header"
-            *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
-            [class.cal-past]="day.isPast"
-            [class.cal-today]="day.isToday"
-            [class.cal-future]="day.isFuture"
-            [ngClass]="day.cssClass"
-            (mwlClick)="
-              dayHeaderClicked.emit({ day: day, sourceEvent: $event })
-            "
-            mwlDroppable
-            dragOverClass="cal-drag-over"
-            (drop)="
-              eventDropped.emit({
-                event: $event.dropData.event,
-                newStart: day.date
-              })
-            "
-            (dragEnter)="dragEnter.emit({ date: day.date })"
-            tabindex="0"
-            role="columnheader"
+          <ng-container
+            *ngIf="{
+              room: room$ | async,
+              member: member$ | async
+            } as roomMemDoc"
           >
-            <b>{{ day.date | calendarDate: "weekViewColumnHeader":locale }}</b
-            ><br />
-            <span>{{
-              day.date | calendarDate: "weekViewColumnSubHeader":locale
-            }}</span>
-          </div>
-        </div>
-      </ng-template>
+            <ng-container *ngIf="roomMemDoc.room as room">
+              <div class="calendar-room-toolbar-members">
+                <div>
+                  <app-room-member-list
+                    [userCount]="room.memberCount"
+                    [users]="room.members"
+                    [userImg]="room.profileImages"
+                  >
+                  </app-room-member-list>
+                </div>
+              </div>
+            </ng-container>
 
-      <div [ngSwitch]="view">
-        <mwl-calendar-month-view
-          *ngSwitchCase="CalendarView.Month"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          [activeDayIsOpen]="activeDayIsOpen"
-          (dayClicked)="dayClicked($event.day)"
-          (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)"
-        >
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view
-          *ngSwitchCase="CalendarView.Week"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          [hourSegmentTemplate]="customTimeLabelTemplate"
-          [headerTemplate]="customTemplate"
-          (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)"
-        >
-        </mwl-calendar-week-view>
-        <mwl-calendar-day-view
-          *ngSwitchCase="CalendarView.Day"
-          [viewDate]="viewDate"
-          [events]="events"
-          [refresh]="refresh"
-          [hourSegmentTemplate]="customTimeLabelTemplate"
-          (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)"
-        >
-        </mwl-calendar-day-view>
-      </div>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+            <mat-accordion *ngIf="roomMemDoc.member as member">
+              <ng-container *ngIf="votesFT === undefined; else hasVotes">
+                <mat-expansion-panel
+                  class="expansion-panel"
+                  *ngIf="suggestedFT$ | async as meetingTimes"
+                  [expanded]="true"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="sidebar-title-wrapper">
+                      <mat-icon> date_range </mat-icon>
+                      <span class="sidebar-title-text"> FreeThyme </span>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-divider class="line-divider"></mat-divider>
+                  <div class="suggestedTimeList">
+                    <button
+                      *ngFor="let meetingTime of meetingTimes | slice: 0:10"
+                      class="suggestedTime"
+                      mat-stroked-button
+                      (click)="addVote(meetingTime.start)"
+                      (mouseenter)="
+                        addTempEvent(meetingTime.start, meetingTime.end)
+                      "
+                      (mouseleave)="removeTempEvent()"
+                    >
+                      <span
+                        >{{ meetingTime.start | date: "MMM dd, yyyy" }}
+                      </span>
+                      <span>
+                        {{ meetingTime.start | date: "h:mm aaa" }} -
+                        {{ meetingTime.end | date: "h:mm aaa" }}</span
+                      >
+                    </button>
+                  </div>
+                </mat-expansion-panel>
+              </ng-container>
+
+              <ng-template #hasVotes>
+                <mat-expansion-panel
+                  class="expansion-panel"
+                  *ngIf="combinedSuggestion as meetingTimes"
+                  [expanded]="true"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="sidebar-title-wrapper">
+                      <mat-icon> date_range </mat-icon>
+                      <span class="sidebar-title-text"> FreeThyme </span>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-divider class="line-divider"></mat-divider>
+                  <div class="suggestedTimeList">
+                    <button
+                      *ngFor="
+                        let meetingTime of meetingTimes
+                          | slice: suggestStart:suggestEnd
+                      "
+                      class="suggestedTime"
+                      mat-stroked-button
+                      (click)="addVote(meetingTime.start)"
+                      (mouseenter)="
+                        addTempEvent(meetingTime.start, meetingTime.end)
+                      "
+                      (mouseleave)="removeTempEvent()"
+                    >
+                      <span
+                        >{{ meetingTime.start | date: "MMM dd, yyyy" }}
+                      </span>
+                      <span>
+                        {{ meetingTime.start | date: "h:mm aaa" }} -
+                        {{ meetingTime.end | date: "h:mm aaa" }}</span
+                      >
+                      <app-user-bar
+                        [userCount]="meetingTime.count"
+                        [users]="meetingTime.UIDs"
+                        [userImg]="meetingTime.profileImages"
+                      ></app-user-bar>
+                    </button>
+                  </div>
+                </mat-expansion-panel>
+              </ng-template>
+            </mat-accordion>
+          </ng-container>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+          <!-- This block represents the header for the calendar and the calendar grid together -->
+          <div class="calendar-wrapper">
+            <!-- Template to get rid of 12 am in the time label column -->
+            <ng-template
+              #customTimeLabelTemplate
+              let-segment="segment"
+              let-locale="locale"
+              let-segmentHeight="segmentHeight"
+              let-isTimeLabel="isTimeLabel"
+            >
+              <div
+                #segmentElement
+                class="cal-hour-segment"
+                [style.height.px]="segmentHeight"
+                [class.cal-hour-start]="segment.isStart"
+                [class.cal-after-hour-start]="!segment.isStart"
+                [ngClass]="segment.cssClass"
+                (mousedown)="startDragToCreate(segment, $event, segmentElement)"
+              >
+                <div class="calculations" *ngIf="isTimeLabel">
+                  <div
+                    *ngIf="
+                      segment.date
+                        | calendarDate: 'weekViewHour':locale as result
+                    "
+                  >
+                    <div class="cal-time" *ngIf="result != '12 AM'">
+                      {{ result }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
+            <!-- Template to Get rid of the weekends -->
+            <ng-template
+              #customTemplate
+              let-days="days"
+              let-locale="locale"
+              let-dayHeaderClicked="dayHeaderClicked"
+              let-eventDropped="eventDropped"
+              let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate"
+              let-dragEnter="dragEnter"
+            >
+              <div class="cal-day-headers" role="row">
+                <div class="time-label-column">
+                  <mat-icon> access_time </mat-icon>
+                  <span> {{ timezone }}</span>
+                </div>
+                <div
+                  class="cal-header"
+                  *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
+                  [class.cal-past]="day.isPast"
+                  [class.cal-today]="day.isToday"
+                  [class.cal-future]="day.isFuture"
+                  [ngClass]="day.cssClass"
+                  (mwlClick)="
+                    dayHeaderClicked.emit({ day: day, sourceEvent: $event })
+                  "
+                  mwlDroppable
+                  dragOverClass="cal-drag-over"
+                  (drop)="
+                    eventDropped.emit({
+                      event: $event.dropData.event,
+                      newStart: day.date
+                    })
+                  "
+                  (dragEnter)="dragEnter.emit({ date: day.date })"
+                  tabindex="0"
+                  role="columnheader"
+                >
+                  <b>{{
+                    day.date | calendarDate: "weekViewColumnHeader":locale
+                  }}</b
+                  ><br />
+                  <span>{{
+                    day.date | calendarDate: "weekViewColumnSubHeader":locale
+                  }}</span>
+                </div>
+              </div>
+            </ng-template>
+
+            <div [ngSwitch]="view">
+              <mwl-calendar-month-view
+                *ngSwitchCase="CalendarView.Month"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                [activeDayIsOpen]="activeDayIsOpen"
+                (dayClicked)="dayClicked($event.day)"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-month-view>
+              <mwl-calendar-week-view
+                *ngSwitchCase="CalendarView.Week"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                [hourSegmentTemplate]="customTimeLabelTemplate"
+                [headerTemplate]="customTemplate"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-week-view>
+              <mwl-calendar-day-view
+                *ngSwitchCase="CalendarView.Day"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                [hourSegmentTemplate]="customTimeLabelTemplate"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-day-view>
+            </div>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>
