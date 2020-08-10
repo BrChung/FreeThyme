@@ -414,8 +414,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   }
 
   setSideNavPage(pageView) {
-    console.log(pageView);
     this.sideNavPage = pageView;
+    this.sidenavOpened = true;
   }
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;

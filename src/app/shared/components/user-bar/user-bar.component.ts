@@ -13,5 +13,9 @@ export class UserBarComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.userImg) {
+      this.userImg = Object.assign({}, ...this.userImg);
+    }
+  }
 }
