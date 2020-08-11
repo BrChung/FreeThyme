@@ -16,6 +16,7 @@ import {
   isAfter,
   roundToNearestMinutes,
   isSameHour,
+  subHours,
 } from "date-fns";
 
 @Injectable({
@@ -242,66 +243,72 @@ export class CalendarService {
     Gets the list of suggested times that have votes
   */
   getVotesFT(calID) {
-    let votedTimesData = {}
+    let votedTimesData = {};
     const docRef = this.afs.doc(`rooms/${calID}/entire-cal/votes`);
     return docRef.valueChanges().pipe(
-        switchMap((doc) => {
-          // console.log(doc)
+      switchMap((doc) => {
+        // console.log(doc)
 
-          // If votes in firebase exists and is not empty,
-          // then send the calendar-room document to the map
-          if (doc !== undefined && Object.keys(doc).length !== 0) {
-            votedTimesData = doc
-            return this.afs.doc(`rooms/${calID}`).valueChanges();
-          }
-          else {
-            // Sends an empty document to the map when votes does not exist
-            return of({})
-          }
-        }),
-        // This received the calendar-room ref and gets the meeting length
-        map((calDoc) => {
-          // If document it receives is not empty, then grab the meeting length
-          if (Object.keys(calDoc).length !== 0) {
-            votedTimesData['meetingLength']=calDoc["meetingLength"];
-          }
-          console.log("Data provided to Calendar-Room.ts: ", votedTimesData)
-          return votedTimesData;
-        })
-    )
+        // If votes in firebase exists and is not empty,
+        // then send the calendar-room document to the map
+        if (doc !== undefined && Object.keys(doc).length !== 0) {
+          votedTimesData = doc;
+          return this.afs.doc(`rooms/${calID}`).valueChanges();
+        } else {
+          // Sends an empty document to the map when votes does not exist
+          return of({});
+        }
+      }),
+      // This received the calendar-room ref and gets the meeting length
+      map((calDoc) => {
+        // If document it receives is not empty, then grab the meeting length
+        if (Object.keys(calDoc).length !== 0) {
+          votedTimesData["meetingLength"] = calDoc["meetingLength"];
+        }
+        console.log("Data provided to Calendar-Room.ts: ", votedTimesData);
+        return votedTimesData;
+      })
+    );
   }
-
 
   /*
     Combines the suggestion free time and the suggestions
     with votes to update the front-end
   */
   combineSuggestions(calID, suggestedFT, votesFT) {
-    console.log("Trying to combine votes + suggestions: ", calID, suggestedFT, votesFT);
+    console.log(
+      "Trying to combine votes + suggestions: ",
+      calID,
+      suggestedFT,
+      votesFT
+    );
 
     // Convert votes to an array
-    let newVotesFT = Object.entries(votesFT.votedTimes).map(el => ({
+    let newVotesFT = Object.entries(votesFT.votedTimes).map((el) => ({
       start: new Date(el[0]),
       end: addMinutes(Date.parse(el[0]), votesFT.meetingLength),
       UIDs: el[1]["UIDs"],
       profileImages: el[1]["profileImages"],
-      count: el[1]["count"]}))
+      count: el[1]["count"],
+    }));
 
+    newVotesFT.sort((a, b) => (a.count > b.count ? -1 : 1));
+    newVotesFT = newVotesFT.filter((obj) => obj.end > subHours(new Date(), 1));
     // We compare the start times of all of the suggestedFT with the newVotesFT
     // To remove duplicates in the suggestedFT array
-    for(const [suggestedIndex, suggestedObj] of suggestedFT.entries()) {
+    for (const [suggestedIndex, suggestedObj] of suggestedFT.entries()) {
       // console.log(suggestedIndex, suggestedObj)
-    	for(const [votesIndex, votesObj] of (newVotesFT.entries())) {
-        console.log(suggestedObj.start, " vs ", votesObj.start)
-            if(suggestedObj.start.getTime() === votesObj.start.getTime()) {
-              console.log('WE ARE THE SAME: ',suggestedObj.start, votesObj.start)
-                suggestedFT.splice(suggestedIndex, 1);
-                  break;
-              }
-          }
+      for (const [votesIndex, votesObj] of newVotesFT.entries()) {
+        console.log(suggestedObj.start, " vs ", votesObj.start);
+        if (suggestedObj.start.getTime() === votesObj.start.getTime()) {
+          console.log("WE ARE THE SAME: ", suggestedObj.start, votesObj.start);
+          suggestedFT.splice(suggestedIndex, 1);
+          break;
+        }
+      }
     }
     // Votes should be returned first, and then the other suggested times
-    return newVotesFT.concat(suggestedFT)
+    return newVotesFT.concat(suggestedFT);
   }
 
   /* Retrieve Rooms that the user is a member of
