@@ -187,7 +187,9 @@
                         *ngFor="let meetingTime of meetingTimes | slice: 0:10"
                         class="suggestedTime"
                         mat-stroked-button
-                        (click)="voteClickEvent(meetingTime.start)"
+                        appPreventDoubleClick
+                        (throttledClick)="voteClickEvent(meetingTime)"
+                        [throttleTime]="3000"
                         (mouseenter)="
                           addTempEvent(
                             $event,
@@ -230,7 +232,9 @@
                         "
                         class="suggestedTime"
                         mat-stroked-button
-                        (click)="voteClickEvent(meetingTime)"
+                        appPreventDoubleClick
+                        (throttledClick)="voteClickEvent(meetingTime)"
+                        [throttleTime]="3000"
                         (mouseenter)="
                           addTempEvent(
                             $event,
