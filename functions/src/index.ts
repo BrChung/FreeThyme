@@ -1,8 +1,9 @@
 import * as functions from 'firebase-functions';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+exports.testing = functions.pubsub
+  .schedule('every day 17:18')
+  .timeZone('America/Los_Angeles')
+  .onRun(context => {
+
+    console.log('triggered every 5 minutes', context)
+  });
