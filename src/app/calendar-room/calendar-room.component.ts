@@ -197,6 +197,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   addTempEvent(event, tempEventStart, tempEventEnd) {
     event.stopPropagation();
+    this.events = this.events.filter((obj) => obj.meta?.tmpEvent !== true);
     const tempEvent: CalendarEvent = {
       title: "",
       start: tempEventStart,
@@ -213,7 +214,7 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
 
   removeTempEvent(event) {
     event.stopPropagation();
-    this.events.pop();
+    this.events = this.events.filter((obj) => obj.meta?.tmpEvent !== true);
     this.refresh.next();
   }
 

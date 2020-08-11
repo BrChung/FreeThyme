@@ -16,6 +16,7 @@ import {
   isAfter,
   roundToNearestMinutes,
   isSameHour,
+  subHours,
 } from "date-fns";
 
 @Injectable({
@@ -292,6 +293,7 @@ export class CalendarService {
     }));
 
     newVotesFT.sort((a, b) => (a.count > b.count ? -1 : 1));
+    newVotesFT = newVotesFT.filter((obj) => obj.end > subHours(new Date(), 1));
     // We compare the start times of all of the suggestedFT with the newVotesFT
     // To remove duplicates in the suggestedFT array
     for (const [suggestedIndex, suggestedObj] of suggestedFT.entries()) {
