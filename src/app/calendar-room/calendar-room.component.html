@@ -85,7 +85,11 @@
 
     <span class="fill-space"></span>
 
-    <button mat-icon-button (click)="openSettingsDialog()" class="settings-button">
+    <button
+      mat-icon-button
+      (click)="openSettingsDialog()"
+      class="settings-button"
+    >
       <mat-icon> settings </mat-icon>
     </button>
 
@@ -130,7 +134,6 @@
         <button mat-icon-button (click)="setSideNavPage('suggestions')">
           <mat-icon> date_range </mat-icon>
         </button>
-
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -141,9 +144,7 @@
           mode="side"
           [opened]="sidenavOpened"
         >
-          <div class="side-nav-content"
-            [ngSwitch] = "sideNavPage"
-          >
+          <div class="side-nav-content" [ngSwitch]="sideNavPage">
             <div *ngSwitchCase="'members'">
               <ng-container
                 *ngIf="{
@@ -186,11 +187,15 @@
                         *ngFor="let meetingTime of meetingTimes | slice: 0:10"
                         class="suggestedTime"
                         mat-stroked-button
-                        (click)="addVote(meetingTime.start)"
+                        (click)="voteClickEvent(meetingTime.start)"
                         (mouseenter)="
-                          addTempEvent(meetingTime.start, meetingTime.end)
+                          addTempEvent(
+                            $event,
+                            meetingTime.start,
+                            meetingTime.end
+                          )
                         "
-                        (mouseleave)="removeTempEvent()"
+                        (mouseleave)="removeTempEvent($event)"
                       >
                         <span
                           >{{ meetingTime.start | date: "MMM dd, yyyy" }}
@@ -225,11 +230,15 @@
                         "
                         class="suggestedTime"
                         mat-stroked-button
-                        (click)="addVote(meetingTime.start)"
+                        (click)="voteClickEvent(meetingTime)"
                         (mouseenter)="
-                          addTempEvent(meetingTime.start, meetingTime.end)
+                          addTempEvent(
+                            $event,
+                            meetingTime.start,
+                            meetingTime.end
+                          )
                         "
-                        (mouseleave)="removeTempEvent()"
+                        (mouseleave)="removeTempEvent($event)"
                       >
                         <span
                           >{{ meetingTime.start | date: "MMM dd, yyyy" }}
@@ -239,7 +248,7 @@
                           {{ meetingTime.end | date: "h:mm aaa" }}</span
                         >
                         <app-user-bar
-                          [userCount]="meetingTime.count"
+                          [userCount]="meetingTime.length"
                           [users]="meetingTime.UIDs"
                           [userImg]="meetingTime.profileImages"
                         ></app-user-bar>

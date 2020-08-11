@@ -143,6 +143,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
                 this.suggestedFT,
                 this.votesFT
               );
+              console.log(this.votesFT);
+              this.cdr.detectChanges();
             }
           });
         this.member$ = this.calendar.getMemberDoc(this.calID);
@@ -178,11 +180,23 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
   // DONE:
   //  Increments the total number of votes for the suggested time
   //  Adds the users profile picture for the suggested time
-  addVote(startTime: Date) {
-    this.calendar.addVoteTime(startTime.toISOString(), this.calID);
+  async voteClickEvent(meeting: any) {
+    const user = await this.auth.getCurrentUser();
+    if (meeting.UIDs) {
+      const entry = meeting.UIDs.filter((obj) => obj.uid === user.uid);
+      console.log(entry.length > 0);
+      if (entry.length > 0) {
+        return this.calendar.removeVoteTime(
+          meeting.start.toISOString(),
+          this.calID
+        );
+      }
+    }
+    return this.calendar.addVoteTime(meeting.start.toISOString(), this.calID);
   }
 
-  addTempEvent(tempEventStart, tempEventEnd) {
+  addTempEvent(event, tempEventStart, tempEventEnd) {
+    event.stopPropagation();
     const tempEvent: CalendarEvent = {
       title: "",
       start: tempEventStart,
@@ -197,7 +211,8 @@ export class CalendarRoomComponent implements OnInit, OnDestroy {
     console.log(this.events);
   }
 
-  removeTempEvent() {
+  removeTempEvent(event) {
+    event.stopPropagation();
     this.events.pop();
     this.refresh.next();
   }
