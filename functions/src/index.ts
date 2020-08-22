@@ -21,8 +21,8 @@ const db = admin.firestore();
 // Optimizations:
 // Put the "updating" action into a transaction just in case it is being read/written to
 // by another service/component so that it will try to update again
-exports.testing = functions.pubsub
-  .schedule('every day 19:28')
+exports.remove_old_votes = functions.pubsub
+  .schedule('every day 11:59')
   .timeZone('America/Los_Angeles')
   .onRun(async (context) => {
     console.log("context timestamp --> ", context.timestamp);
